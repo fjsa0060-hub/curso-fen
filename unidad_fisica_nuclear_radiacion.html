@@ -33,4 +33,742 @@
   header.hero{padding:54px 0 26px; border-bottom:1px solid var(--line)}
   .back-link{
     display:inline-flex; align-items:center; gap:6px; font-family:"Space Mono",monospace;
-    font-size:12.5px; letter-spacing:.03em;
+    font-size:12.5px; letter-spacing:.03em; color:var(--ink-faint); text-decoration:none;
+    margin-bottom:18px; transition:color .15s ease;
+  }
+  .back-link:hover{color:var(--ink-soft)}
+  .crumb{
+    font-family:"Space Mono",monospace; font-size:12px; letter-spacing:.04em;
+    color:var(--ink-faint); text-transform:uppercase; margin-bottom:22px;
+  }
+  .crumb b{color:var(--ink-soft); font-weight:700}
+  .eyebrow{
+    font-family:"Space Mono",monospace; font-size:13px; font-weight:700;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--evaluar);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:"Space Grotesk",sans-serif; font-weight:700;
+    font-size:clamp(2rem,5.2vw,3.4rem); line-height:1.05; letter-spacing:-.02em;
+    margin:0 0 22px; max-width:18ch; color:var(--ink);
+  }
+  .meta{display:flex; flex-wrap:wrap; gap:8px 26px; font-size:14px; color:var(--ink-soft)}
+  .meta .k{font-family:"Space Mono",monospace; font-size:11.5px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--ink-faint); display:block; margin-bottom:2px}
+  .ref-obj{
+    margin-top:24px; padding:16px 18px; background:var(--surface);
+    border:1px solid var(--line); border-left:4px solid var(--evaluar); border-radius:10px;
+    font-size:14.5px; max-width:760px; color:var(--ink-soft);
+  }
+  .ref-obj .k{font-family:"Space Mono",monospace; font-size:11.5px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--ink-faint); display:block; margin-bottom:4px}
+  .ref-obj em{font-style:normal; color:var(--evaluar); font-weight:600}
+
+  /* ---------- MIND MAP ---------- */
+  .mm-section{padding:40px 0 30px}
+  .mm-title{font-family:"Space Mono",monospace; font-size:12px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-faint); text-align:center; margin-bottom:6px}
+  .mm-sub{text-align:center; color:var(--ink-soft); font-size:14px; margin:0 0 28px}
+  .mm-wrap{position:relative; min-height:280px}
+  .mm-links{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0}
+  .mm-link{fill:none; stroke-width:2.5; opacity:.55}
+  .mm-link-comprender{stroke:var(--comprender)}
+  .mm-link-analizar{stroke:var(--analizar)}
+  .mm-link-aplicar{stroke:var(--aplicar)}
+  .mm-link-evaluar{stroke:var(--evaluar)}
+  .mm-center{
+    position:relative; z-index:1; width:max-content; max-width:340px; margin:0 auto 56px;
+    background:var(--surface-2); color:var(--ink); border:1px solid rgba(255,255,255,.10);
+    border-radius:16px; padding:18px 24px; text-align:center;
+    box-shadow:0 14px 40px rgba(0,0,0,.45);
+  }
+  .mm-center .lbl{font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-faint); display:block; margin-bottom:5px}
+  .mm-center .txt{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:17px; line-height:1.2}
+  .mm-nodes{position:relative; z-index:1; display:flex; flex-wrap:wrap; justify-content:center; gap:16px}
+  .mm-node{
+    flex:1 1 175px; max-width:200px; min-width:150px;
+    background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--c);
+    border-radius:12px; padding:14px 14px 16px; cursor:pointer; text-align:left;
+    font-family:inherit; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .mm-node:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(0,0,0,.5)}
+  .mm-node:focus-visible{outline:3px solid var(--c); outline-offset:2px}
+  .mm-node.active{box-shadow:0 10px 26px rgba(0,0,0,.5); border-color:var(--c)}
+  .mm-node .num{font-family:"Space Mono",monospace; font-size:22px; font-weight:700; color:var(--c); line-height:1}
+  .mm-node .lvl{display:inline-block; font-family:"Space Mono",monospace; font-size:10px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--c);
+    background:var(--c-tint); border-radius:20px; padding:2px 9px; margin:8px 0 7px}
+  .mm-node .nt{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:14.5px; line-height:1.2; color:var(--ink)}
+  .lvl-comprender{--c:var(--comprender); --c-tint:var(--comprender-tint)}
+  .lvl-analizar{--c:var(--analizar); --c-tint:var(--analizar-tint)}
+  .lvl-aplicar{--c:var(--aplicar); --c-tint:var(--aplicar-tint)}
+  .lvl-evaluar{--c:var(--evaluar); --c-tint:var(--evaluar-tint)}
+
+  /* ---------- LAYOUT BODY ---------- */
+  .body-grid{display:grid; grid-template-columns:200px 1fr; gap:48px; padding:30px 0 80px; align-items:start}
+  nav.rail{position:sticky; top:24px; align-self:start}
+  .rail-title{font-family:"Space Mono",monospace; font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-faint); margin-bottom:14px}
+  .nav-item{display:flex; gap:11px; align-items:flex-start; width:100%; text-align:left;
+    background:none; border:none; cursor:pointer; padding:9px 0; font-family:inherit;
+    color:var(--ink-soft); border-top:1px solid var(--line-soft); transition:color .15s}
+  .nav-item:hover{color:var(--ink)}
+  .nav-item .dot{width:10px; height:10px; border-radius:50%; background:var(--c); margin-top:6px; flex:none}
+  .nav-item .ni-txt{font-size:13.5px; line-height:1.3}
+  .nav-item .ni-num{font-family:"Space Mono",monospace; font-weight:700; font-size:12px}
+  .nav-item.active{color:var(--ink); font-weight:600}
+  .nav-item.active .ni-txt{font-weight:600}
+
+  /* ---------- SECTIONS ---------- */
+  section.od{scroll-margin-top:20px; margin-bottom:64px; padding-top:6px}
+  .od-head{border-left:4px solid var(--c); padding-left:20px; margin-bottom:24px}
+  .od-tag{display:inline-flex; align-items:center; gap:8px; font-family:"Space Mono",monospace;
+    font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--c);
+    background:var(--c-tint); border-radius:20px; padding:4px 12px; margin-bottom:14px}
+  .od-tag .n{font-weight:700}
+  h2{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:clamp(1.5rem,3vw,2rem);
+    line-height:1.14; letter-spacing:-.015em; margin:0 0 14px; color:var(--ink)}
+  .objective{background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; font-size:14.5px; color:var(--ink-soft)}
+  .objective .k{font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--c); display:block; margin-bottom:5px; font-weight:700}
+  .objective b{color:var(--ink); font-weight:600}
+  .content{margin-top:26px}
+  .content p{margin:0 0 16px; color:var(--ink-soft)}
+  .content h3{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:1.12rem;
+    margin:30px 0 10px; color:var(--ink)}
+  .lead{font-size:1.08rem; color:var(--ink) !important}
+  .content b{color:var(--ink)}
+
+  /* tables */
+  .tbl-wrap{overflow-x:auto; margin:22px 0; border:1px solid var(--line); border-radius:12px}
+  table{border-collapse:collapse; width:100%; min-width:520px; font-size:14px; background:var(--surface)}
+  th,td{text-align:left; padding:12px 15px; border-bottom:1px solid var(--line-soft); vertical-align:top; color:var(--ink-soft)}
+  thead th{font-family:"Space Mono",monospace; font-size:11px; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--ink-faint); background:var(--surface-2)}
+  tbody tr:last-child td{border-bottom:none}
+  td b, th b{font-weight:600; color:var(--ink)}
+  .yes{color:var(--comprender); font-weight:700}
+  .no{color:var(--ink-faint)}
+
+  /* callout */
+  .callout{display:flex; gap:14px; background:var(--c-tint); border-radius:12px; padding:16px 18px; margin:22px 0;
+    border:1px solid color-mix(in srgb, var(--c) 32%, transparent)}
+  .callout .ic{font-family:"Space Mono",monospace; font-weight:700; color:var(--c); font-size:13px;
+    letter-spacing:.05em; text-transform:uppercase; flex:none; padding-top:1px}
+  .callout p{margin:0; font-size:14.5px; color:var(--ink) !important}
+  .aula{--c:var(--analizar); --c-tint:var(--analizar-tint)}
+
+  /* figure / schematic */
+  figure{margin:24px 0; border:1px solid var(--line); border-radius:14px; background:var(--surface); padding:22px 18px 14px}
+  figure svg{display:block; width:100%; height:auto}
+  figure img{display:block; width:100%; height:auto}
+  figcaption{font-size:13px; color:var(--ink-soft); text-align:center; margin-top:12px;
+    font-family:"Space Mono",monospace; letter-spacing:.02em}
+
+  /* MemorAI — enlace de repaso al final del tema */
+  .memorai-promo{padding:34px 0 44px; text-align:center}
+  .memorai-promo a{display:inline-flex; flex-direction:column; align-items:center; gap:12px; text-decoration:none}
+  .memorai-promo img{display:block; width:160px; height:auto; border-radius:12px;
+    transition:transform .15s ease, filter .15s ease}
+  .memorai-promo a:hover img{transform:translateY(-3px); filter:brightness(1.08)}
+  .memorai-promo .mp-cta{font-family:"Space Mono",monospace; font-size:12.5px; letter-spacing:.04em;
+    color:var(--ink-faint); transition:color .15s ease}
+  .memorai-promo a:hover .mp-cta{color:var(--ink-soft)}
+
+  /* hueco de imagen pendiente */
+  .img-prompt{margin:24px 0; border:1.5px dashed var(--line); border-radius:14px; padding:20px 20px 18px;
+    background:color-mix(in srgb, var(--surface) 60%, transparent)}
+  .img-prompt .ip-lbl{font-family:"Space Mono",monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:10px; display:flex; align-items:center; gap:8px}
+  .img-prompt .ip-lbl::before{content:"◇"; color:var(--ink-faint)}
+  .img-prompt .ip-prompt{font-family:"Space Mono",monospace; font-size:12.5px; line-height:1.6; color:var(--ink-soft);
+    white-space:pre-wrap}
+
+  footer{border-top:1px solid var(--line); padding:34px 0 60px; color:var(--ink-faint); font-size:13px;
+    font-family:"Space Mono",monospace; letter-spacing:.02em}
+  footer .v{color:var(--ink-soft)}
+
+  @media (max-width:860px){
+    .body-grid{grid-template-columns:1fr; gap:0}
+    nav.rail{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .mm-node{transition:none}
+  }
+
+  /* ---------- V2 · FLASHCARDS ---------- */
+  .check{margin-top:40px; padding-top:28px; border-top:1px solid var(--line)}
+  .check-h{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:1.14rem; color:var(--ink); margin-bottom:4px}
+  .check-h .badge{font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--c); background:var(--c-tint); border-radius:20px; padding:3px 10px; margin-left:8px; vertical-align:middle}
+  .check-sub{font-size:13.5px; color:var(--ink-faint); margin:0 0 20px}
+  /* Enlace a MemorAI filtrado por objetivo. Hereda --c del nivel de Bloom de la sección. */
+  .mem-od{display:inline-flex; align-items:center; gap:7px; margin-top:22px; text-decoration:none;
+    font-family:"Space Mono",monospace; font-size:11.5px; letter-spacing:.03em;
+    color:var(--c); background:var(--c-tint); border:1px solid var(--c);
+    border-radius:22px; padding:9px 16px; transition:filter .15s ease, transform .15s ease}
+  .mem-od:hover{filter:brightness(1.14); transform:translateY(-1px)}
+  .fc-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(285px,1fr)); gap:18px}
+  .flip{perspective:1300px; cursor:pointer; min-height:240px; outline:none}
+  .flip-inner{position:relative; width:100%; min-height:240px;
+    transition:transform .55s cubic-bezier(.2,.7,.2,1); transform-style:preserve-3d}
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .flip:focus-visible .face-front{box-shadow:0 0 0 3px var(--c)}
+  .face{position:absolute; top:0; left:0; width:100%;
+    -webkit-backface-visibility:hidden; backface-visibility:hidden;
+    background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--c);
+    border-radius:14px; padding:18px 18px 16px}
+  .face-back{transform:rotateY(180deg)}
+  .fc-tag{display:flex; justify-content:space-between; font-family:"Space Mono",monospace; font-size:10.5px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--c); margin-bottom:11px}
+  .fc-q{font-size:15px; font-weight:600; color:var(--ink); line-height:1.4; margin-bottom:13px}
+  .fc-opts{list-style:none; margin:0; padding:0; font-size:13.5px; color:var(--ink-soft)}
+  .fc-opts li{padding:5px 0 5px 24px; position:relative; line-height:1.4}
+  .fc-opts li .ltr{position:absolute; left:0; top:5px; font-family:"Space Mono",monospace; font-weight:700; color:var(--ink-faint)}
+  .fc-hint{margin-top:14px; font-family:"Space Mono",monospace; font-size:10.5px; color:var(--ink-faint); text-align:right}
+  .fc-correct{display:inline-block; font-family:"Space Mono",monospace; font-size:10.5px; font-weight:700; letter-spacing:.05em;
+    color:var(--c); background:var(--c-tint); border-radius:20px; padding:3px 11px; margin-bottom:11px}
+  .fc-ans{font-size:15px; font-weight:600; color:var(--ink); line-height:1.4; margin-bottom:11px}
+  .fc-why{font-size:13.5px; color:var(--ink-soft); line-height:1.5}
+  .fc-why b{color:var(--ink)}
+
+  /* ---------- V3 · SERIOUS GAME ---------- */
+  .game{margin-top:40px; padding:24px 22px 22px; background:var(--surface); border:1px solid var(--line);
+    border-top:4px solid var(--c); border-radius:16px}
+  .game-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:8px}
+  .game-kicker{font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--c); margin-bottom:6px}
+  .game-title{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:1.18rem; color:var(--ink); margin:0}
+  .game-score{font-family:"Space Mono",monospace; font-weight:700; font-size:14px; color:var(--c);
+    background:var(--c-tint); border-radius:20px; padding:5px 13px; white-space:nowrap}
+  .game-intro{font-size:13.5px; color:var(--ink-soft); margin:0 0 18px; line-height:1.5}
+  .game-progress{font-family:"Space Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:10px}
+  .scenario-title{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:1.04rem; color:var(--ink); margin:0 0 6px}
+  .scenario-sit{font-size:14.5px; color:var(--ink-soft); line-height:1.55; margin:0 0 16px}
+  .opts{display:flex; flex-direction:column; gap:10px}
+  .opt{display:flex; gap:12px; align-items:flex-start; text-align:left; width:100%; cursor:pointer;
+    font-family:inherit; font-size:14px; color:var(--ink); background:var(--bg); border:1px solid var(--line);
+    border-radius:11px; padding:13px 15px; transition:border-color .15s, background .15s, transform .1s}
+  .opt:hover:not(:disabled){border-color:var(--c); transform:translateY(-1px)}
+  .opt:disabled{cursor:default}
+  .opt .ob{width:9px; height:9px; border-radius:50%; background:var(--ink-faint); margin-top:5px; flex:none}
+  .opt.good{border-color:var(--comprender); background:var(--comprender-tint)}
+  .opt.partial{border-color:var(--aplicar); background:var(--aplicar-tint)}
+  .opt.bad{border-color:var(--evaluar); background:var(--evaluar-tint)}
+  .opt .tag-best{margin-left:auto; align-self:center; flex:none; font-family:"Space Mono",monospace;
+    font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--comprender)}
+  .feedback{margin-top:14px; padding:13px 15px; border-radius:11px; font-size:13.5px; line-height:1.55; border-left:4px solid var(--c); color:var(--ink-soft)}
+  .feedback.good{border-color:var(--comprender); background:var(--comprender-tint)}
+  .feedback.partial{border-color:var(--aplicar); background:var(--aplicar-tint)}
+  .feedback.bad{border-color:var(--evaluar); background:var(--evaluar-tint)}
+  .feedback .fb-verd{font-family:"Space Mono",monospace; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; display:block; margin-bottom:5px}
+  .feedback.good .fb-verd{color:var(--comprender)}
+  .feedback.partial .fb-verd{color:var(--aplicar)}
+  .feedback.bad .fb-verd{color:var(--evaluar)}
+  .game-next{margin-top:16px; font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:14px; cursor:pointer;
+    background:var(--c); color:#1a0b0e; border:none; border-radius:10px; padding:11px 22px; transition:transform .12s, filter .12s}
+  .game-next:hover{transform:translateY(-2px); filter:brightness(1.07)}
+  .game-result{text-align:center; padding:14px 0 6px}
+  .gr-score{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:2.7rem; color:var(--c); line-height:1}
+  .gr-of{font-family:"Space Mono",monospace; font-size:12.5px; color:var(--ink-faint); margin-bottom:14px}
+  .gr-badge{display:inline-block; font-family:"Space Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; border-radius:20px; padding:5px 14px; margin-bottom:16px}
+  .gr-badge.pass{color:var(--comprender); background:var(--comprender-tint)}
+  .gr-badge.fail{color:var(--evaluar); background:var(--evaluar-tint)}
+  .gr-tier{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:1.18rem; color:var(--ink); margin-bottom:6px}
+  .gr-msg{font-size:14px; color:var(--ink-soft); max-width:480px; margin:0 auto 18px; line-height:1.5}
+  .game-restart{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:14px; cursor:pointer; display:inline-block;
+    background:transparent; color:var(--c); border:1px solid var(--c); border-radius:10px; padding:10px 22px}
+  .game-restart:hover{background:var(--c-tint)}
+
+
+
+  /* ---------- FIGURAS AMPLIABLES (figlb v1) ---------- */
+  figure{position:relative}
+  figure.figlb-able{cursor:zoom-in}
+  figure.figlb-able:focus-visible{outline:2px solid var(--analizar); outline-offset:3px}
+  figure.figlb-able .figlb-hint{
+    position:absolute; top:10px; right:10px; z-index:2;
+    display:flex; align-items:center; gap:6px; pointer-events:none;
+    font-family:"Space Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ink-faint); background:color-mix(in srgb, var(--bg) 72%, transparent);
+    border:1px solid var(--line); border-radius:8px; padding:4px 8px;
+    opacity:0; transition:opacity .15s ease, color .15s ease;
+  }
+  figure.figlb-able:hover .figlb-hint,
+  figure.figlb-able:focus-visible .figlb-hint{opacity:1; color:var(--ink-soft)}
+
+  .figlb{
+    position:fixed; inset:0; z-index:9999; display:none;
+    background:color-mix(in srgb, var(--bg) 94%, #000);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  }
+  .figlb.open{display:block}
+  body.figlb-lock{overflow:hidden}
+  .figlb-stage{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    padding:64px 28px 92px; overflow:hidden; touch-action:none;
+  }
+  .figlb-pan{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%; transform-origin:50% 50%; will-change:transform;
+    transition:transform .16s ease-out;
+  }
+  .figlb-pan.dragging{transition:none; cursor:grabbing}
+  .figlb-fit{
+    width:100%; max-width:100%; max-height:100%; aspect-ratio:var(--figlb-ar, 16/9);
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px;
+  }
+  .figlb-fit.raster{width:auto; height:auto; aspect-ratio:auto; padding:10px}
+  .figlb-fit svg{display:block; width:100%; height:100%}
+  .figlb-fit img{display:block; max-width:calc(100vw - 76px); max-height:calc(100vh - 176px); width:auto; height:auto}
+
+  .figlb-cap{
+    position:absolute; left:0; right:0; bottom:26px; margin:0 auto; max-width:74ch; padding:0 28px;
+    font-family:"Space Mono",monospace; font-size:13px; line-height:1.5; color:var(--ink-soft);
+    text-align:center; pointer-events:none;
+  }
+  .figlb-bar{
+    position:absolute; top:18px; right:22px; display:flex; align-items:center; gap:8px; z-index:2;
+  }
+  .figlb-bar button{
+    display:flex; align-items:center; justify-content:center; min-width:38px; height:38px; padding:0 11px;
+    background:var(--surface); color:var(--ink-soft); border:1px solid var(--line); border-radius:10px;
+    font-family:"Space Mono",monospace; font-size:15px; line-height:1; cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .figlb-bar button:hover{background:var(--surface-2); color:var(--ink); border-color:var(--ink-faint)}
+  .figlb-bar button:disabled{opacity:.4; cursor:default}
+  .figlb-bar .figlb-lvl{
+    min-width:56px; text-align:center; font-family:"Space Mono",monospace; font-size:12px;
+    color:var(--ink-faint); letter-spacing:.04em;
+  }
+  .figlb-help{
+    position:absolute; left:22px; top:26px; font-family:"Space Mono",monospace; font-size:11.5px;
+    letter-spacing:.04em; color:var(--ink-faint); pointer-events:none;
+  }
+  @media (max-width:860px){
+    .figlb-stage{padding:58px 12px 86px}
+    .figlb-help{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .figlb-pan{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero"><div class="wrap" id="heroWrap"></div></header>
+
+<section class="mm-section"><div class="wrap">
+  <div class="mm-title">Mapa de la unidad · índice navegable</div>
+  <p class="mm-sub">Toca cualquier nodo para ir a esa parte. El color indica el nivel cognitivo (taxonomía de Bloom).</p>
+  <div class="mm-wrap" id="mmWrap">
+    <svg class="mm-links" id="mmLinks" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="mm-center" id="mmCenter"></div>
+    <div class="mm-nodes" id="mmNodes"></div>
+  </div>
+</div></section>
+
+<div class="wrap"><div class="body-grid">
+  <nav class="rail" id="rail" aria-label="Índice de objetivos"></nav>
+  <main id="main"></main>
+</div></div>
+
+<div class="wrap"><div class="memorai-promo">
+  <a id="memoraiPromo" href="memorai.html" target="_blank" rel="noopener">
+    <img src="data:image/webp;base64,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" alt="MemorAI — Nunca olvides lo que importa" width="160" height="99" loading="lazy">
+    <span class="mp-cta">Repasa esta unidad con MemorAI &rarr;</span>
+  </a>
+</div></div>
+
+<footer><div class="wrap" id="footWrap"></div></footer>
+
+<script id="unit-data">
+/* ===== INICIO · DATOS DE LA UNIDAD ============================================
+   El skill «resumen-didactico-video» REEMPLAZA el objeto window.UNIT de abajo
+   por los datos de la unidad generada. No toques nada fuera de este bloque.
+   ============================================================================ */
+window.UNIT = {"curso": "Fundamentos de Energía Nuclear (FEN)", "modulo": "M1 · Física nuclear y radiación", "numTema": "1.1", "tema": "Física nuclear y radiación", "titulo": "Física nuclear y radiación: del átomo al núcleo, fisión y fusión", "tituloPagina": "1.1 Física nuclear y radiación · FEN", "tituloCorto": "Física nuclear y radiación", "fuente": "Ciencia y Tecnología Nuclear, Cap. 1 · Física nuclear y radiación (M. Fernández Ordóñez, G. Jiménez Varas — Jóvenes Nucleares, Sociedad Nuclear Española)", "formato": "documento", "objetivoReferencia": "Explicar el comportamiento del núcleo atómico -su estructura, su estabilidad y las reacciones que libera- como base para entender el funcionamiento de una central nuclear.", "objetivoInferido": true, "slug": "fisica_nuclear_radiacion", "unitHref": "unidad_fisica_nuclear_radiacion.html", "memoraiHref": "memorai.html", "objetivos": [{"id": "od1", "n": "1", "lvl": "comprender", "lvlLabel": "Comprender", "navTitle": "Modelos atómicos", "titulo": "De Dalton a Schrödinger: la evolución del modelo atómico", "objetivo": "Explicar cómo ha evolucionado el modelo atómico, desde Dalton hasta Schrödinger, apoyándose en el experimento que forzó cada cambio.", "contentHtml": "\n<p class=\"lead\">Durante más de dos mil años la pregunta \"¿de qué está hecha la materia?\" tuvo respuestas filosóficas. Solo en poco más de un siglo -de 1808 a 1932- la física convirtió esa pregunta en un modelo experimental, y lo hizo a base de que cada modelo nuevo cayera ante un experimento que el anterior no podía explicar.</p>\n<p>El filósofo griego Demócrito ya había propuesto hacia el 400 a.C. que la materia estaba formada por átomos indivisibles. Pero la primera versión con base experimental llegó con John Dalton en 1808: átomos indivisibles, iguales entre sí dentro de un mismo elemento químico y sin carga eléctrica. Ese modelo se sostuvo casi un siglo, hasta que en 1897 J. J. Thomson descubrió el electrón, una partícula mucho más pequeña que el átomo y con carga. Un átomo \"indivisible\" que contenía algo más pequeño en su interior ya no podía ser indivisible.</p>\n<p>Thomson resolvió la contradicción proponiendo un átomo formado por una masa de carga positiva con los electrones incrustados en ella, como pasas en un pudin. Fue Ernest Rutherford quien, en 1911, puso ese modelo a prueba bombardeando láminas de oro muy finas con partículas alfa. Si Thomson tenía razón, casi todas las partículas debían rebotar al chocar con esa masa positiva densa. Ocurrió lo contrario: la inmensa mayoría atravesó la lámina como si no hubiera nada, y solo unas pocas se desviaron o rebotaron. La única explicación era que el átomo está casi hueco, con casi toda su masa y su carga positiva concentrada en un núcleo diminuto en el centro.</p>\n<figure class=\"figlb-able\" tabindex=\"0\"><svg viewBox=\"0 0 1600 900\" role=\"img\" aria-label=\"Linea de tiempo de los modelos atómicos, de Dalton en 1808 a Schrödinger en 1926, con los descubrimientos que invalidaron cada modelo anterior\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Segoe UI, Inter, Helvetica Neue, Arial, sans-serif\"><defs><linearGradient id=\"tl-bg\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#0B1622\"/><stop offset=\"1\" stop-color=\"#0B1622\"/></linearGradient></defs><rect width=\"1600\" height=\"900\" fill=\"#0B1622\"/><text x=\"48\" y=\"70\" font-size=\"40\" fill=\"#FFFFFF\" font-weight=\"600\">Modelos atómicos, 1808-1932</text><text x=\"48\" y=\"104\" font-size=\"22\" fill=\"#3EC9E8\">Cada modelo cae ante un experimento que no puede explicar</text><line x1=\"90\" y1=\"430\" x2=\"1540\" y2=\"430\" stroke=\"#2A4056\" stroke-width=\"4\"/><g id=\"hitos\"><g id=\"hito-dalton\"><circle cx=\"160\" cy=\"430\" r=\"9\" fill=\"#3EC9E8\"/><rect x=\"60\" y=\"230\" width=\"220\" height=\"160\" rx=\"14\" fill=\"#111F30\" fill-opacity=\"0.92\" stroke=\"#3EC9E8\" stroke-width=\"1.5\"/><text x=\"80\" y=\"262\" font-size=\"18\" fill=\"#3EC9E8\" font-weight=\"600\">1808 · DALTON</text><text x=\"80\" y=\"290\" font-size=\"16\" fill=\"#E6EDF5\"><tspan x=\"80\" dy=\"0\">Átomos indivisibles,</tspan><tspan x=\"80\" dy=\"1.35em\">iguales por elemento,</tspan><tspan x=\"80\" dy=\"1.35em\">sin carga eléctrica.</tspan></text><line x1=\"160\" y1=\"390\" x2=\"160\" y2=\"421\" stroke=\"#3EC9E8\" stroke-width=\"2.5\"/></g><g id=\"hito-thomson\"><circle cx=\"480\" cy=\"430\" r=\"9\" fill=\"#FF4D8D\"/><rect x=\"380\" y=\"470\" width=\"220\" height=\"170\" rx=\"14\" fill=\"#111F30\" fill-opacity=\"0.92\" stroke=\"#FF4D8D\" stroke-width=\"1.5\"/><text x=\"400\" y=\"502\" font-size=\"18\" fill=\"#FF4D8D\" font-weight=\"600\">1897 · THOMSON</text><text x=\"400\" y=\"530\" font-size=\"16\" fill=\"#E6EDF5\"><tspan x=\"400\" dy=\"0\">Descubre el electrón:</tspan><tspan x=\"400\" dy=\"1.35em\">el átomo no es</tspan><tspan x=\"400\" dy=\"1.35em\">indivisible. Propone</tspan><tspan x=\"400\" dy=\"1.35em\">una masa positiva</tspan><tspan x=\"400\" dy=\"1.35em\">con electrones dentro.</tspan></text><line x1=\"480\" y1=\"439\" x2=\"480\" y2=\"469\" stroke=\"#FF4D8D\" stroke-width=\"2.5\"/></g><g id=\"hito-rutherford\"><circle cx=\"800\" cy=\"430\" r=\"9\" fill=\"#8FD14F\"/><rect x=\"700\" y=\"230\" width=\"230\" height=\"170\" rx=\"14\" fill=\"#111F30\" fill-opacity=\"0.92\" stroke=\"#8FD14F\" stroke-width=\"1.5\"/><text x=\"720\" y=\"262\" font-size=\"18\" fill=\"#8FD14F\" font-weight=\"600\">1911 · RUTHERFORD</text><text x=\"720\" y=\"290\" font-size=\"16\" fill=\"#E6EDF5\"><tspan x=\"720\" dy=\"0\">Bombardea oro con</tspan><tspan x=\"720\" dy=\"1.35em\">partículas alfa: casi</tspan><tspan x=\"720\" dy=\"1.35em\">todas atraviesan la</tspan><tspan x=\"720\" dy=\"1.35em\">lámina. El átomo está</tspan><tspan x=\"720\" dy=\"1.35em\">casi hueco, con un</tspan><tspan x=\"720\" dy=\"1.35em\">núcleo positivo denso.</tspan></text><line x1=\"800\" y1=\"390\" x2=\"800\" y2=\"421\" stroke=\"#8FD14F\" stroke-width=\"2.5\"/></g><g id=\"hito-bohr\"><circle cx=\"1120\" cy=\"430\" r=\"9\" fill=\"#FFC24B\"/><rect x=\"1020\" y=\"470\" width=\"230\" height=\"170\" rx=\"14\" fill=\"#111F30\" fill-opacity=\"0.92\" stroke=\"#FFC24B\" stroke-width=\"1.5\"/><text x=\"1040\" y=\"502\" font-size=\"18\" fill=\"#FFC24B\" font-weight=\"600\">1913 · BOHR</text><text x=\"1040\" y=\"530\" font-size=\"16\" fill=\"#E6EDF5\"><tspan x=\"1040\" dy=\"0\">Añade física cuántica:</tspan><tspan x=\"1040\" dy=\"1.35em\">los electrones giran</tspan><tspan x=\"1040\" dy=\"1.35em\">en capas discretas,</tspan><tspan x=\"1040\" dy=\"1.35em\">no en cualquier</tspan><tspan x=\"1040\" dy=\"1.35em\">orbita.</tspan></text><line x1=\"1120\" y1=\"439\" x2=\"1120\" y2=\"469\" stroke=\"#FFC24B\" stroke-width=\"2.5\"/></g><g id=\"hito-schrodinger\"><circle cx=\"1440\" cy=\"430\" r=\"9\" fill=\"#B47BF0\"/><rect x=\"1340\" y=\"210\" width=\"230\" height=\"190\" rx=\"14\" fill=\"#111F30\" fill-opacity=\"0.92\" stroke=\"#B47BF0\" stroke-width=\"1.5\"/><text x=\"1360\" y=\"242\" font-size=\"18\" fill=\"#B47BF0\" font-weight=\"600\">1926-32 · SCHRÖDINGER</text><text x=\"1360\" y=\"270\" font-size=\"16\" fill=\"#E6EDF5\"><tspan x=\"1360\" dy=\"0\">Modelo cuántico</tspan><tspan x=\"1360\" dy=\"1.35em\">vigente: electrones</tspan><tspan x=\"1360\" dy=\"1.35em\">como nube de</tspan><tspan x=\"1360\" dy=\"1.35em\">probabilidad. En 1932</tspan><tspan x=\"1360\" dy=\"1.35em\">Chadwick confirma</tspan><tspan x=\"1360\" dy=\"1.35em\">el neutrón.</tspan></text><line x1=\"1440\" y1=\"400\" x2=\"1440\" y2=\"421\" stroke=\"#B47BF0\" stroke-width=\"2.5\"/></g></g><rect x=\"60\" y=\"760\" width=\"1480\" height=\"100\" rx=\"14\" fill=\"#111F30\" fill-opacity=\"0.9\" stroke=\"#2A4056\"/><text x=\"86\" y=\"798\" font-size=\"19\" fill=\"#FFC24B\" font-weight=\"600\">1938-39 · Hahn, Meitner y Strassmann</text><text x=\"86\" y=\"826\" font-size=\"17\" fill=\"#E6EDF5\">Bombardean uranio con neutrones y obtienen bario: la primera fisión nuclear observada.</text></svg><figcaption>Cada tarjeta señala el experimento que obligó a sustituir el modelo anterior; la franja inferior añade el descubrimiento de 1938-39 que abre el siguiente objetivo de esta unidad.</figcaption></figure>\n<p>El modelo de Rutherford todavía tenía un problema: según la física clásica, un electrón girando alrededor de un núcleo debería perder energía e ir cayendo en espiral hasta estrellarse contra él. El átomo se desmoronaría en una fracción de segundo, y evidentemente no lo hace. Niels Bohr, discípulo de Rutherford, resolvió esto en 1913 introduciendo la física cuántica: los electrones solo pueden ocupar determinadas capas u órbitas discretas, nunca posiciones intermedias. Entre 1926 y 1932, Erwin Schrödinger llevó la mecánica cuántica hasta sus últimas consecuencias: los electrones no orbitan como planetas, sino que existen como una nube de probabilidad alrededor del núcleo. Es el modelo que sigue vigente hoy. Ese mismo año, 1932, James Chadwick confirmó experimentalmente la existencia del neutrón, la partícula neutra que completaba la imagen del núcleo.</p>\n<div class=\"callout\"><span class=\"ic\">Nota</span><p>El hilo de esta historia no termina en un modelo estático: en 1938-39, Otto Hahn, Lise Meitner y Fritz Strassmann bombardearon uranio con neutrones y obtuvieron bario, un núcleo con la mitad de masa. Habían fisionado el átomo sin saberlo del todo -y esa observación es la puerta de entrada al resto de esta unidad.</p></div>\n", "cards": [{"id": "od1-c1", "q": "¿Qué observación experimental de Thomson en 1897 hizo insostenible el modelo de Dalton?", "opts": ["Que las partículas alfa atravesaban láminas de oro sin apenas desviarse en su trayectoria", "Que el átomo contenía una partícula cargada -el electrón- mucho más pequeña que el propio átomo", "Que los electrones solo podían ocupar determinadas capas discretas alrededor del núcleo", "Que el neutrón era una partícula sin carga capaz de residir establemente dentro del núcleo"], "correct": 1, "why": "Dalton sostenía que el átomo era indivisible y sin carga. Un electrón cargado y más pequeño que el átomo contradecía las dos ideas a la vez, y forzó a Thomson a proponer un átomo con partículas dentro."}, {"id": "od1-c2", "q": "En el experimento de Rutherford, ¿qué resultado obligó a abandonar el modelo de Thomson?", "opts": ["Que casi todas las partículas alfa atravesaran la lámina de oro en vez de rebotar contra ella", "Que el electrón resultara tener masa negativa en lugar de masa positiva, al medirlo con precisión", "Que la mitad de las partículas alfa quedara atrapada de forma permanente dentro del núcleo de oro", "Que las partículas alfa emitidas resultaran ser en realidad electrones de muy alta energía"], "correct": 0, "why": "El modelo de Thomson predecía una masa positiva densa que debía frenar o rebotar la mayoría de las partículas alfa. Que casi todas pasaran de largo solo se explica si el átomo está casi vacío, con la masa concentrada en un núcleo pequeño."}, {"id": "od1-c3", "q": "¿Qué aportó el modelo de Bohr de 1913 que el de Rutherford no explicaba?", "opts": ["Por qué los electrones no caen en espiral hacia el núcleo, al limitarlos a capas discretas fijas", "Por qué el núcleo concentra más del 99% de la masa total del átomo en un volumen tan pequeño", "Por qué las partículas alfa emitidas por el radio tienen carga positiva en lugar de carga neutra", "Por qué un mismo elemento químico puede presentar varios isótopos con distinto número de neutrones"], "correct": 0, "why": "La física clásica predecía que un electrón en órbita libre perdería energía y caería sobre el núcleo. Bohr introdujo la física cuántica para fijar a los electrones en capas discretas, sin posiciones intermedias, y así el átomo deja de ser inestable."}, {"id": "od1-c4", "q": "¿Qué distingue al modelo de Schrödinger (1926-32) del modelo de Bohr que lo precede?", "opts": ["Que sitúa el descubrimiento del neutrón antes que el de las capas electrónicas discretas de Bohr", "Que reemplaza las órbitas fijas por una nube de probabilidad, sin trayectoria definida para el electrón", "Que propone por primera vez un núcleo positivo rodeado de electrones en vez de un átomo macizo", "Que descarta la existencia de electrones y explica la carga del átomo solo con protones y neutrones"], "correct": 1, "why": "Bohr ya había introducido capas discretas; el aporte de Schrödinger, con la mecánica cuántica completa, es sustituir la idea de órbita por una distribución de probabilidad: no se puede decir dónde está el electrón, solo dónde es más probable encontrarlo."}]}, {"id": "od2", "n": "2", "lvl": "comprender", "lvlLabel": "Comprender", "navTitle": "Átomo, núcleo e isótopos", "titulo": "La estructura del átomo: del núcleo a los isótopos", "objetivo": "Describir la estructura del átomo y del núcleo -nucleones, isótopos y número másico- situando su tamaño en la escala del universo a la partícula.", "contentHtml": "\n<p class=\"lead\">Hoy se sabe que el átomo consta de un núcleo central -que concentra más del 99% de su masa- rodeado de electrones dispuestos según distribuciones de probabilidad. El núcleo, a su vez, no es un ente fundamental: está formado por protones y neutrones, llamados genéricamente <b>nucleones</b>, que tampoco son indivisibles, sino que están compuestos de partículas aún más pequeñas llamadas quarks.</p>\n<p>Para hacerse una idea de lo vacío que está el átomo conviene comparar escalas muy distintas entre sí. Si el núcleo de hidrógeno -formado por un único protón- fuera del tamaño de un balón de fútbol en el centro de un estadio, el átomo completo ocuparía todo el estadio: el núcleo es unas 100.000 veces más pequeño que el átomo que lo contiene.</p>\n<div class=\"tbl-wrap\"><table><thead><tr><th>Objeto</th><th>Tamaño aproximado</th></tr></thead><tbody>\n<tr><td>Galaxia</td><td>10<sup>22</sup> m</td></tr>\n<tr><td>Sistema solar</td><td>10<sup>14</sup> m</td></tr>\n<tr><td>Tierra</td><td>10<sup>7</sup> m</td></tr>\n<tr><td>Un árbol</td><td>10 m</td></tr>\n<tr><td>Una mosca</td><td>10<sup>-2</sup> m</td></tr>\n<tr><td>Célula humana</td><td>10<sup>-4</sup> m</td></tr>\n<tr><td>ADN</td><td>10<sup>-9</sup> m</td></tr>\n<tr><td><b>Átomo de hidrógeno</b></td><td><b>10<sup>-10</sup> m</b></td></tr>\n<tr><td><b>Núcleo de plomo</b></td><td><b>10<sup>-11</sup> m</b></td></tr>\n<tr><td><b>Protón y neutrón</b></td><td><b>10<sup>-15</sup> m</b></td></tr>\n</tbody></table></div>\n<p>Un elemento químico queda definido por su número de protones: es lo que distingue al hidrógeno del uranio. Pero un mismo elemento puede tener distinto número de neutrones -esas variantes se llaman <b>isótopos</b>-. El hidrógeno normal tiene un protón y ningún neutrón; si añade un neutrón se llama deuterio, y con dos, tritio. Cada núcleo se identifica con su símbolo y su <b>número másico</b>, la suma de protones más neutrones: <sup>1</sup>H, <sup>2</sup>H, <sup>3</sup>H.</p>\n<p>El uranio funciona igual: su isótopo mayoritario en la naturaleza, el <sup>238</sup>U, tiene 92 protones y 146 neutrones. El isótopo que hace posible la fisión en las centrales nucleares, el <sup>235</sup>U, tiene los mismos 92 protones pero solo 143 neutrones. Ese pequeño cambio en el número de neutrones es lo que separa un combustible nuclear útil de un metal pesado corriente, y es el hilo que conecta este objetivo con los dos siguientes.</p>\n", "cards": [{"id": "od2-c1", "q": "Según la escala de tamaños del capítulo, ¿cómo es de grande el átomo de hidrógeno en relación con su núcleo?", "opts": ["El núcleo y el átomo tienen prácticamente el mismo tamaño, con una diferencia mínima", "El núcleo es unas 100.000 veces más pequeño que el átomo completo que lo contiene", "El átomo es solo diez veces mayor que su núcleo, una diferencia de un orden de magnitud", "El núcleo ocupa aproximadamente la mitad del volumen total que ocupa el átomo entero"], "correct": 1, "why": "El capítulo usa la comparación del balón de fútbol en el centro de un estadio: el núcleo de hidrógeno es unas 100.000 veces más pequeño que el átomo, lo que deja la materia prácticamente vacía."}, {"id": "od2-c2", "q": "¿Qué son los nucleones y de qué están compuestos a su vez?", "opts": ["Los electrones que orbitan el núcleo; a su vez están formados por fotones de muy baja energía", "Los isótopos de un mismo elemento químico; a su vez se distinguen solo por su número de protones", "Las partículas alfa emitidas en la desintegración; a su vez están formadas por dos electrones libres", "Los protones y neutrones del núcleo; a su vez están formados por partículas más pequeñas, los quarks"], "correct": 3, "why": "Nucleones es el nombre genérico de protones y neutrones, por formar el núcleo. Ninguno de los dos es indivisible: ambos están compuestos de quarks, partículas aún más elementales."}, {"id": "od2-c3", "q": "El <sup>235</sup>U y el <sup>238</sup>U son isótopos del mismo elemento. ¿En qué se diferencian exactamente?", "opts": ["Tienen el mismo número de protones (92) pero distinto número de neutrones en el núcleo", "Tienen el mismo número de neutrones pero distinto número de protones, lo que cambia el elemento", "Tienen el mismo número másico total pero una disposición distinta de sus electrones externos", "Uno de los dos no tiene núcleo definido, solo una nube difusa de neutrones sin protones"], "correct": 0, "why": "Ser isótopos del mismo elemento significa compartir el número de protones -eso es lo que define al uranio-, y diferir en el número de neutrones: 146 en el <sup>238</sup>U frente a 143 en el <sup>235</sup>U."}, {"id": "od2-c4", "q": "¿Qué indica el número másico que acompaña al símbolo de un isótopo, como en <sup>235</sup>U?", "opts": ["El número de electrones que orbitan alrededor del núcleo en su estado eléctricamente neutro", "La energía, en millones de electronvoltios, que libera ese isótopo al fisionarse por completo", "La suma total de protones y neutrones que contiene el núcleo de ese isótopo concreto", "El número de años que tarda ese isótopo en desintegrarse hasta la mitad de una muestra inicial"], "correct": 2, "why": "El número másico es protones más neutrones. Para el <sup>235</sup>U son 92 protones y 143 neutrones; no describe electrones, energía liberada ni periodo de semidesintegración, que son magnitudes distintas."}]}, {"id": "od3", "n": "3", "lvl": "analizar", "lvlLabel": "Analizar", "navTitle": "Radiactividad y estabilidad", "titulo": "Estabilidad nuclear y los cuatro procesos radiactivos", "objetivo": "Diferenciar los cuatro procesos radiactivos (alfa, beta negativa, beta positiva y gamma) y relacionar la estabilidad de un núcleo con su combinación de protones y neutrones.", "contentHtml": "\n<p class=\"lead\">De los cerca de 2.300 núcleos que se conocen, solo unos 300 son estables. El resto -inestables- buscan estabilidad transformándose mediante procesos radiactivos, y lo hacen de una de estas cuatro formas.</p>\n<p>La estabilidad depende del equilibrio entre dos fuerzas: los protones, al tener carga positiva, se repelen entre sí; pero a distancias muy pequeñas, dentro del núcleo, todas las partículas se atraen. Los neutrones no tienen carga, así que no añaden repulsión: cuantos más neutrones haya junto a los protones, más equilibrado queda ese balance. Por eso los núcleos pequeños son estables con un neutrón por cada protón, y los núcleos grandes necesitan cada vez más neutrones que protones para compensar la repulsión creciente.</p>\n<figure class=\"figlb-able\" tabindex=\"0\"><svg viewBox=\"0 0 1600 900\" role=\"img\" aria-label=\"Comparativa de los cuatro procesos radiactivos: desintegración alfa, beta negativa, beta positiva y gamma\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Segoe UI, Inter, Helvetica Neue, Arial, sans-serif\"><defs><marker id=\"arwp\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0 0 L10 5 L0 10 z\" fill=\"#B8C6D6\"/></marker></defs><rect width=\"1600\" height=\"900\" fill=\"#0B1622\"/><text x=\"48\" y=\"70\" font-size=\"40\" fill=\"#FFFFFF\" font-weight=\"600\">Cómo se desintegra un núcleo inestable</text><text x=\"48\" y=\"104\" font-size=\"22\" fill=\"#3EC9E8\">Cuatro estrategias para llegar a una combinación más estable de protones y neutrones</text><g><rect x=\"60\" y=\"180\" width=\"330\" height=\"620\" rx=\"16\" fill=\"#111F30\" fill-opacity=\"0.9\" stroke=\"#3EC9E8\" stroke-width=\"1.5\"/><text x=\"82\" y=\"222\" font-size=\"21\" fill=\"#3EC9E8\" font-weight=\"600\">ALFA</text><circle cx=\"225\" cy=\"330\" r=\"70\" fill=\"#1E3346\"/><circle cx=\"225\" cy=\"330\" r=\"70\" fill=\"none\" stroke=\"#3EC9E8\" stroke-width=\"2.5\"/><text x=\"225\" y=\"337\" font-size=\"18\" fill=\"#FFFFFF\" text-anchor=\"middle\">Sobra masa</text><path d=\"M225 415 L225 470\" stroke=\"#3EC9E8\" stroke-width=\"2.5\" marker-end=\"url(#arwp)\"/><circle cx=\"225\" cy=\"560\" r=\"58\" fill=\"#1E3346\"/><circle cx=\"225\" cy=\"560\" r=\"58\" fill=\"none\" stroke=\"#3EC9E8\" stroke-width=\"2.5\"/><text x=\"225\" y=\"567\" font-size=\"17\" fill=\"#FFFFFF\" text-anchor=\"middle\">-2p -2n</text><text x=\"82\" y=\"662\" font-size=\"15.5\" fill=\"#E6EDF5\"><tspan x=\"82\" dy=\"0\">Expulsa una partícula alfa (2</tspan><tspan x=\"82\" dy=\"1.35em\">protones + 2 neutrones): el núcleo</tspan><tspan x=\"82\" dy=\"1.35em\">pierde masa de golpe.</tspan></text></g><g><rect x=\"430\" y=\"180\" width=\"330\" height=\"620\" rx=\"16\" fill=\"#111F30\" fill-opacity=\"0.9\" stroke=\"#FF4D8D\" stroke-width=\"1.5\"/><text x=\"452\" y=\"222\" font-size=\"21\" fill=\"#FF4D8D\" font-weight=\"600\">BETA NEGATIVA</text><circle cx=\"595\" cy=\"330\" r=\"70\" fill=\"#1E3346\"/><circle cx=\"595\" cy=\"330\" r=\"70\" fill=\"none\" stroke=\"#FF4D8D\" stroke-width=\"2.5\"/><text x=\"595\" y=\"337\" font-size=\"18\" fill=\"#FFFFFF\" text-anchor=\"middle\">Sobra neutrón</text><path d=\"M595 415 L595 470\" stroke=\"#FF4D8D\" stroke-width=\"2.5\" marker-end=\"url(#arwp)\"/><circle cx=\"595\" cy=\"560\" r=\"58\" fill=\"#1E3346\"/><circle cx=\"595\" cy=\"560\" r=\"58\" fill=\"none\" stroke=\"#FF4D8D\" stroke-width=\"2.5\"/><text x=\"595\" y=\"567\" font-size=\"17\" fill=\"#FFFFFF\" text-anchor=\"middle\">n -> p + e-</text><text x=\"452\" y=\"662\" font-size=\"15.5\" fill=\"#E6EDF5\"><tspan x=\"452\" dy=\"0\">Un neutrón se convierte en protón</tspan><tspan x=\"452\" dy=\"1.35em\">y electrón; el electrón sale del</tspan><tspan x=\"452\" dy=\"1.35em\">núcleo.</tspan></text></g><g><rect x=\"800\" y=\"180\" width=\"330\" height=\"620\" rx=\"16\" fill=\"#111F30\" fill-opacity=\"0.9\" stroke=\"#8FD14F\" stroke-width=\"1.5\"/><text x=\"822\" y=\"222\" font-size=\"21\" fill=\"#8FD14F\" font-weight=\"600\">BETA POSITIVA</text><circle cx=\"965\" cy=\"330\" r=\"70\" fill=\"#1E3346\"/><circle cx=\"965\" cy=\"330\" r=\"70\" fill=\"none\" stroke=\"#8FD14F\" stroke-width=\"2.5\"/><text x=\"965\" y=\"337\" font-size=\"18\" fill=\"#FFFFFF\" text-anchor=\"middle\">Sobra protón</text><path d=\"M965 415 L965 470\" stroke=\"#8FD14F\" stroke-width=\"2.5\" marker-end=\"url(#arwp)\"/><circle cx=\"965\" cy=\"560\" r=\"58\" fill=\"#1E3346\"/><circle cx=\"965\" cy=\"560\" r=\"58\" fill=\"none\" stroke=\"#8FD14F\" stroke-width=\"2.5\"/><text x=\"965\" y=\"567\" font-size=\"17\" fill=\"#FFFFFF\" text-anchor=\"middle\">p -> n + e+</text><text x=\"822\" y=\"662\" font-size=\"15.5\" fill=\"#E6EDF5\"><tspan x=\"822\" dy=\"0\">Un protón se convierte en neutrón</tspan><tspan x=\"822\" dy=\"1.35em\">y positrón (electrón de carga</tspan><tspan x=\"822\" dy=\"1.35em\">positiva).</tspan></text></g><g><rect x=\"1170\" y=\"180\" width=\"330\" height=\"620\" rx=\"16\" fill=\"#111F30\" fill-opacity=\"0.9\" stroke=\"#FFC24B\" stroke-width=\"1.5\"/><text x=\"1192\" y=\"222\" font-size=\"21\" fill=\"#FFC24B\" font-weight=\"600\">GAMMA</text><circle cx=\"1335\" cy=\"330\" r=\"70\" fill=\"#1E3346\"/><circle cx=\"1335\" cy=\"330\" r=\"70\" fill=\"none\" stroke=\"#FFC24B\" stroke-width=\"2.5\"/><text x=\"1335\" y=\"337\" font-size=\"18\" fill=\"#FFFFFF\" text-anchor=\"middle\">Sobra energía</text><path d=\"M1335 415 L1335 470\" stroke=\"#FFC24B\" stroke-width=\"2.5\" marker-end=\"url(#arwp)\"/><circle cx=\"1335\" cy=\"560\" r=\"58\" fill=\"#1E3346\"/><circle cx=\"1335\" cy=\"560\" r=\"58\" fill=\"none\" stroke=\"#FFC24B\" stroke-width=\"2.5\"/><text x=\"1335\" y=\"567\" font-size=\"17\" fill=\"#FFFFFF\" text-anchor=\"middle\">radiación</text><text x=\"1192\" y=\"662\" font-size=\"15.5\" fill=\"#E6EDF5\"><tspan x=\"1192\" dy=\"0\">El número de partículas no cambia:</tspan><tspan x=\"1192\" dy=\"1.35em\">solo se libera energía como</tspan><tspan x=\"1192\" dy=\"1.35em\">radiación electromagnética.</tspan></text></g><rect x=\"60\" y=\"820\" width=\"1440\" height=\"60\" rx=\"12\" fill=\"#111F30\" fill-opacity=\"0.85\" stroke=\"#2A4056\"/><text x=\"86\" y=\"857\" font-size=\"16.5\" fill=\"#B8C6D6\">El período de semidesintegración mide cuánto tarda en desintegrarse la mitad de una muestra: de microsegundos a miles de millones de años según el isótopo.</text></svg><figcaption>Cada proceso resuelve un desequilibrio distinto entre protones y neutrones; fíjate en qué partícula \"sobra\" antes de la flecha y qué emite el núcleo para deshacerse de ese exceso.</figcaption></figure>\n<p>Cuando a un núcleo le sobra masa para ser estable, expulsa una partícula alfa -dos protones y dos neutrones juntos, en la práctica un núcleo de helio-. Si lo que le sobra es un neutrón respecto a sus protones, ese neutrón se transforma en un protón y expulsa un electrón: es la desintegración beta negativa. Si le sobra un protón, ocurre lo simétrico: un protón se convierte en neutrón y expulsa un positrón, un electrón de carga positiva -desintegración beta positiva-. Y cuando el número de partículas ya es el correcto pero al núcleo le sobra energía, simplemente la libera como radiación electromagnética: es la desintegración gamma, sin cambiar ni un protón ni un neutrón de sitio.</p>\n<p>Cada isótopo inestable se desintegra a un ritmo propio, que se mide con el <b>periodo de semidesintegración</b>: el tiempo que tarda la mitad de una muestra en desintegrarse. No es un valor cualquiera -va de fracciones de segundo a miles de millones de años-, y determina cuánto tiempo hay que gestionar ese material como radiactivo.</p>\n<div class=\"tbl-wrap\"><table><thead><tr><th>Isótopo</th><th>Periodo de semidesintegración</th><th>Origen</th></tr></thead><tbody>\n<tr><td><sup>238</sup>U</td><td>4.470 millones de años</td><td>Natural</td></tr>\n<tr><td><sup>235</sup>U</td><td>704 millones de años</td><td>Natural</td></tr>\n<tr><td><sup>233</sup>Th</td><td>22,2 minutos</td><td>Artificial</td></tr>\n<tr><td><sup>239</sup>U</td><td>23,5 minutos</td><td>Artificial</td></tr>\n</tbody></table></div>\n<div class=\"callout\"><span class=\"ic\">Nota</span><p>La fisión -un núcleo pesado que se rompe en dos- es en realidad el quinto proceso radiactivo, y es tan central para esta unidad que merece su propio objetivo: es lo que se trata a continuación.</p></div>\n", "cards": [{"id": "od3-c1", "q": "¿Qué combinación de protones y neutrones hace que un núcleo pequeño sea estable, según el capítulo?", "opts": ["Un número de protones muy superior al número de neutrones, para maximizar la carga positiva total", "Un núcleo formado casi por completo por neutrones, con muy pocos protones que aporten repulsión eléctrica", "Un número de neutrones aproximadamente igual al número de protones, sin apenas exceso de ninguno", "Un número de neutrones que crece de forma proporcional al cuadrado del número de protones"], "correct": 2, "why": "Para núcleos pequeños, la mejor combinación es aproximadamente un neutrón por protón: los neutrones añaden atracción a corta distancia sin sumar repulsión eléctrica, y ese equilibrio es el que da estabilidad."}, {"id": "od3-c2", "q": "Un núcleo tiene un neutrón de más respecto al equilibrio que necesita. ¿Qué proceso radiactivo sigue con más probabilidad?", "opts": ["Desintegración beta positiva: un protón se transforma en neutrón y expulsa un positrón del núcleo", "Desintegración alfa: el núcleo expulsa de golpe dos protones y dos neutrones para perder masa", "Desintegración gamma: el núcleo libera el exceso como radiación electromagnética sin cambiar partículas", "Desintegración beta negativa: el neutrón sobrante se transforma en protón y expulsa un electrón"], "correct": 3, "why": "Cuando sobra un neutrón, ese neutrón se convierte en protón y el núcleo expulsa un electrón: es exactamente la desintegración beta negativa. La beta positiva resuelve el caso contrario, sobra de protón."}, {"id": "od3-c3", "q": "¿Qué distingue a la desintegración gamma de las otras tres desintegraciones vistas en este objetivo?", "opts": ["Que solo ocurre en núcleos artificiales creados en laboratorio, rara vez en isótopos de origen natural", "Que el núcleo ya tiene el número correcto de protones y neutrones y solo libera un exceso de energía", "Que el núcleo emite dos protones y dos neutrones juntos en forma de una única partícula pesada", "Que transforma simultáneamente un protón en neutrón y un neutrón en protón dentro del mismo núcleo"], "correct": 1, "why": "En la desintegración gamma el número de nucleones no cambia: el núcleo ya tiene la combinación correcta de protones y neutrones, y lo único que le sobra es energía, que libera como radiación electromagnética."}, {"id": "od3-c4", "q": "El <sup>235</sup>U tiene un periodo de semidesintegración de 704 millones de años. ¿Qué significa exactamente ese dato?", "opts": ["Que el <sup>235</sup>U deja de ser radiactivo por completo pasados exactamente 704 millones de años", "Que hacen falta 704 millones de años para que un solo átomo de <sup>235</sup>U emita su primera partícula", "Que la energía liberada por cada fisión de <sup>235</sup>U tarda 704 millones de años en disiparse", "Que en 704 millones de años se habrá desintegrado la mitad de los átomos de una muestra de <sup>235</sup>U"], "correct": 3, "why": "El periodo de semidesintegración es el tiempo en que la mitad de los átomos de una muestra se desintegran, no el tiempo hasta que 'termina' la radiactividad ni el tiempo hasta la primera desintegración de un átomo aislado."}]}, {"id": "od4", "n": "4", "lvl": "comprender", "lvlLabel": "Comprender", "navTitle": "Fisión y fusión", "titulo": "Fisión y fusión: dos formas de liberar la energía del núcleo", "objetivo": "Distinguir la fisión de la fusión nuclear y explicar, a partir de E=mc², por qué ambas liberan energía.", "contentHtml": "\n<p class=\"lead\">Fisión y fusión son procesos opuestos -uno rompe núcleos pesados, el otro une núcleos ligeros- pero comparten el mismo origen físico: ambos liberan energía porque el resultado final tiene menos masa que el punto de partida, y esa masa que falta se transforma en energía según la ecuación de Einstein, E=mc².</p>\n<figure class=\"figlb-able\" tabindex=\"0\"><img src=\"nucleo_fision.gif\" alt=\"Animación de un cúmulo esférico incandescente que representa la energía liberada al romperse o unirse núcleos atómicos\" loading=\"lazy\"><figcaption>Tanto la fisión como la fusión liberan esa energía por la misma razón: el resultado final pesa menos que lo que había al principio, y esa masa que falta se convierte en energía según E=mc².</figcaption></figure>\n<p><b>Fusión nuclear.</b> Dos núcleos atómicos ligeros se unen para formar un núcleo más pesado, cuya masa es inferior a la suma de las masas de los dos núcleos originales. Ese defecto de masa es la energía liberada. La reacción de fusión con más futuro para uso energético combina dos isótopos del hidrógeno, deuterio y tritio, para formar helio y liberar un neutrón de alta energía:</p>\n<div class=\"tbl-wrap\"><table><thead><tr><th>Reactivos</th><th>Productos</th></tr></thead><tbody>\n<tr><td>Deuterio (<sup>2</sup>H) + Tritio (<sup>3</sup>H)</td><td>Helio-4 (3,5 MeV) + neutrón (14,1 MeV)</td></tr>\n</tbody></table></div>\n<p>Es la reacción que alimenta al Sol y a las estrellas, pero conseguirla de forma sostenida y aprovechable en la Tierra exige confinar el combustible a temperaturas de millones de grados: la investigación lleva más de cincuenta años en marcha sin lograr todavía una central de fusión comercial.</p>\n<p><b>Fisión nuclear.</b> Un núcleo atómico pesado se divide en dos núcleos más pequeños, emitiendo además neutrones, rayos gamma y otras partículas. El núcleo pesado inicial pesa más que la suma de los dos fragmentos en que se divide, y de nuevo ese exceso de masa se transforma en energía. Aunque existen fisiones espontáneas, la forma habitual de inducirla es enviar un neutrón con la energía adecuada contra un núcleo fisionable -por ejemplo <sup>235</sup>U-: el núcleo captura el neutrón, se vuelve muy inestable y se divide en dos fragmentos, liberando a su vez varios neutrones nuevos de alta energía. No todos los núcleos pesados son fisionables por cualquier neutrón; solo unos pocos, como el <sup>233</sup>U, el <sup>235</sup>U o el <sup>239</sup>Pu, cumplen esa condición.</p>\n<p>Esta es la reacción con la que trabaja este curso: es la que hace posible que las centrales nucleares generen calor de forma continua, y esos neutrones nuevos que libera cada fisión son la clave del objetivo siguiente.</p>\n", "cards": [{"id": "od4-c1", "q": "¿Qué tienen en común la fisión y la fusión nuclear, según el capítulo?", "opts": ["Que ambas dividen un núcleo pesado en dos fragmentos de menor masa liberando energía por igual", "Que ambas necesitan millones de grados de temperatura para liberar su energía de forma sostenida", "Que ambas liberan energía porque el resultado final tiene menos masa que los núcleos de partida", "Que ambas se explotan hoy de forma comercial y aportan energía a las centrales nucleares en España"], "correct": 2, "why": "Fisión y fusión son procesos opuestos -uno divide, el otro une-, pero en los dos el producto final pesa menos que el punto de partida, y esa masa perdida se convierte en energía según E=mc². La fusión, además, no está aún explotada comercialmente."}, {"id": "od4-c2", "q": "En la reacción deuterio + tritio, ¿qué le ocurre a la masa total al pasar de reactivos a productos?", "opts": ["La masa total se mantiene exactamente igual, porque el helio-4 conserva toda la masa del deuterio y el tritio", "La masa de los productos aumenta, porque el neutrón liberado añade masa nueva al sistema completo", "La masa de los productos (helio y neutrón) es menor que la de los dos isótopos de hidrógeno iniciales", "La masa solo cambia si la reacción ocurre dentro de una estrella y no en un laboratorio terrestre"], "correct": 2, "why": "El helio-4 y el neutrón resultantes pesan, juntos, menos que el deuterio y el tritio de partida. Ese defecto de masa es precisamente lo que se libera como energía, 3,5 y 14,1 MeV respectivamente."}, {"id": "od4-c3", "q": "Para que un núcleo de <sup>235</sup>U se fisione al capturar un neutrón, ¿qué condición señala el capítulo como necesaria?", "opts": ["Que el núcleo de <sup>235</sup>U esté previamente unido a otro núcleo de <sup>235</sup>U en la misma muestra", "Que el neutrón llegue con una velocidad -una energía- adecuada para que el núcleo lo capture", "Que el neutrón proceda de una desintegración beta y no de una fisión previa de otro núcleo", "Que la temperatura del entorno supere los mismos millones de grados que necesita la fusión"], "correct": 1, "why": "El texto precisa que se envía un neutrón con la energía adecuada; no cualquier núcleo pesado captura cualquier neutrón y fisiona: solo unos pocos isótopos como el <sup>235</sup>U cumplen esa condición, y la energía del neutrón importa."}]}, {"id": "od5", "n": "5", "lvl": "aplicar", "lvlLabel": "Aplicar", "navTitle": "Reacción en cadena", "titulo": "Cómo se inicia y se controla una reacción en cadena", "objetivo": "Explicar cómo se inicia y se controla una reacción en cadena de fisión en un reactor nuclear, identificando el papel del moderador y de las barras de control.", "contentHtml": "\n<p class=\"lead\">Una sola fisión libera energía, pero no sostiene nada por sí sola. Lo que hace que un reactor nuclear produzca calor de forma continua es que cada fisión libera nuevos neutrones capaces de provocar fisiones siguientes: una <b>reacción en cadena</b>.</p>\n<figure class=\"figlb-able\" tabindex=\"0\"><svg viewBox=\"0 0 1600 900\" role=\"img\" aria-label=\"Reacción en cadena de fisión: un neutrón fisiona un núcleo de uranio-235, que libera energía y nuevos neutrones capaces de fisionar más núcleos\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Segoe UI, Inter, Helvetica Neue, Arial, sans-serif\"><defs><marker id=\"arwc\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0 0 L10 5 L0 10 z\" fill=\"#FFC24B\"/></marker></defs><rect width=\"1600\" height=\"900\" fill=\"#0B1622\"/><text x=\"48\" y=\"70\" font-size=\"40\" fill=\"#FFFFFF\" font-weight=\"600\">La reacción en cadena</text><text x=\"48\" y=\"104\" font-size=\"22\" fill=\"#FFC24B\">Un neutrón fisiona un núcleo de uranio-235 y libera más neutrones que repiten el proceso</text><rect x=\"60\" y=\"160\" width=\"1480\" height=\"330\" rx=\"16\" fill=\"#111F30\" fill-opacity=\"0.85\" stroke=\"#2A4056\"/><text x=\"90\" y=\"200\" font-size=\"19\" fill=\"#5AA9FF\" font-weight=\"600\">Generación 1</text><g><circle cx=\"200\" cy=\"340\" r=\"26\" fill=\"#1E3346\" stroke=\"#5AA9FF\" stroke-width=\"2.5\"/><text x=\"200\" y=\"346\" font-size=\"14\" fill=\"#FFFFFF\" text-anchor=\"middle\">U-235</text></g><line x1=\"60\" y1=\"340\" x2=\"174\" y2=\"340\" stroke=\"#B8C6D6\" stroke-width=\"2.5\" marker-end=\"url(#arwc)\"/><text x=\"65\" y=\"325\" font-size=\"15\" fill=\"#B8C6D6\">n</text><g><circle cx=\"500\" cy=\"260\" r=\"26\" fill=\"#1E3346\" stroke=\"#FF7A45\" stroke-width=\"2.5\"/><text x=\"500\" y=\"266\" font-size=\"14\" fill=\"#FFFFFF\" text-anchor=\"middle\">Fr.1</text></g><g><circle cx=\"500\" cy=\"420\" r=\"26\" fill=\"#1E3346\" stroke=\"#FF7A45\" stroke-width=\"2.5\"/><text x=\"500\" y=\"426\" font-size=\"14\" fill=\"#FFFFFF\" text-anchor=\"middle\">Fr.2</text></g><line x1=\"226\" y1=\"340\" x2=\"474\" y2=\"270\" stroke=\"#FFC24B\" stroke-width=\"2.5\" marker-end=\"url(#arwc)\"/><line x1=\"226\" y1=\"340\" x2=\"474\" y2=\"410\" stroke=\"#FFC24B\" stroke-width=\"2.5\" marker-end=\"url(#arwc)\"/><line x1=\"226\" y1=\"340\" x2=\"700\" y2=\"200\" stroke=\"#FFC24B\" stroke-width=\"2\" marker-end=\"url(#arwc)\"/><line x1=\"226\" y1=\"340\" x2=\"700\" y2=\"480\" stroke=\"#FFC24B\" stroke-width=\"2\" marker-end=\"url(#arwc)\"/><line x1=\"226\" y1=\"340\" x2=\"750\" y2=\"340\" stroke=\"#FFC24B\" stroke-width=\"2\" marker-end=\"url(#arwc)\"/><text x=\"680\" y=\"190\" font-size=\"15\" fill=\"#FFC24B\">n</text><text x=\"730\" y=\"330\" font-size=\"15\" fill=\"#FFC24B\">n</text><text x=\"680\" y=\"500\" font-size=\"15\" fill=\"#FFC24B\">n</text><text x=\"90\" y=\"470\" font-size=\"16\" fill=\"#E6EDF5\">2-3 neutrones nuevos, de alta energía (~1 MeV), listos para fisionar más núcleos.</text><rect x=\"800\" y=\"200\" width=\"700\" height=\"260\" rx=\"14\" fill=\"#0B1622\" stroke=\"#2A4056\"/><text x=\"826\" y=\"235\" font-size=\"18\" fill=\"#3FD9C0\" font-weight=\"600\">Qué la mantiene controlada</text><text x=\"826\" y=\"266\" font-size=\"15.5\" fill=\"#E6EDF5\"><tspan x=\"826\" dy=\"0\">- Moderador (agua o grafito) frena los</tspan><tspan x=\"826\" dy=\"1.4em\">  neutrones de ~1 MeV a ~0,025 eV, la</tspan><tspan x=\"826\" dy=\"1.4em\">  energía a la que el U-235 fisiona mejor.</tspan><tspan x=\"826\" dy=\"1.6em\">- Barras de control absorben neutrones</tspan><tspan x=\"826\" dy=\"1.4em\">  de sobra: insertarlas frena la reacción.</tspan><tspan x=\"826\" dy=\"1.6em\">- Recarga cada 12-24 meses repone el</tspan><tspan x=\"826\" dy=\"1.4em\">  235U consumido sin perder el control.</tspan></text><rect x=\"60\" y=\"530\" width=\"1480\" height=\"300\" rx=\"16\" fill=\"#111F30\" fill-opacity=\"0.85\" stroke=\"#2A4056\"/><text x=\"90\" y=\"570\" font-size=\"19\" fill=\"#FF4D8D\" font-weight=\"600\">Calor residual, aún con el reactor parado</text><text x=\"90\" y=\"605\" font-size=\"16\" fill=\"#E6EDF5\"><tspan x=\"90\" dy=\"0\">Los productos de fisión siguen desintegrándose y liberando calor durante años, aunque</tspan><tspan x=\"90\" dy=\"1.4em\">se detenga la reacción en cadena. El calor decae de forma exponencial: mucho al</tspan><tspan x=\"90\" dy=\"1.4em\">principio, muy poco a largo plazo. Por eso el combustible gastado pasa unos 5 años</tspan><tspan x=\"90\" dy=\"1.4em\">en una piscina de refrigeración antes de poder almacenarse en seco.</tspan></text></svg><figcaption>Cada neutrón liberado puede fisionar un nuevo núcleo de <sup>235</sup>U y liberar, a su vez, más neutrones: así se mantiene la cadena mientras el reactor está en operación.</figcaption></figure>\n<p>Si alrededor del núcleo que acaba de fisionarse hay otros núcleos fisionables, estos pueden absorber los neutrones recién liberados, fisionarse a su vez y liberar nuevos neutrones que repiten el proceso. En un reactor nuclear esa cadena se mantiene autosostenida durante todo el ciclo de operación entre recargas de combustible -actualmente entre uno y dos años-, gracias a los millones de fisiones que se producen continuamente.</p>\n<p>Hay un obstáculo que resolver primero. Los neutrones que salen de una fisión tienen una energía muy alta, del orden de 1 MeV -por eso se llaman neutrones rápidos-. Pero la energía con la que un neutrón fisiona con más probabilidad al <sup>235</sup>U es de apenas 0,025 eV, ocho órdenes de magnitud menor. Para reducir esa energía se usa un <b>moderador</b> -agua o grafito-: mediante choques sucesivos entre los neutrones y los átomos del moderador, los neutrones van perdiendo energía hasta la que necesitan para fisionar con eficacia. Ese proceso se llama termalización.</p>\n<p>Controlar la reacción en cadena consiste, en la práctica, en controlar cuántos neutrones sobreviven para producir la siguiente fisión. Las <b>barras de control</b> -materiales que absorben neutrones- se insertan o se retiran del núcleo del reactor para frenar o permitir la reacción a voluntad. Y aunque se pare la reacción en cadena por completo, el combustible sigue produciendo <b>calor residual</b> durante años: los productos de la fisión son radiactivos y se van desintegrando lentamente. Ese calor decae de forma exponencial -mucho al principio, muy poco a largo plazo-, y es la razón por la que el combustible gastado pasa unos cinco años en una piscina de refrigeración antes de poder almacenarse en seco.</p>\n<div class=\"game\" data-od=\"od5-game\">\n  <div class=\"game-intro\">\n    <p><b>Simulador de decisión · Sala de control</b></p>\n    <p>Eres el operador de turno de un reactor. Cuatro situaciones ponen a prueba si sabes qué palanca mover -moderador, barras de control o tiempo- para mantener la reacción en cadena donde debe estar.</p>\n  </div>\n</div>\n", "cards": [{"id": "od5-c1", "q": "¿Qué papel cumple exactamente el moderador -agua o grafito- en un reactor nuclear de espectro térmico?", "opts": ["Reduce la energía de los neutrones rápidos hasta la energía a la que el <sup>235</sup>U fisiona mejor", "Absorbe neutrones para frenar directamente la reacción en cadena cuando la potencia sube demasiado", "Aporta neutrones adicionales al núcleo para compensar los que se pierden por fuga fuera del reactor", "Convierte el <sup>238</sup>U no fisionable en <sup>239</sup>Pu, un isótopo capaz de fisionarse con facilidad"], "correct": 0, "why": "El moderador reduce, mediante choques, la energía de los neutrones desde ~1 MeV hasta ~0,025 eV, la energía a la que el <sup>235</sup>U fisiona con más probabilidad. Absorber neutrones es función de las barras de control, no del moderador."}, {"id": "od5-c2", "q": "¿Qué diferencia hay entre lo que hacen las barras de control y lo que hace el moderador?", "opts": ["Las barras absorben neutrones para regular la cadena; el moderador reduce su energía sin absorberlos", "Las barras reducen la energía de los neutrones; el moderador los absorbe para frenar la reacción", "Ambas cumplen una función parecida y podrían sustituirse una por otra con apenas cambios en el resultado", "Las barras solo actúan durante el arranque del reactor; el moderador solo actúa durante la parada"], "correct": 0, "why": "Son funciones distintas y complementarias: el moderador termaliza los neutrones sin eliminarlos, mientras que las barras de control los absorben para reducir su número y así regular o detener la reacción en cadena."}, {"id": "od5-c3", "q": "¿Por qué el combustible gastado pasa unos cinco años en una piscina antes de poder almacenarse en seco?", "opts": ["Porque durante esos cinco años continúan produciéndose fisiones en cadena dentro del combustible gastado", "Porque el agua de la piscina modera los neutrones residuales hasta detener por completo la radiactividad", "Porque las barras de control tardan cinco años en absorber la mayor parte de los neutrones que quedan en el núcleo", "Porque el calor residual generado por los productos de fisión, aunque decae, sigue siendo alto ese tiempo"], "correct": 3, "why": "El calor residual, producido por la desintegración de los productos de fisión, decae de forma exponencial pero sigue siendo demasiado alto para un almacenamiento en seco justo después de la parada; de ahí los años en piscina."}], "game": {"titulo": "Sala de control: mantén la reacción en cadena", "intro": "Cuatro decisiones de una guardia de operador. En cada una, elige la acción que mejor controla la reacción en cadena según lo que has aprendido sobre moderador, barras de control y calor residual.", "threshold": 6, "scenarios": [{"id": "esc1", "title": "Arranque del reactor", "situation": "El reactor arranca con el núcleo cargado de combustible fresco de <sup>235</sup>U. Los neutrones que libera cada fisión salen con una energía de aproximadamente 1 MeV, muy por encima de los 0,025 eV con los que el <sup>235</sup>U fisiona mejor. ¿Qué haces para que esos neutrones sean realmente útiles para sostener la cadena?", "options": [{"label": "Dejar que el agua actúe como moderador, para termalizar los neutrones mediante choques sucesivos", "score": 2, "fb": "Correcto: el agua frena los neutrones de 1 MeV hasta los 0,025 eV a los que el <sup>235</sup>U fisiona con más probabilidad, mediante sucesivos choques con sus átomos."}, {"label": "Retirar las barras de control por completo, para maximizar el número de neutrones disponibles", "score": 1, "fb": "Aceptable a medias: retirar barras aumenta neutrones disponibles, pero sin moderador siguen siendo demasiado rápidos para fisionar con eficacia al <sup>235</sup>U."}, {"label": "Añadir más barras de control, para reducir la energía media de los neutrones que circulan", "score": 0, "fb": "Error: las barras de control absorben neutrones, no reducen su energía. Confundes moderación con absorción, y con más barras la reacción se frena en vez de encauzarse."}]}, {"id": "esc2", "title": "Subida de potencia inesperada", "situation": "La potencia del reactor sube más rápido de lo previsto: hay demasiados neutrones disponibles para fisionar nuevos núcleos. ¿Qué acción reduce la reacción en cadena de forma directa?", "options": [{"label": "Cambiar el moderador de agua a grafito, para reducir todavía más la energía de los neutrones", "score": 1, "fb": "Aceptable a medias: el grafito también modera, pero cambiar de moderador en marcha no es la acción rápida para frenar un exceso de potencia; es una decisión de diseño, no de operación."}, {"label": "Insertar barras de control en el núcleo, para que absorban parte de los neutrones de sobra", "score": 2, "fb": "Correcto: insertar barras de control absorbe neutrones que ya no fisionan nuevos núcleos, y así se frena directamente la reacción en cadena."}, {"label": "Aumentar la recarga de combustible fresco de <sup>235</sup>U, para diluir la concentración de neutrones", "score": 0, "fb": "Error: añadir más combustible fisionable aporta más núcleos capaces de fisionarse, lo que agravaría la subida de potencia en vez de controlarla."}]}, {"id": "esc3", "title": "Parada programada", "situation": "Toca parada programada para recarga de combustible. Se inserta el juego completo de barras de control y la reacción en cadena se detiene. Un compañero pregunta si ya se puede dejar de refrigerar el núcleo. ¿Qué le respondes?", "options": [{"label": "Que no: el combustible sigue liberando calor residual durante años, aunque la cadena esté detenida", "score": 2, "fb": "Correcto: los productos de fisión siguen siendo radiactivos y se desintegran liberando calor mucho después de detener la cadena; por eso el combustible gastado pasa años en una piscina antes de almacenarse en seco."}, {"label": "Que sí, porque al detener la reacción en cadena el combustible deja de producir calor de inmediato", "score": 0, "fb": "Error: parar la cadena detiene las fisiones nuevas, pero no la desintegración de los productos de fisión ya generados, que siguen liberando calor residual."}, {"label": "Que se puede reducir la refrigeración a la mitad, porque el calor decae de forma exponencial desde el minuto uno", "score": 1, "fb": "Aceptable a medias: es verdad que el calor decae exponencialmente, con mucho al principio y poco después, pero reducir la refrigeración a la mitad justo tras la parada es prematuro: el calor residual inicial sigue siendo alto."}]}, {"id": "esc4", "title": "La pregunta del visitante", "situation": "Un visitante pregunta por qué el reactor usa un moderador en lugar de dejar que los neutrones rápidos de 1 MeV fisionen directamente el combustible sin frenarlos. ¿Cuál es la explicación correcta?", "options": [{"label": "Porque sin moderador los neutrones rápidos escaparían del núcleo interactuando con muy pocos átomos", "score": 1, "fb": "Aceptable a medias: los neutrones rápidos sí pueden escapar más fácilmente, pero la razón principal para moderar es la probabilidad de fisión, no solo evitar fugas."}, {"label": "Porque los neutrones rápidos son radiactivos por sí mismos y el moderador reduce su radiactividad", "score": 0, "fb": "Error: el neutrón no es radiactivo en ese sentido dentro del reactor; el moderador no reduce radiactividad, reduce la energía cinética del neutrón mediante choques sucesivos."}, {"label": "Porque el <sup>235</sup>U fisiona con mucha más probabilidad con neutrones lentos, de unos 0,025 eV", "score": 2, "fb": "Correcto: la probabilidad de fisión del <sup>235</sup>U es mucho mayor con neutrones termalizados a 0,025 eV que con los neutrones rápidos de 1 MeV que salen directamente de la fisión."}]}]}}]};
+/* ===== FIN · DATOS DE LA UNIDAD ============================================ */
+</script>
+
+<script>
+(function(){
+  var U = window.UNIT || {};
+  var O = U.objetivos || [];
+  var L = ['A','B','C','D'];
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+  /* MemorAI · enlaces de repaso.
+     Relativos a propósito: funcionan en cualquier despliegue sin tocar nada.
+     Sin `od` → abre el mazo del tema. Con `od` → filtra ese objetivo. */
+  var MEM = U.memoraiHref || 'memorai.html';
+  function memoraiURL(od){
+    if(!U.slug) return MEM;
+    var u = MEM + '?mazo=' + encodeURIComponent(U.slug) + '&rol=alumno';
+    return od ? u + '&od=' + encodeURIComponent(od) : u;
+  }
+  var _promo = document.getElementById('memoraiPromo');
+  if(_promo) _promo.setAttribute('href', memoraiURL());
+
+  /* Título de la pestaña. Antes se editaba a mano en el <title>; ahora sale de los datos. */
+  document.title = U.tituloPagina || ((U.tema ? U.tema + ' \u00b7 ' : '') + (U.curso || 'Unidad did\u00e1ctica'));
+
+  document.getElementById('heroWrap').innerHTML =
+    '<a class="back-link" href="index.html">&larr; Volver al &iacute;ndice</a>'
+   +'<div class="crumb">Curso &middot; <b>'+esc(U.curso)+'</b> &nbsp;&rsaquo;&nbsp; M&oacute;dulo &middot; <b>'+esc(U.modulo)+'</b> &nbsp;&rsaquo;&nbsp; Tema &middot; <b>'+(U.numTema?esc(U.numTema)+' &middot; ':'')+esc(U.tema)+'</b></div>'
+   +'<div class="eyebrow">'+(U.numTema?'Tema '+esc(U.numTema)+' &middot; ':'')+'Unidad did&aacute;ctica &middot; '+esc(U.formato||'fuente')+'</div>'
+   +'<h1>'+esc(U.titulo)+'</h1>'
+   +'<div class="meta"><div><span class="k">Fuente</span>'+esc(U.fuente||'\u2014')+'</div>'
+   +(U.formato?'<div><span class="k">Formato</span>'+esc(U.formato)+'</div>':'')
+   +'<div><span class="k">Objetivos</span>'+O.length+' &middot; Bloom: '+(O[0]?esc(O[0].lvlLabel):'')+' &rarr; '+(O.length?esc(O[O.length-1].lvlLabel):'')+'</div></div>'
+   +'<div class="ref-obj"><span class="k">Objetivo de referencia'+(U.objetivoInferido?' (inferido)':'')+'</span>Al terminar, el alumno ser&aacute; capaz de <em>'+esc(U.objetivoReferencia)+'</em>. Este objetivo es el que fija el nivel de Bloom de cada parte.</div>';
+
+  document.getElementById('mmCenter').innerHTML='<span class="lbl">Objetivo de la unidad</span><span class="txt">'+esc(U.tituloCorto||U.titulo)+'</span>';
+  document.getElementById('mmNodes').innerHTML = O.map(function(o){
+    return '<button class="mm-node lvl-'+o.lvl+'" data-target="'+o.id+'" data-lvl="'+o.lvl+'"><div class="num">'+esc(o.n)+'</div><span class="lvl">'+esc(o.lvlLabel)+'</span><div class="nt">'+esc(o.navTitle)+'</div></button>';
+  }).join('');
+  document.getElementById('rail').innerHTML='<div class="rail-title">Objetivos</div>'+O.map(function(o){
+    return '<button class="nav-item lvl-'+o.lvl+'" data-target="'+o.id+'"><span class="dot"></span><span class="ni-txt"><span class="ni-num">'+esc(o.n)+'</span> &middot; '+esc(o.navTitle)+'</span></button>';
+  }).join('');
+
+  function cardHTML(c){
+    var opts=c.opts.map(function(o,i){return '<li><span class="ltr">'+L[i]+'</span>'+esc(o)+'</li>';}).join('');
+    return '<div class="flip" role="button" tabindex="0" aria-label="Tarjeta de repaso. Toca para ver la respuesta.">'
+      +'<div class="flip-inner"><div class="face face-front">'
+        +'<div class="fc-tag"><span>'+esc(c._lvlLabel)+'</span><span>'+esc(c._odLabel)+'</span></div>'
+        +'<div class="fc-q">'+esc(c.q)+'</div><ul class="fc-opts">'+opts+'</ul>'
+        +'<div class="fc-hint">&#8635; tocar para girar</div></div>'
+      +'<div class="face face-back"><div class="fc-correct">Respuesta &middot; '+L[c.correct]+'</div>'
+        +'<div class="fc-ans">'+esc(c.opts[c.correct])+'</div>'
+        +'<div class="fc-why"><b>Por qu&eacute;:</b> '+esc(c.why)+'</div>'
+        +'<div class="fc-hint">&#8635; tocar para volver</div></div></div></div>';
+  }
+  function gameBox(o){
+    return '<div class="game lvl-'+o.lvl+'" id="game-'+o.id+'"><div class="game-head"><div>'
+      +'<div class="game-kicker">Serious game &middot; alto nivel cognitivo</div>'
+      +'<h3 class="game-title">'+esc(o.game.titulo||'Simulador de decisi\u00f3n')+'</h3></div>'
+      +'<div class="game-score" id="gScore">0 / 0</div></div>'
+      +'<p class="game-intro">'+esc(o.game.intro||'Cada escenario te da una tarea con restricciones. Elige la opci\u00f3n m\u00e1s adecuada.')+' Umbral para superar: '+o.game.threshold+'.</p>'
+      +'<div class="game-stage" id="gStage"></div></div>';
+  }
+
+  var allCards=[];
+  document.getElementById('main').innerHTML = O.map(function(o){
+    (o.cards||[]).forEach(function(c){ c._lvlLabel=o.lvlLabel; c._odLabel='OD'+o.n; allCards.push(c); });
+    var s='<section class="od lvl-'+o.lvl+'" id="'+o.id+'" data-od="'+o.id+'">';
+    s+='<div class="od-head"><span class="od-tag"><span class="n">'+esc(o.n)+'</span> &middot; '+esc(o.lvlLabel)+'</span>';
+    s+='<h2>'+esc(o.titulo)+'</h2>';
+    s+='<div class="objective"><span class="k">Objetivo did\u00e1ctico</span>'+(o.objetivo||'')+'</div></div>';
+    s+='<div class="content">'+(o.contentHtml||'');
+    if(o.game){ s+=gameBox(o); }
+    s+='<div class="check lvl-'+o.lvl+'" data-od="'+o.id+'"><div class="check-h">Comprueba lo aprendido <span class="badge">'+esc(o.n)+' &middot; '+esc(o.lvlLabel)+'</span></div>'
+      +'<p class="check-sub">Lee la pregunta, piensa tu respuesta y toca la tarjeta para girarla.</p>'
+      +'<div class="fc-grid">'+(o.cards||[]).map(cardHTML).join('')+'</div>'
+      +(U.slug ? '<a class="mem-od" href="'+memoraiURL('OD'+o.n)+'" target="_blank" rel="noopener">Ejercita este objetivo con repaso espaciado &middot; <b>MemorAI</b> &rarr;</a>' : '')
+      +'</div>';
+    s+='</div></section>'; return s;
+  }).join('');
+
+  document.getElementById('footWrap').innerHTML='<span class="v">Unidad did\u00e1ctica generada con el skill \u00abresumen-didactico-video\u00bb</span><br>Fuente \u00fanica &middot; Bloom relativo al objetivo de referencia &middot; Flashcards + serious game condicional.';
+
+  function toggle(el){ el.classList.toggle('flipped'); }
+  document.querySelectorAll('.flip').forEach(function(f){
+    f.addEventListener('click', function(){ toggle(f); });
+    f.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(f);} });
+  });
+  function sizeCards(){
+    document.querySelectorAll('.flip').forEach(function(f){
+      var inner=f.querySelector('.flip-inner'); var h=0;
+      f.querySelectorAll('.face').forEach(function(fc){ h=Math.max(h, fc.offsetHeight); });
+      if(h>0){ inner.style.height=h+'px'; f.style.height=h+'px'; f.style.minHeight=h+'px'; inner.style.minHeight=h+'px'; }
+    });
+  }
+
+  var wrap=document.getElementById('mmWrap'), svg=document.getElementById('mmLinks'), center=document.getElementById('mmCenter');
+  var nodes=Array.prototype.slice.call(document.querySelectorAll('.mm-node'));
+  function drawLinks(){
+    if(!wrap||!svg||!center) return;
+    var wr=wrap.getBoundingClientRect(); svg.setAttribute('viewBox','0 0 '+wr.width+' '+wr.height);
+    var cr=center.getBoundingClientRect(); var cx=cr.left-wr.left+cr.width/2; var cy=cr.top-wr.top+cr.height; var out='';
+    nodes.forEach(function(node){
+      var nr=node.getBoundingClientRect(); var nx=nr.left-wr.left+nr.width/2; var ny=nr.top-wr.top;
+      var dy=ny-cy; var c1y=cy+dy*0.5, c2y=ny-dy*0.5;
+      out+='<path d="M '+cx+' '+cy+' C '+cx+' '+c1y+', '+nx+' '+c2y+', '+nx+' '+ny+'" class="mm-link mm-link-'+node.getAttribute('data-lvl')+'"/>';
+    });
+    svg.innerHTML=out;
+  }
+  function go(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  document.querySelectorAll('.mm-node,.nav-item').forEach(function(b){ b.addEventListener('click',function(){ go(b.getAttribute('data-target')); }); });
+  function setActive(id){ document.querySelectorAll('.mm-node,.nav-item').forEach(function(el){ el.classList.toggle('active', el.getAttribute('data-target')===id); }); }
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting) setActive(e.target.getAttribute('data-od')); }); },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+    document.querySelectorAll('section[data-od]').forEach(function(s){ obs.observe(s); });
+  }
+
+  var gameObj=O.filter(function(o){return o.game;})[0];
+  if(gameObj){
+    var GAME=gameObj.game.scenarios||[]; var THRESH=gameObj.game.threshold||Math.ceil(GAME.length*2*0.75);
+    var stage=document.getElementById('gStage'); var scoreEl=document.getElementById('gScore');
+    var MAX=GAME.reduce(function(s,sc){return s+Math.max.apply(null,sc.options.map(function(o){return o.score;}));},0);
+    var idx=0, score=0, answered=false, current=[];
+    if(scoreEl) scoreEl.textContent='0 / '+MAX;
+    function verdict(sc){return sc===2?'good':(sc===1?'partial':'bad');}
+    function verdLabel(sc){return sc===2?'\u00d3ptima \u00b7 +2':(sc===1?'Aceptable \u00b7 +1':'Error \u00b7 +0');}
+    function renderScenario(){
+      answered=false; var sc=GAME[idx]; current=shuffle(sc.options);
+      var h='<div class="game-progress">Escenario '+(idx+1)+' de '+GAME.length+'</div>';
+      h+='<div class="scenario-title">'+esc(sc.title)+'</div><div class="scenario-sit">'+esc(sc.situation)+'</div><div class="opts">';
+      current.forEach(function(o,i){ h+='<button class="opt" data-i="'+i+'"><span class="ob"></span><span>'+esc(o.label)+'</span></button>'; });
+      h+='</div><div id="gFb"></div>'; stage.innerHTML=h;
+      stage.querySelectorAll('.opt').forEach(function(b){ b.addEventListener('click',function(){choose(parseInt(b.getAttribute('data-i'),10));}); });
+    }
+    function choose(i){
+      if(answered) return; answered=true; var o=current[i]; score+=o.score; if(scoreEl) scoreEl.textContent=score+' / '+MAX;
+      stage.querySelectorAll('.opt').forEach(function(b,bi){
+        b.disabled=true; if(bi===i) b.classList.add(verdict(current[bi].score));
+        if(current[bi].score===2){ b.classList.add('good'); var t=document.createElement('span'); t.className='tag-best'; t.textContent='\u2713 \u00f3ptima'; b.appendChild(t); }
+      });
+      var last=(idx===GAME.length-1), v=verdict(o.score);
+      document.getElementById('gFb').innerHTML='<div class="feedback '+v+'"><span class="fb-verd">'+verdLabel(o.score)+'</span>'+esc(o.fb)+'</div><button class="game-next" id="gNext">'+(last?'Ver resultado':'Siguiente escenario')+'</button>';
+      document.getElementById('gNext').addEventListener('click',function(){ idx++; (idx>=GAME.length)?renderResult():renderScenario(); });
+    }
+    function renderResult(){
+      var pass=score>=THRESH, tier, msg;
+      if(score===MAX){tier='Decisi\u00f3n experta';msg='Eliges siempre con el criterio correcto del objetivo.';}
+      else if(pass){tier='Superado';msg='Buen criterio. Repasa los matices para afinar del todo.';}
+      else if(score>=MAX*0.5){tier='Casi';msg='Vas bien, pero revisa el razonamiento del objetivo antes de reintentarlo.';}
+      else {tier='A repasar';msg='Vuelve al objetivo y a su esquema antes de reintentarlo.';}
+      stage.innerHTML='<div class="game-result"><div class="gr-score">'+score+'</div><div class="gr-of">de '+MAX+' puntos \u00b7 umbral '+THRESH+'</div><div class="gr-badge '+(pass?'pass':'fail')+'">'+(pass?'Superado':'No superado')+'</div><div class="gr-tier">'+esc(tier)+'</div><div class="gr-msg">'+esc(msg)+'</div><button class="game-restart" id="gRestart">\u21bb Jugar de nuevo</button></div>';
+      document.getElementById('gRestart').addEventListener('click',function(){ idx=0;score=0;answered=false; if(scoreEl) scoreEl.textContent='0 / '+MAX; renderScenario(); });
+    }
+    renderScenario();
+  }
+
+  var t; window.addEventListener('resize', function(){ clearTimeout(t); t=setTimeout(function(){drawLinks(); sizeCards();},120); });
+  window.addEventListener('load', function(){ drawLinks(); sizeCards(); });
+  drawLinks(); sizeCards();
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ drawLinks(); sizeCards(); }); }
+  setTimeout(function(){ drawLinks(); sizeCards(); },350);
+})();
+</script>
+<script id="figlb">
+/* Figuras a pantalla completa con zoom — figlb v1.
+   Delegado: funciona también con las figuras inyectadas desde window.UNIT. */
+(function(){
+  if(window.__figlbReady) return; window.__figlbReady=true;
+  var MINK=1, MAXK=8, STEP=1.5;
+  var ov,stage,pan,fit,cap,lvl,bIn,bOut,bRst,bCls;
+  var k=1,tx=0,ty=0,lastFocus=null,uid=0;
+  var pointers={},pinch=null,drag=null;
+
+  function build(){
+    ov=document.createElement('div'); ov.className='figlb'; ov.setAttribute('role','dialog');
+    ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label','Figura ampliada');
+    ov.innerHTML='<div class="figlb-stage"><div class="figlb-pan"><div class="figlb-fit"></div></div></div>'+
+      '<div class="figlb-help">Rueda o pellizco para acercar · arrastra para mover · Esc para cerrar</div>'+
+      '<div class="figlb-bar">'+
+        '<button type="button" data-a="out" aria-label="Alejar">−</button>'+
+        '<span class="figlb-lvl">100%</span>'+
+        '<button type="button" data-a="in" aria-label="Acercar">+</button>'+
+        '<button type="button" data-a="rst" aria-label="Restablecer zoom">↻</button>'+
+        '<button type="button" data-a="cls" aria-label="Cerrar">✕</button>'+
+      '</div><div class="figlb-cap"></div>';
+    document.body.appendChild(ov);
+    stage=ov.querySelector('.figlb-stage'); pan=ov.querySelector('.figlb-pan');
+    fit=ov.querySelector('.figlb-fit'); cap=ov.querySelector('.figlb-cap'); lvl=ov.querySelector('.figlb-lvl');
+    bOut=ov.querySelector('[data-a=out]'); bIn=ov.querySelector('[data-a=in]');
+    bRst=ov.querySelector('[data-a=rst]'); bCls=ov.querySelector('[data-a=cls]');
+
+    bIn.addEventListener('click',function(){zoomCenter(k*STEP);});
+    bOut.addEventListener('click',function(){zoomCenter(k/STEP);});
+    bRst.addEventListener('click',function(){k=1;tx=0;ty=0;apply();});
+    bCls.addEventListener('click',close);
+    stage.addEventListener('click',function(e){ if(e.target===stage||e.target===pan) close(); });
+    stage.addEventListener('wheel',function(e){
+      e.preventDefault();
+      var d=e.deltaY*(e.deltaMode===1?16:(e.deltaMode===2?100:1));
+      zoomAt(e.clientX,e.clientY, k*clamp(Math.exp(-d*0.0022),0.6,1.66));
+    },{passive:false});
+    stage.addEventListener('pointerdown',onDown);
+    window.addEventListener('pointermove',onMove);
+    window.addEventListener('pointerup',onUp);
+    window.addEventListener('pointercancel',onUp);
+    document.addEventListener('keydown',function(e){
+      if(!ov.classList.contains('open')) return;
+      if(e.key==='Escape'){e.preventDefault();close();}
+      else if(e.key==='+'||e.key==='='){e.preventDefault();zoomCenter(k*STEP);}
+      else if(e.key==='-'){e.preventDefault();zoomCenter(k/STEP);}
+      else if(e.key==='0'){e.preventDefault();k=1;tx=0;ty=0;apply();}
+    });
+  }
+
+  function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+  function clampPan(){
+    var r=stage.getBoundingClientRect();
+    var mx=Math.max(0,(r.width*k-r.width)/2), my=Math.max(0,(r.height*k-r.height)/2);
+    tx=clamp(tx,-mx,mx); ty=clamp(ty,-my,my);
+  }
+  function apply(){
+    clampPan();
+    pan.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+k.toFixed(3)+')';
+    lvl.textContent=Math.round(k*100)+'%';
+    bOut.disabled=k<=MINK+0.001; bIn.disabled=k>=MAXK-0.001;
+  }
+  function zoomAt(cx,cy,nk){
+    nk=clamp(nk,MINK,MAXK); if(nk===k) return;
+    var r=stage.getBoundingClientRect();
+    var ox=cx-r.left-r.width/2, oy=cy-r.top-r.height/2;
+    tx=ox-(ox-tx)*(nk/k); ty=oy-(oy-ty)*(nk/k); k=nk;
+    if(k===1){tx=0;ty=0;}
+    apply();
+  }
+  function zoomCenter(nk){
+    var r=stage.getBoundingClientRect();
+    zoomAt(r.left+r.width/2, r.top+r.height/2, nk);
+  }
+
+  function onDown(e){
+    if(!ov.classList.contains('open')) return;
+    pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+    var ids=Object.keys(pointers);
+    if(ids.length===2){
+      drag=null; pinch=dist(ids); pinch={d:pinch,k:k};
+      pan.classList.add('dragging');
+    } else if(ids.length===1 && k>1){
+      drag={x:e.clientX,y:e.clientY,tx:tx,ty:ty}; pan.classList.add('dragging');
+    }
+  }
+  function dist(ids){
+    var a=pointers[ids[0]],b=pointers[ids[1]];
+    return Math.hypot(a.x-b.x,a.y-b.y)||1;
+  }
+  function onMove(e){
+    if(!(e.pointerId in pointers)) return;
+    pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+    var ids=Object.keys(pointers);
+    if(pinch && ids.length===2){
+      var a=pointers[ids[0]],b=pointers[ids[1]];
+      zoomAt((a.x+b.x)/2,(a.y+b.y)/2, pinch.k*(dist(ids)/pinch.d));
+    } else if(drag){
+      tx=drag.tx+(e.clientX-drag.x); ty=drag.ty+(e.clientY-drag.y); apply();
+    }
+  }
+  function onUp(e){
+    delete pointers[e.pointerId];
+    if(Object.keys(pointers).length<2) pinch=null;
+    if(Object.keys(pointers).length===0){ drag=null; pan.classList.remove('dragging'); }
+  }
+
+  /* Clona el nodo renombrando ids para no colisionar con el original del documento
+     (markers de flecha, gradientes, clipPaths…). */
+  function cloneIsolated(node){
+    var c=node.cloneNode(true), sfx='--figlb'+(++uid), map={};
+    Array.prototype.forEach.call(c.querySelectorAll('[id]'),function(el){
+      var o=el.id; map[o]=o+sfx; el.id=map[o];
+    });
+    if(c.id){ map[c.id]=c.id+sfx; c.id=map[c.id]; }
+    if(!Object.keys(map).length) return c;
+    var all=[c].concat(Array.prototype.slice.call(c.querySelectorAll('*')));
+    all.forEach(function(el){
+      Array.prototype.forEach.call(el.attributes,function(at){
+        var v=at.value;
+        if(v.indexOf('#')===-1) return;
+        var nv=v;
+        for(var o in map){
+          nv=nv.split('url(#'+o+')').join('url(#'+map[o]+')');
+          if(nv==='#'+o) nv='#'+map[o];
+        }
+        if(nv!==v) el.setAttribute(at.name,nv);
+      });
+    });
+    return c;
+  }
+
+  function aspectOf(svg){
+    var vb=(svg.getAttribute('viewBox')||'').trim().split(/[\s,]+/);
+    if(vb.length===4){
+      var w=parseFloat(vb[2]),h=parseFloat(vb[3]);
+      if(w>0&&h>0) return w+'/'+h;
+    }
+    var aw=parseFloat(svg.getAttribute('width')),ah=parseFloat(svg.getAttribute('height'));
+    if(aw>0&&ah>0) return aw+'/'+ah;
+    return '16/9';
+  }
+
+  function open(figure){
+    var src=figure.querySelector('svg')||figure.querySelector('img');
+    if(!src) return;
+    if(!ov) build();
+    fit.innerHTML=''; fit.classList.remove('raster');
+    var c=cloneIsolated(src);
+    if(c.tagName.toLowerCase()==='svg'){
+      c.removeAttribute('width'); c.removeAttribute('height');
+      fit.style.setProperty('--figlb-ar', aspectOf(src));
+    } else {
+      fit.classList.add('raster');
+    }
+    c.removeAttribute('id');
+    fit.appendChild(c);
+    var fc=figure.querySelector('figcaption');
+    cap.textContent=fc?fc.textContent.trim():'';
+    k=1;tx=0;ty=0;
+    lastFocus=document.activeElement;
+    ov.classList.add('open'); document.body.classList.add('figlb-lock');
+    apply(); bCls.focus();
+  }
+  function close(){
+    if(!ov) return;
+    ov.classList.remove('open'); document.body.classList.remove('figlb-lock');
+    fit.innerHTML=''; cap.textContent=''; pointers={}; pinch=null; drag=null;
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  /* Marca las figuras ampliables (también las que se inyectan después). */
+  function mark(){
+    Array.prototype.forEach.call(document.querySelectorAll('figure'),function(f){
+      if(f.classList.contains('figlb-able')) return;
+      if(ov && ov.contains(f)) return;
+      if(!f.querySelector('svg') && !f.querySelector('img')) return;
+      f.classList.add('figlb-able');
+      f.setAttribute('tabindex','0');
+      f.setAttribute('role','button');
+      f.setAttribute('aria-label','Ampliar figura a pantalla completa');
+      var h=document.createElement('span');
+      h.className='figlb-hint'; h.setAttribute('aria-hidden','true');
+      h.textContent='⤢ Ampliar';
+      f.appendChild(h);
+    });
+  }
+
+  document.addEventListener('click',function(e){
+    var f=e.target.closest?e.target.closest('figure.figlb-able'):null;
+    if(!f||(ov&&ov.contains(f))) return;
+    if(e.target.closest('a,button,input,select,textarea')) return;
+    open(f);
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ') return;
+    var f=document.activeElement;
+    if(!f||!f.classList||!f.classList.contains('figlb-able')) return;
+    e.preventDefault(); open(f);
+  });
+
+  function boot(){
+    if(!ov) build();
+    mark();
+    if(window.MutationObserver){
+      new MutationObserver(function(){mark();})
+        .observe(document.body,{childList:true,subtree:true});
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
+  else boot();
+})();
+</script>
+</body>
+</html>
