@@ -1,1 +1,100 @@
-PLACEHOLDER_WILL_REPLACE
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEN -> Fundamentos de Energia Nuclear - Indice del curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1013; --card:#171b20; --line:#282e35;
+  --ink:#e9e7e2; --ink-dim:#a6acb4; --ink-faint:#666c75;
+  --comprender:#3fb5a3; --comprender-tint:rgba(63,181,163,.14);
+  --analizar:#5b8fd9;   --analizar-tint:rgba(91,143,217,.14);
+  --aplicar:#d9a13f;    --aplicar-tint:rgba(217,161,63,.14);
+  --evaluar:#d97a63;    --evaluar-tint:rgba(217,122,99,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+header{padding:56px 0 36px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;margin-bottom:8px}
+.sub{color:var(--ink-dim);font-size:15px;max-width:640px}
+.progress{margin-top:26px;display:flex;align-items:center;gap:14px}
+.bar-track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--comprender),var(--evaluar));border-radius:3px;transition:width .4s ease}
+.prog-txt{font-family:'Space Mono',monospace;font-size:12.5px;color:var(--ink-faint);white-space:nowrap}
+main{padding:40px 0 80px}
+.mod{margin-bottom:34px}
+.mod-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.mod-code{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-faint);letter-spacing:.08em}
+.mod-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px}
+.temas{display:flex;flex-direction:column;gap:8px}
+.tema{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);transition:border-color .15s ease,transform .15s ease}
+.tema.done{cursor:pointer}
+.tema.done:hover{border-color:var(--c);transform:translateX(2px)}
+.tema.pending{opacity:.72;cursor:default}
+.t-num{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-faint);width:22px;flex-shrink:0}
+.t-dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex-shrink:0}
+.t-body{flex:1;min-width:0}
+.t-title{font-size:14.5px;font-weight:500}
+.t-meta{font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-faint);margin-top:2px}
+.t-lvl{font-family:'Space Mono',monospace;font-size:10.5px;padding:3px 8px;border-radius:5px;background:var(--c-tint);color:var(--c);white-space:nowrap;flex-shrink:0}
+.t-state{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--ink-faint);white-space:nowrap;flex-shrink:0}
+footer{border-top:1px solid var(--line);padding:22px 0 56px;color:var(--ink-faint);font-size:12px;font-family:'Space Mono',monospace}
+@media(max-width:560px){.t-meta{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">AULA.I - Curso</div>
+  <h1 id="cTitle"></h1>
+  <p class="sub" id="cSub"></p>
+  <div class="progress">
+    <div class="bar-track"><div class="bar-fill" id="cBar" style="width:0"></div></div>
+    <div class="prog-txt" id="cProg"></div>
+  </div>
+</div></header>
+<main><div class="wrap"><div id="mods"></div></div></main>
+<footer><div class="wrap">Indice generado para AULA.I - cada tema enlaza a su unidad didactica cuando esta hecha - fuente: Ciencia y Tecnologia Nuclear (Jovenes Nucleares - Sociedad Nuclear Espanola)</div></footer>
+<script id="course-data">window.COURSE = {"curso": "Fundamentos de Energia Nuclear (FEN)", "subtitulo": "Curso Basico de Ciencia y Tecnologia Nuclear · Jovenes Nucleares - Sociedad Nuclear Espanola", "total": 9, "done": 0, "modulos": [{"code": "M1", "nombre": "Fisica nuclear y radiacion", "temas": [{"n": 1, "t": "Fisica nuclear y radiacion: del atomo al nucleo, fision y fusion", "lvl": "comprender", "fuente": "Cap. 1"}]}, {"code": "M2", "nombre": "Centrales nucleares", "temas": [{"n": 2, "t": "Centrales nucleares: la fision como fuente de calor, tipos PWR/BWR y componentes", "lvl": "comprender", "fuente": "Cap. 2"}]}, {"code": "M3", "nombre": "Combustible nuclear", "temas": [{"n": 3, "t": "Combustible nuclear: ciclo pre-reactor, reactor y post-reactor", "lvl": "analizar", "fuente": "Cap. 3"}]}, {"code": "M4", "nombre": "Seguridad nuclear", "temas": [{"n": 4, "t": "Seguridad nuclear: defensa en profundidad, factor humano y el CSN", "lvl": "analizar", "fuente": "Cap. 4"}]}, {"code": "M5", "nombre": "Proteccion radiologica", "temas": [{"n": 5, "t": "Proteccion radiologica: efectos biologicos, magnitudes y equipos", "lvl": "aplicar", "fuente": "Cap. 5"}]}, {"code": "M6", "nombre": "Gestion de residuos radiactivos", "temas": [{"n": 6, "t": "Gestion de residuos radiactivos: clasificacion, etapas y almacenamiento en Espana", "lvl": "analizar", "fuente": "Cap. 6"}]}, {"code": "M7", "nombre": "Centrales nucleares del futuro", "temas": [{"n": 7, "t": "Centrales nucleares del futuro: generaciones III, IV y fusion", "lvl": "comprender", "fuente": "Cap. 7"}]}, {"code": "M8", "nombre": "Aplicaciones de la tecnologia nuclear", "temas": [{"n": 8, "t": "Aplicaciones de la tecnologia nuclear: medicina, industria, agricultura y mas", "lvl": "aplicar", "fuente": "Cap. 8"}]}, {"code": "M9", "nombre": "Aspectos socioeconomicos y ambientales", "temas": [{"n": 9, "t": "Aspectos socioeconomicos y ambientales de la energia nuclear", "lvl": "evaluar", "fuente": "Cap. 9"}]}]};</script>
+<script>
+(function(){
+  const c = window.COURSE;
+  document.getElementById('cTitle').textContent = c.curso;
+  document.getElementById('cSub').textContent = c.subtitulo;
+  document.getElementById('cBar').style.width = Math.round(100*c.done/c.total)+'%';
+  document.getElementById('cProg').textContent = c.done+' / '+c.total+' unidades';
+  const lvlLabel = {comprender:'Comprender', analizar:'Analizar', aplicar:'Aplicar', evaluar:'Evaluar'};
+  const root = document.getElementById('mods');
+  c.modulos.forEach(mod=>{
+    const modDiv = document.createElement('div');
+    modDiv.className = 'mod';
+    modDiv.innerHTML = '<div class="mod-head"><span class="mod-code">'+mod.code+'</span><span class="mod-name">'+mod.nombre+'</span></div>';
+    const temasDiv = document.createElement('div');
+    temasDiv.className = 'temas';
+    mod.temas.forEach(t=>{
+      const isDone = !!t.href;
+      const el = document.createElement(isDone ? 'a' : 'div');
+      el.className = 'tema ' + (isDone ? 'done' : 'pending');
+      el.style.setProperty('--c','var(--'+t.lvl+')');
+      el.style.setProperty('--c-tint','var(--'+t.lvl+'-tint)');
+      if(isDone) el.href = t.href;
+      el.innerHTML =
+        '<span class="t-num">'+String(t.n).padStart(2,'0')+'</span>'+
+        '<span class="t-dot"></span>'+
+        '<span class="t-body"><div class="t-title">'+t.t+'</div><div class="t-meta">'+t.fuente+'</div></span>'+
+        '<span class="t-lvl">'+lvlLabel[t.lvl]+'</span>'+
+        '<span class="t-state">'+(isDone ? 'hecho' : 'pendiente')+'</span>';
+      temasDiv.appendChild(el);
+    });
+    modDiv.appendChild(temasDiv);
+    root.appendChild(modDiv);
+  });
+})();
+</script>
+</body>
+</html>
