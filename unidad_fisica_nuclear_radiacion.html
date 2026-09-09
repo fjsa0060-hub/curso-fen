@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad didáctica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1420; --surface:#18202E; --surface-2:#1E2738;
+    --line:#2C3850; --line-soft:#232E42;
+    --ink:#E8ECF4; --ink-soft:#B2BBCC; --ink-faint:#7E889C;
+
+    --comprender:#34C9B6; --comprender-tint:rgba(52,201,182,.13);
+    --analizar:#5AA3EC;   --analizar-tint:rgba(90,163,236,.13);
+    --aplicar:#EFAC4A;    --aplicar-tint:rgba(239,172,74,.14);
+    --evaluar:#EC6F84;    --evaluar-tint:rgba(236,111,132,.14);
+
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif; line-height:1.62;
+    font-size:16.5px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+
+  /* ---------- HEADER ---------- */
+  header.hero{padding:54px 0 26px; border-bottom:1px solid var(--line)}
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px; font-family:"Space Mono",monospace;
+    font-size:12.5px; letter-spacing:.03em;
