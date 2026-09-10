@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0e1013; --card:#171b20; --line:#282e35;
+  --bg:#0a0d14; --card:#171b20cc; --line:#282e35;
   --ink:#e9e7e2; --ink-dim:#a6acb4; --ink-faint:#666c75;
   --comprender:#3fb5a3; --comprender-tint:rgba(63,181,163,.14);
   --analizar:#5b8fd9;   --analizar-tint:rgba(91,143,217,.14);
@@ -17,7 +17,26 @@
   --evaluar:#d97a63;    --evaluar-tint:rgba(217,122,99,.14);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5}
+
+/* ---------- FONDO ---------- */
+html{background:var(--bg)}
+body{
+  background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5;
+  position:relative;min-height:100vh;
+}
+body::before{
+  content:"";position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 1000px 700px at 84% 4%, rgba(63,181,163,.22), transparent 62%),
+    radial-gradient(ellipse 700px 700px at 4% 92%, rgba(91,143,217,.14), transparent 60%),
+    linear-gradient(160deg, #0a0d14 0%, #0b1220 45%, #0a0d14 100%);
+}
+.bg-deco{position:fixed;top:0;right:0;pointer-events:none;width:900px;height:700px;max-width:60vw;
+  -webkit-mask-image:linear-gradient(to bottom left, black 35%, transparent 75%);
+  mask-image:linear-gradient(to bottom left, black 35%, transparent 75%);
+}
+header,main,footer{position:relative}
+
 .wrap{max-width:920px;margin:0 auto;padding:0 24px}
 header{padding:56px 0 36px;border-bottom:1px solid var(--line)}
 .eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px}
@@ -33,12 +52,13 @@ main{padding:40px 0 80px}
 .mod-code{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-faint);letter-spacing:.08em}
 .mod-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px}
 .temas{display:flex;flex-direction:column;gap:8px}
-.tema{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);transition:border-color .15s ease,transform .15s ease}
+.tema{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--card);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);transition:border-color .15s ease,transform .15s ease}
 .tema.done{cursor:pointer}
 .tema.done:hover{border-color:var(--c);transform:translateX(2px)}
 .tema.pending{opacity:.72;cursor:default}
+.t-icon{width:34px;height:34px;flex-shrink:0;border-radius:9px;background:var(--c-tint);display:flex;align-items:center;justify-content:center}
+.t-icon svg{width:19px;height:19px;stroke:var(--c);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .t-num{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-faint);width:22px;flex-shrink:0}
-.t-dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex-shrink:0}
 .t-body{flex:1;min-width:0}
 .t-title{font-size:14.5px;font-weight:500}
 .t-meta{font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-faint);margin-top:2px}
@@ -49,6 +69,27 @@ footer{border-top:1px solid var(--line);padding:22px 0 56px;color:var(--ink-fain
 </style>
 </head>
 <body>
+<svg class="bg-deco" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g transform="translate(640,190)">
+    <circle r="5.5" fill="#e9e7e2"/>
+    <ellipse rx="230" ry="90" fill="none" stroke="#3fb5a3" stroke-opacity=".55" stroke-width="1.6"/>
+    <ellipse rx="230" ry="90" fill="none" stroke="#5b8fd9" stroke-opacity=".55" stroke-width="1.6" transform="rotate(60)"/>
+    <ellipse rx="230" ry="90" fill="none" stroke="#d9a13f" stroke-opacity=".5" stroke-width="1.6" transform="rotate(120)"/>
+    <circle cx="230" cy="0" r="4.5" fill="#3fb5a3"/>
+    <circle cx="-115" cy="199" r="4.5" fill="#5b8fd9"/>
+    <circle cx="-115" cy="-199" r="4.5" fill="#d9a13f"/>
+  </g>
+  <g fill="#e9e7e2" fill-opacity=".6">
+    <circle cx="120" cy="90" r="1.7"/>
+    <circle cx="260" cy="150" r="1.4"/>
+    <circle cx="360" cy="55" r="1.9"/>
+    <circle cx="820" cy="430" r="1.7"/>
+    <circle cx="750" cy="560" r="1.5"/>
+    <circle cx="500" cy="35" r="1.6"/>
+    <circle cx="60" cy="260" r="1.5"/>
+    <circle cx="880" cy="120" r="1.4"/>
+  </g>
+</svg>
 <header><div class="wrap">
   <div class="eyebrow">AULA.I - Curso</div>
   <h1 id="cTitle"></h1>
@@ -69,6 +110,20 @@ footer{border-top:1px solid var(--line);padding:22px 0 56px;color:var(--ink-fain
   document.getElementById('cBar').style.width = Math.round(100*c.done/c.total)+'%';
   document.getElementById('cProg').textContent = c.done+' / '+c.total+' unidades';
   const lvlLabel = {comprender:'Comprender', analizar:'Analizar', aplicar:'Aplicar', evaluar:'Evaluar'};
+
+  /* Iconos por módulo (SVG stroke, 24x24), uno por tema del mapa del curso */
+  const icons = {
+    M1: '<circle cx="12" cy="12" r="2.4"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(0 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(120 12 12)"/>',
+    M2: '<path d="M6 21V9c0-2.5 1.6-4.5 3-6 .3 1.8-.4 2.8-.4 4.3 0 1.6 1 2.3 1.7 1.4.4 2 .1 3.4-.4 4.4C11.3 14.5 12 16 13 16.6c1.4-1.4 1.7-2.9 1.4-4.6 1.8 1.7 3.6 4.4 3.6 7V21"/><path d="M3 21h18"/>',
+    M3: '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="10.5" y="4" width="4" height="16" rx="1"/><rect x="16" y="4" width="4" height="16" rx="1"/><path d="M5 8h4M10.5 8h4M16 8h4M5 13h4M10.5 13h4M16 13h4"/>',
+    M4: '<path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/>',
+    M5: '<path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z"/><circle cx="12" cy="10" r="2"/><path d="M8.5 17c.6-2.2 2-3.3 3.5-3.3s2.9 1.1 3.5 3.3"/>',
+    M6: '<ellipse cx="12" cy="5.5" rx="6" ry="2.2"/><path d="M6 5.5V18c0 1.2 2.7 2.2 6 2.2s6-1 6-2.2V5.5"/><path d="M6 11.5c0 1.2 2.7 2.2 6 2.2s6-1 6-2.2"/>',
+    M7: '<path d="M12 2v6"/><circle cx="12" cy="13" r="5.2"/><circle cx="12" cy="13" r="1.6"/><path d="M12 2l-2.2 3.6h4.4L12 2z"/>',
+    M8: '<circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/>',
+    M9: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.4 4 5.6 4 9s-1.4 6.6-4 9c-2.6-2.4-4-5.6-4-9s1.4-6.6 4-9z"/>'
+  };
+
   const root = document.getElementById('mods');
   c.modulos.forEach(mod=>{
     const modDiv = document.createElement('div');
@@ -83,9 +138,10 @@ footer{border-top:1px solid var(--line);padding:22px 0 56px;color:var(--ink-fain
       el.style.setProperty('--c','var(--'+t.lvl+')');
       el.style.setProperty('--c-tint','var(--'+t.lvl+'-tint)');
       if(isDone) el.href = t.href;
+      const iconPaths = icons[mod.code] || icons.M1;
       el.innerHTML =
+        '<span class="t-icon"><svg viewBox="0 0 24 24">'+iconPaths+'</svg></span>'+
         '<span class="t-num">'+String(t.n).padStart(2,'0')+'</span>'+
-        '<span class="t-dot"></span>'+
         '<span class="t-body"><div class="t-title">'+t.t+'</div><div class="t-meta">'+t.fuente+'</div></span>'+
         '<span class="t-lvl">'+lvlLabel[t.lvl]+'</span>'+
         '<span class="t-state">'+(isDone ? 'hecho' : 'pendiente')+'</span>';
