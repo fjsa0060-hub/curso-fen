@@ -64,6 +64,19 @@ main{padding:40px 0 80px}
 .t-meta{font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-faint);margin-top:2px}
 .t-lvl{font-family:'Space Mono',monospace;font-size:10.5px;padding:3px 8px;border-radius:5px;background:var(--c-tint);color:var(--c);white-space:nowrap;flex-shrink:0}
 .t-state{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--ink-faint);white-space:nowrap;flex-shrink:0}
+.memorai-cta{display:flex;align-items:center;gap:18px;margin-top:30px;padding:20px 22px;background:var(--card);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:14px;flex-wrap:wrap}
+.mc-icon{width:46px;height:46px;flex-shrink:0;border-radius:12px;background:rgba(63,181,163,.16);display:flex;align-items:center;justify-content:center}
+.mc-icon svg{width:25px;height:25px;stroke:var(--comprender);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mc-txt{flex:1 1 260px;min-width:0}
+.mc-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px}
+.mc-sub{color:var(--ink-dim);font-size:13px;margin-top:3px;max-width:480px}
+.mc-actions{display:flex;gap:10px;flex-wrap:wrap}
+.mc-btn{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.02em;text-decoration:none;padding:10px 16px;border-radius:22px;white-space:nowrap;transition:filter .15s ease,transform .15s ease}
+.mc-btn:hover{transform:translateY(-1px)}
+.mc-btn-solid{background:var(--comprender);color:#0a0d14;font-weight:700}
+.mc-btn-solid:hover{filter:brightness(1.1)}
+.mc-btn-outline{border:1px solid var(--comprender);color:var(--comprender)}
+.mc-btn-outline:hover{background:var(--comprender-tint)}
 footer{border-top:1px solid var(--line);padding:22px 0 56px;color:var(--ink-faint);font-size:12px;font-family:'Space Mono',monospace}
 @media(max-width:560px){.t-meta{display:none}}
 </style>
@@ -97,6 +110,17 @@ footer{border-top:1px solid var(--line);padding:22px 0 56px;color:var(--ink-fain
   <div class="progress">
     <div class="bar-track"><div class="bar-fill" id="cBar" style="width:0"></div></div>
     <div class="prog-txt" id="cProg"></div>
+  </div>
+  <div class="memorai-cta">
+    <div class="mc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="10" rx="2"></rect><rect x="7" y="3" width="14" height="10" rx="2"></rect><path d="M9.5 20.3a5 5 0 0 0 8-4"></path><path d="M20 14.3v2.5h-2.5"></path></svg></div>
+    <div class="mc-txt">
+      <div class="mc-title">MemorAI &middot; repaso espaciado</div>
+      <div class="mc-sub">Repasa las tarjetas del curso desde el navegador, o desc&aacute;rgate la app para que tu progreso se guarde en tu propio ordenador, sin conexi&oacute;n.</div>
+    </div>
+    <div class="mc-actions">
+      <a class="mc-btn mc-btn-solid" href="memorai.html">Abrir MemorAI</a>
+      <a class="mc-btn mc-btn-outline" href="memorai_descargable.zip" download>Descargar &#8659; uso offline</a>
+    </div>
   </div>
 </div></header>
 <main><div class="wrap"><div id="mods"></div></div></main>

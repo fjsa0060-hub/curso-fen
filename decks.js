@@ -5,7 +5,7 @@ window.MEMORAI_DECKS = [
   {
     "id": "fisica_nuclear_radiacion",
     "name": "Física nuclear y radiación",
-    "curso": "FEN",
+    "curso": "Fundamentos de Energía Nuclear (FEN)",
     "slug": "fisica_nuclear_radiacion",
     "cards": [
       {
@@ -153,6 +153,30 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
+        "front": "Un técnico necesita detener radiación gamma procedente de una fuente industrial. Según el capítulo, ¿qué blindaje es el adecuado?<br><br>A) Un espesor grueso de hormigón o plomo, porque la radiación gamma es electromagnética y muy penetrante<br>B) Una hoja de papel o la propia ropa de trabajo, suficiente para detener cualquier radiación electromagnética<br>C) Unos pocos milímetros de aluminio, el mismo material que basta para detener las partículas beta<br>D) Un guante de látex, porque la radiación gamma se detiene con cualquier barrera física por fina que sea",
+        "back": "Correcta: C) Unos pocos milímetros de aluminio, el mismo material que basta para detener las partículas beta<br><br><i>Por qué:</i> El capítulo distingue tres blindajes según el tipo de radiación: papel o piel para alfa, milímetros de aluminio para beta, y espesores gruesos de hormigón o plomo para gamma, por ser electromagnética y muy penetrante.",
+        "tags": [
+          "fisica_nuclear_radiacion",
+          "OD3",
+          "Bloom::Analizar"
+        ],
+        "objetivo": "OD3 · Radiactividad y estabilidad",
+        "tema": "Física nuclear y radiación",
+        "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
+      },
+      {
+        "front": "Según los datos del CSN citados en el capítulo, ¿cuál es la principal fuente de la dosis media anual de radiación natural que recibe una persona en España?<br><br>A) La radiación cósmica, con 0,39 mSv al año frente a los 1,15 mSv del radón<br>B) La radiación terrestre, con 0,48 mSv al año frente a los 1,15 mSv del radón<br>C) El radón, con 1,15 mSv al año frente a los 0,39 mSv de la radiación cósmica<br>D) Las fuentes internas del propio cuerpo, con más dosis anual que el radón y la radiación terrestre juntos",
+        "back": "Correcta: C) El radón, con 1,15 mSv al año frente a los 0,39 mSv de la radiación cósmica<br><br><i>Por qué:</i> De los 2,41 mSv anuales de media que cita el CSN, el radón aporta 1,15 mSv, más que la radiación cósmica (0,39 mSv) y la terrestre (0,48 mSv) por separado: es el mayor componente individual de la dosis natural.",
+        "tags": [
+          "fisica_nuclear_radiacion",
+          "OD3",
+          "Bloom::Analizar"
+        ],
+        "objetivo": "OD3 · Radiactividad y estabilidad",
+        "tema": "Física nuclear y radiación",
+        "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
+      },
+      {
         "front": "¿Qué tienen en común la fisión y la fusión nuclear, según el capítulo?<br><br>A) Que ambas dividen un núcleo pesado en dos fragmentos de menor masa liberando energía por igual<br>B) Que ambas necesitan millones de grados de temperatura para liberar su energía de forma sostenida<br>C) Que ambas liberan energía porque el resultado final tiene menos masa que los núcleos de partida<br>D) Que ambas se explotan hoy de forma comercial y aportan energía a las centrales nucleares en España",
         "back": "Correcta: C) Que ambas liberan energía porque el resultado final tiene menos masa que los núcleos de partida<br><br><i>Por qué:</i> Fisión y fusión son procesos opuestos -uno divide, el otro une-, pero en los dos el producto final pesa menos que el punto de partida, y esa masa perdida se convierte en energía según E=mc². La fusión, además, no está aún explotada comercialmente.",
         "tags": [
@@ -179,6 +203,30 @@ window.MEMORAI_DECKS = [
       {
         "front": "Para que un núcleo de &lt;sup&gt;235&lt;/sup&gt;U se fisione al capturar un neutrón, ¿qué condición señala el capítulo como necesaria?<br><br>A) Que el núcleo de &lt;sup&gt;235&lt;/sup&gt;U esté previamente unido a otro núcleo de &lt;sup&gt;235&lt;/sup&gt;U en la misma muestra<br>B) Que el neutrón llegue con una velocidad -una energía- adecuada para que el núcleo lo capture<br>C) Que el neutrón proceda de una desintegración beta y no de una fisión previa de otro núcleo<br>D) Que la temperatura del entorno supere los mismos millones de grados que necesita la fusión",
         "back": "Correcta: B) Que el neutrón llegue con una velocidad -una energía- adecuada para que el núcleo lo capture<br><br><i>Por qué:</i> El texto precisa que se envía un neutrón con la energía adecuada; no cualquier núcleo pesado captura cualquier neutrón y fisiona: solo unos pocos isótopos como el &lt;sup&gt;235&lt;/sup&gt;U cumplen esa condición, y la energía del neutrón importa.",
+        "tags": [
+          "fisica_nuclear_radiacion",
+          "OD4",
+          "Bloom::Comprender"
+        ],
+        "objetivo": "OD4 · Fisión y fusión",
+        "tema": "Física nuclear y radiación",
+        "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
+      },
+      {
+        "front": "Según el OIEA, ¿por qué hace falta calentar el combustible de fusión a temperaturas muy superiores a las del núcleo del Sol para conseguir fusión en la Tierra?<br><br>A) Porque en la Tierra no existe la presión gravitatoria que ayuda a las estrellas a fusionar con menos calor<br>B) Porque el deuterio terrestre es un isótopo distinto del que se fusiona de forma natural en el interior del Sol<br>C) Porque los reactores de fusión terrestres usan tritio en vez de helio, que exige más temperatura para reaccionar<br>D) Porque la fusión en la Tierra libera menos energía por reacción que la fusión que ocurre dentro de las estrellas",
+        "back": "Correcta: A) Porque en la Tierra no existe la presión gravitatoria que ayuda a las estrellas a fusionar con menos calor<br><br><i>Por qué:</i> El OIEA señala que hacen falta unos 100 millones de grados en la Tierra, muy por encima de la temperatura solar, precisamente porque falta la presión gravitatoria que en el Sol facilita la fusión a temperaturas más bajas.",
+        "tags": [
+          "fisica_nuclear_radiacion",
+          "OD4",
+          "Bloom::Comprender"
+        ],
+        "objetivo": "OD4 · Fisión y fusión",
+        "tema": "Física nuclear y radiación",
+        "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
+      },
+      {
+        "front": "¿Qué diferencia hay entre el confinamiento magnético y el confinamiento inercial, las dos vías de fusión que cita el OIEA?<br><br>A) El magnético comprime el combustible con láseres; el inercial lo atrapa con campos magnéticos en un tokamak<br>B) El magnético atrapa el plasma con campos magnéticos en un reactor en anillo; el inercial comprime una cápsula con láseres<br>C) El magnético solo se ensaya en laboratorio; el inercial es la única vía usada en proyectos como ITER<br>D) El magnético y el inercial son en realidad el mismo método, con distinto nombre según el país que lo desarrolla",
+        "back": "Correcta: B) El magnético atrapa el plasma con campos magnéticos en un reactor en anillo; el inercial comprime una cápsula con láseres<br><br><i>Por qué:</i> Son dos vías distintas: el confinamiento magnético usa campos magnéticos en un reactor en forma de anillo -un tokamak, como ITER-, y el confinamiento inercial comprime una pequeña cápsula de combustible con potentes láseres.",
         "tags": [
           "fisica_nuclear_radiacion",
           "OD4",
