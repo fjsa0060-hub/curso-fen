@@ -408,6 +408,11 @@ window.UNIT = {"curso": "Fundamentos de Energía Nuclear (FEN)", "modulo": "M1 �
   var O = U.objetivos || [];
   var L = ['A','B','C','D'];
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  /* Igual que esc(), pero devolviendo la vida a <sup> y <sub>: la notación de
+     isótopos (235U, 238U) viaja dentro de enunciados, opciones y tarjetas, y
+     debe verse como superíndice, no como etiqueta. No se reinterpreta nada más,
+     así que el texto sigue sin poder inyectar marcado. */
+  function escN(s){return esc(s).replace(/&lt;(\/?)(sup|sub)&gt;/g,'<$1$2>');}
   function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 
   /* MemorAI · enlaces de repaso.
@@ -446,15 +451,15 @@ window.UNIT = {"curso": "Fundamentos de Energía Nuclear (FEN)", "modulo": "M1 �
   var MEMORAI_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="10" rx="2"></rect><rect x="7" y="3" width="14" height="10" rx="2"></rect><path d="M9.5 20.3a5 5 0 0 0 8-4"></path><path d="M20 14.3v2.5h-2.5"></path></svg>';
 
   function cardHTML(c){
-    var opts=c.opts.map(function(o,i){return '<li><span class="ltr">'+L[i]+'</span>'+esc(o)+'</li>';}).join('');
+    var opts=c.opts.map(function(o,i){return '<li><span class="ltr">'+L[i]+'</span>'+escN(o)+'</li>';}).join('');
     return '<div class="flip" role="button" tabindex="0" aria-label="Tarjeta de repaso. Toca para ver la respuesta.">'
       +'<div class="flip-inner"><div class="face face-front">'
         +'<div class="fc-tag"><span>'+esc(c._lvlLabel)+'</span><span>'+esc(c._odLabel)+'</span></div>'
-        +'<div class="fc-q">'+esc(c.q)+'</div><ul class="fc-opts">'+opts+'</ul>'
+        +'<div class="fc-q">'+escN(c.q)+'</div><ul class="fc-opts">'+opts+'</ul>'
         +'<div class="fc-hint">&#8635; tocar para girar</div></div>'
       +'<div class="face face-back"><div class="fc-correct">Respuesta &middot; '+L[c.correct]+'</div>'
-        +'<div class="fc-ans">'+esc(c.opts[c.correct])+'</div>'
-        +'<div class="fc-why"><b>Por qu&eacute;:</b> '+esc(c.why)+'</div>'
+        +'<div class="fc-ans">'+escN(c.opts[c.correct])+'</div>'
+        +'<div class="fc-why"><b>Por qu&eacute;:</b> '+escN(c.why)+'</div>'
         +'<div class="fc-hint">&#8635; tocar para volver</div></div></div></div>';
   }
   function gameBox(o){
@@ -534,8 +539,8 @@ window.UNIT = {"curso": "Fundamentos de Energía Nuclear (FEN)", "modulo": "M1 �
     function renderScenario(){
       answered=false; var sc=GAME[idx]; current=shuffle(sc.options);
       var h='<div class="game-progress">Escenario '+(idx+1)+' de '+GAME.length+'</div>';
-      h+='<div class="scenario-title">'+esc(sc.title)+'</div><div class="scenario-sit">'+esc(sc.situation)+'</div><div class="opts">';
-      current.forEach(function(o,i){ h+='<button class="opt" data-i="'+i+'"><span class="ob"></span><span>'+esc(o.label)+'</span></button>'; });
+      h+='<div class="scenario-title">'+esc(sc.title)+'</div><div class="scenario-sit">'+escN(sc.situation)+'</div><div class="opts">';
+      current.forEach(function(o,i){ h+='<button class="opt" data-i="'+i+'"><span class="ob"></span><span>'+escN(o.label)+'</span></button>'; });
       h+='</div><div id="gFb"></div>'; stage.innerHTML=h;
       stage.querySelectorAll('.opt').forEach(function(b){ b.addEventListener('click',function(){choose(parseInt(b.getAttribute('data-i'),10));}); });
     }
@@ -546,7 +551,7 @@ window.UNIT = {"curso": "Fundamentos de Energía Nuclear (FEN)", "modulo": "M1 �
         if(current[bi].score===2){ b.classList.add('good'); var t=document.createElement('span'); t.className='tag-best'; t.textContent='\u2713 \u00f3ptima'; b.appendChild(t); }
       });
       var last=(idx===GAME.length-1), v=verdict(o.score);
-      document.getElementById('gFb').innerHTML='<div class="feedback '+v+'"><span class="fb-verd">'+verdLabel(o.score)+'</span>'+esc(o.fb)+'</div><button class="game-next" id="gNext">'+(last?'Ver resultado':'Siguiente escenario')+'</button>';
+      document.getElementById('gFb').innerHTML='<div class="feedback '+v+'"><span class="fb-verd">'+verdLabel(o.score)+'</span>'+escN(o.fb)+'</div><button class="game-next" id="gNext">'+(last?'Ver resultado':'Siguiente escenario')+'</button>';
       document.getElementById('gNext').addEventListener('click',function(){ idx++; (idx>=GAME.length)?renderResult():renderScenario(); });
     }
     function renderResult(){

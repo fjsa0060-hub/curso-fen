@@ -81,8 +81,8 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_fisica_nuclear_radiacion.html#od2"
       },
       {
-        "front": "El &lt;sup&gt;235&lt;/sup&gt;U y el &lt;sup&gt;238&lt;/sup&gt;U son isótopos del mismo elemento. ¿En qué se diferencian exactamente?<br><br>A) Tienen el mismo número de protones (92) pero distinto número de neutrones en el núcleo<br>B) Tienen el mismo número de neutrones pero distinto número de protones, lo que cambia el elemento<br>C) Tienen el mismo número másico total pero una disposición distinta de sus electrones externos<br>D) Uno de los dos no tiene núcleo definido, solo una nube difusa de neutrones sin protones",
-        "back": "Correcta: A) Tienen el mismo número de protones (92) pero distinto número de neutrones en el núcleo<br><br><i>Por qué:</i> Ser isótopos del mismo elemento significa compartir el número de protones -eso es lo que define al uranio-, y diferir en el número de neutrones: 146 en el &lt;sup&gt;238&lt;/sup&gt;U frente a 143 en el &lt;sup&gt;235&lt;/sup&gt;U.",
+        "front": "El <sup>235</sup>U y el <sup>238</sup>U son isótopos del mismo elemento. ¿En qué se diferencian exactamente?<br><br>A) Tienen el mismo número de protones (92) pero distinto número de neutrones en el núcleo<br>B) Tienen el mismo número de neutrones pero distinto número de protones, lo que cambia el elemento<br>C) Tienen el mismo número másico total pero una disposición distinta de sus electrones externos<br>D) Uno de los dos no tiene núcleo definido, solo una nube difusa de neutrones sin protones",
+        "back": "Correcta: A) Tienen el mismo número de protones (92) pero distinto número de neutrones en el núcleo<br><br><i>Por qué:</i> Ser isótopos del mismo elemento significa compartir el número de protones -eso es lo que define al uranio-, y diferir en el número de neutrones: 146 en el <sup>238</sup>U frente a 143 en el <sup>235</sup>U.",
         "tags": [
           "fisica_nuclear_radiacion",
           "OD2",
@@ -93,8 +93,8 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_fisica_nuclear_radiacion.html#od2"
       },
       {
-        "front": "¿Qué indica el número másico que acompaña al símbolo de un isótopo, como en &lt;sup&gt;235&lt;/sup&gt;U?<br><br>A) El número de electrones que orbitan alrededor del núcleo en su estado eléctricamente neutro<br>B) La energía, en millones de electronvoltios, que libera ese isótopo al fisionarse por completo<br>C) La suma total de protones y neutrones que contiene el núcleo de ese isótopo concreto<br>D) El número de años que tarda ese isótopo en desintegrarse hasta la mitad de una muestra inicial",
-        "back": "Correcta: C) La suma total de protones y neutrones que contiene el núcleo de ese isótopo concreto<br><br><i>Por qué:</i> El número másico es protones más neutrones. Para el &lt;sup&gt;235&lt;/sup&gt;U son 92 protones y 143 neutrones; no describe electrones, energía liberada ni periodo de semidesintegración, que son magnitudes distintas.",
+        "front": "¿Qué indica el número másico que acompaña al símbolo de un isótopo, como en <sup>235</sup>U?<br><br>A) El número de electrones que orbitan alrededor del núcleo en su estado eléctricamente neutro<br>B) La energía, en millones de electronvoltios, que libera ese isótopo al fisionarse por completo<br>C) La suma total de protones y neutrones que contiene el núcleo de ese isótopo concreto<br>D) El número de años que tarda ese isótopo en desintegrarse hasta la mitad de una muestra inicial",
+        "back": "Correcta: C) La suma total de protones y neutrones que contiene el núcleo de ese isótopo concreto<br><br><i>Por qué:</i> El número másico es protones más neutrones. Para el <sup>235</sup>U son 92 protones y 143 neutrones; no describe electrones, energía liberada ni periodo de semidesintegración, que son magnitudes distintas.",
         "tags": [
           "fisica_nuclear_radiacion",
           "OD2",
@@ -141,8 +141,8 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
-        "front": "El &lt;sup&gt;235&lt;/sup&gt;U tiene un periodo de semidesintegración de 704 millones de años. ¿Qué significa exactamente ese dato?<br><br>A) Que el &lt;sup&gt;235&lt;/sup&gt;U deja de ser radiactivo por completo pasados exactamente 704 millones de años<br>B) Que hacen falta 704 millones de años para que un solo átomo de &lt;sup&gt;235&lt;/sup&gt;U emita su primera partícula<br>C) Que la energía liberada por cada fisión de &lt;sup&gt;235&lt;/sup&gt;U tarda 704 millones de años en disiparse<br>D) Que en 704 millones de años se habrá desintegrado la mitad de los átomos de una muestra de &lt;sup&gt;235&lt;/sup&gt;U",
-        "back": "Correcta: D) Que en 704 millones de años se habrá desintegrado la mitad de los átomos de una muestra de &lt;sup&gt;235&lt;/sup&gt;U<br><br><i>Por qué:</i> El periodo de semidesintegración es el tiempo en que la mitad de los átomos de una muestra se desintegran, no el tiempo hasta que 'termina' la radiactividad ni el tiempo hasta la primera desintegración de un átomo aislado.",
+        "front": "El <sup>235</sup>U tiene un periodo de semidesintegración de 704 millones de años. ¿Qué significa exactamente ese dato?<br><br>A) Que el <sup>235</sup>U deja de ser radiactivo por completo pasados exactamente 704 millones de años<br>B) Que hacen falta 704 millones de años para que un solo átomo de <sup>235</sup>U emita su primera partícula<br>C) Que la energía liberada por cada fisión de <sup>235</sup>U tarda 704 millones de años en disiparse<br>D) Que en 704 millones de años se habrá desintegrado la mitad de los átomos de una muestra de <sup>235</sup>U",
+        "back": "Correcta: D) Que en 704 millones de años se habrá desintegrado la mitad de los átomos de una muestra de <sup>235</sup>U<br><br><i>Por qué:</i> El periodo de semidesintegración es el tiempo en que la mitad de los átomos de una muestra se desintegran, no el tiempo hasta que 'termina' la radiactividad ni el tiempo hasta la primera desintegración de un átomo aislado.",
         "tags": [
           "fisica_nuclear_radiacion",
           "OD3",
@@ -201,8 +201,8 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
-        "front": "Para que un núcleo de &lt;sup&gt;235&lt;/sup&gt;U se fisione al capturar un neutrón, ¿qué condición señala el capítulo como necesaria?<br><br>A) Que el núcleo de &lt;sup&gt;235&lt;/sup&gt;U esté previamente unido a otro núcleo de &lt;sup&gt;235&lt;/sup&gt;U en la misma muestra<br>B) Que el neutrón llegue con una velocidad -una energía- adecuada para que el núcleo lo capture<br>C) Que el neutrón proceda de una desintegración beta y no de una fisión previa de otro núcleo<br>D) Que la temperatura del entorno supere los mismos millones de grados que necesita la fusión",
-        "back": "Correcta: B) Que el neutrón llegue con una velocidad -una energía- adecuada para que el núcleo lo capture<br><br><i>Por qué:</i> El texto precisa que se envía un neutrón con la energía adecuada; no cualquier núcleo pesado captura cualquier neutrón y fisiona: solo unos pocos isótopos como el &lt;sup&gt;235&lt;/sup&gt;U cumplen esa condición, y la energía del neutrón importa.",
+        "front": "Para que un núcleo de <sup>235</sup>U se fisione al capturar un neutrón, ¿qué condición señala el capítulo como necesaria?<br><br>A) Que el núcleo de <sup>235</sup>U esté previamente unido a otro núcleo de <sup>235</sup>U en la misma muestra<br>B) Que el neutrón llegue con una velocidad -una energía- adecuada para que el núcleo lo capture<br>C) Que el neutrón proceda de una desintegración beta y no de una fisión previa de otro núcleo<br>D) Que la temperatura del entorno supere los mismos millones de grados que necesita la fusión",
+        "back": "Correcta: B) Que el neutrón llegue con una velocidad -una energía- adecuada para que el núcleo lo capture<br><br><i>Por qué:</i> El texto precisa que se envía un neutrón con la energía adecuada; no cualquier núcleo pesado captura cualquier neutrón y fisiona: solo unos pocos isótopos como el <sup>235</sup>U cumplen esa condición, y la energía del neutrón importa.",
         "tags": [
           "fisica_nuclear_radiacion",
           "OD4",
@@ -225,8 +225,8 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
-        "front": "¿Qué diferencia hay entre el confinamiento magnético y el confinamiento inercial, las dos vías de fusión que cita el OIEA?<br><br>A) El magnético comprime el combustible con láseres; el inercial lo atrapa con campos magnéticos en un tokamak<br>B) El magnético atrapa el plasma con campos magnéticos en un reactor en anillo; el inercial comprime una cápsula con láseres<br>C) El magnético solo se ensaya en laboratorio; el inercial es la única vía usada en proyectos como ITER<br>D) El magnético y el inercial son en realidad el mismo método, con distinto nombre según el país que lo desarrolla",
-        "back": "Correcta: B) El magnético atrapa el plasma con campos magnéticos en un reactor en anillo; el inercial comprime una cápsula con láseres<br><br><i>Por qué:</i> Son dos vías distintas: el confinamiento magnético usa campos magnéticos en un reactor en forma de anillo -un tokamak, como ITER-, y el confinamiento inercial comprime una pequeña cápsula de combustible con potentes láseres.",
+        "front": "¿Qué diferencia hay entre el confinamiento magnético y el confinamiento inercial, las dos vías de fusión que cita el OIEA?<br><br>A) El magnético comprime el combustible con láseres; el inercial lo atrapa con campos magnéticos en un tokamak<br>B) El magnético atrapa el plasma con campos magnéticos en un reactor en anillo; el inercial comprime una cáspula con láseres<br>C) El magnético solo se ensaya en laboratorio; el inercial es la única vía usada en proyectos como ITER<br>D) El magnético y el inercial son en realidad el mismo método, con distinto nombre según el país que lo desarrolla",
+        "back": "Correcta: B) El magnético atrapa el plasma con campos magnéticos en un reactor en anillo; el inercial comprime una cáspula con láseres<br><br><i>Por qué:</i> Son dos vías distintas: el confinamiento magnético usa campos magnéticos en un reactor en forma de anillo -un tokamak, como ITER-, y el confinamiento inercial comprime una pequeña cápsula de combustible con potentes láseres.",
         "tags": [
           "fisica_nuclear_radiacion",
           "OD4",
@@ -237,8 +237,8 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
-        "front": "¿Qué papel cumple exactamente el moderador -agua o grafito- en un reactor nuclear de espectro térmico?<br><br>A) Reduce la energía de los neutrones rápidos hasta la energía a la que el &lt;sup&gt;235&lt;/sup&gt;U fisiona mejor<br>B) Absorbe neutrones para frenar directamente la reacción en cadena cuando la potencia sube demasiado<br>C) Aporta neutrones adicionales al núcleo para compensar los que se pierden por fuga fuera del reactor<br>D) Convierte el &lt;sup&gt;238&lt;/sup&gt;U no fisionable en &lt;sup&gt;239&lt;/sup&gt;Pu, un isótopo capaz de fisionarse con facilidad",
-        "back": "Correcta: A) Reduce la energía de los neutrones rápidos hasta la energía a la que el &lt;sup&gt;235&lt;/sup&gt;U fisiona mejor<br><br><i>Por qué:</i> El moderador reduce, mediante choques, la energía de los neutrones desde ~1 MeV hasta ~0,025 eV, la energía a la que el &lt;sup&gt;235&lt;/sup&gt;U fisiona con más probabilidad. Absorber neutrones es función de las barras de control, no del moderador.",
+        "front": "¿Qué papel cumple exactamente el moderador -agua o grafito- en un reactor nuclear de espectro térmico?<br><br>A) Reduce la energía de los neutrones rápidos hasta la energía a la que el <sup>235</sup>U fisiona mejor<br>B) Absorbe neutrones para frenar directamente la reacción en cadena cuando la potencia sube demasiado<br>C) Aporta neutrones adicionales al núcleo para compensar los que se pierden por fuga fuera del reactor<br>D) Convierte el <sup>238</sup>U no fisionable en <sup>239</sup>Pu, un isótopo capaz de fisionarse con facilidad",
+        "back": "Correcta: A) Reduce la energía de los neutrones rápidos hasta la energía a la que el <sup>235</sup>U fisiona mejor<br><br><i>Por qué:</i> El moderador reduce, mediante choques, la energía de los neutrones desde ~1 MeV hasta ~0,025 eV, la energía a la que el <sup>235</sup>U fisiona con más probabilidad. Absorber neutrones es función de las barras de control, no del moderador.",
         "tags": [
           "fisica_nuclear_radiacion",
           "OD5",
