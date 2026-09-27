@@ -105,6 +105,18 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_centrales_nucleares.html#od2"
       },
       {
+        "front": "En una central PWR, ¿qué papel cumple el boro disuelto en el agua del primario?<br><br>A) Eleva la presión del primario para que el agua no hierva<br>B) Absorbe neutrones y permite un ajuste fino de la reacción<br>C) Protege las vainas del combustible frente a la corrosión<br>D) Frena los neutrones rápidos para que fisionen el uranio",
+        "back": "Correcta: B) Absorbe neutrones y permite un ajuste fino de la reacción<br><br><i>Por qué:</i> El boro absorbe neutrones igual que las barras de control, pero disuelto en todo el refrigerante; su concentración se ajusta poco a poco para compensar el consumo del combustible. Frenar neutrones es el papel del moderador, no del boro.",
+        "tags": [
+          "centrales_nucleares",
+          "OD02",
+          "Bloom::Comprender"
+        ],
+        "objetivo": "OD02 · La fisión como fuente de calor",
+        "tema": "2.1 · Centrales nucleares",
+        "enlace": "unidad_centrales_nucleares.html#od2"
+      },
+      {
         "front": "Un técnico analiza el agua que mueve la turbina de una PWR. ¿Por qué esa agua no ha pasado por el reactor?<br><br>A) Porque el condensador filtra el agua antes de llegar al reactor<br>B) Porque el presionador separa el vapor del agua del primario<br>C) Porque el terciario sustituye esa agua en cada vuelta al río<br>D) Porque el secundario se calienta en el generador sin mezclarse",
         "back": "Correcta: D) Porque el secundario se calienta en el generador sin mezclarse<br><br><i>Por qué:</i> En una PWR el agua del secundario se evapora en el generador de vapor sin entrar en contacto con la del primario. Solo el secundario pasa por la turbina.",
         "tags": [
@@ -201,50 +213,50 @@ window.MEMORAI_DECKS = [
         "enlace": "unidad_centrales_nucleares.html#od4"
       },
       {
-        "front": "Al comparar el libro (2013) con los datos de Foro Nuclear, ¿qué explica que el parque haya pasado de 8 a 7 reactores?<br><br>A) La conversión de Cofrentes de tipo BWR a tipo PWR<br>B) El desmantelamiento de Vandellós II tras su parada en 1989<br>C) El cierre de Santa María de Garoña tras denegarse su licencia<br>D) La fusión de Almaraz I y Almaraz II en una sola unidad",
+        "front": "Francia tiene 57 reactores y Estados Unidos 94, pero la cuota nuclear francesa (68 %) casi cuadruplica la de EE. UU. (18 %). ¿Qué lo explica?<br><br>A) Los reactores franceses son BWR y tienen más potencia<br>B) El sistema eléctrico estadounidense es mucho mayor que el francés<br>C) La mayoría de reactores estadounidenses está parada por revisión<br>D) Francia suma a su parque la electricidad nuclear importada",
+        "back": "Correcta: B) El sistema eléctrico estadounidense es mucho mayor que el francés<br><br><i>Por qué:</i> La cuota depende de cuánta electricidad nuclear se produce frente al total del país. Estados Unidos tiene más reactores, pero su sistema eléctrico es mucho más grande, así que la nuclear pesa menos en porcentaje. Los reactores franceses son PWR.",
+        "tags": [
+          "centrales_nucleares",
+          "OD05",
+          "Bloom::Analizar"
+        ],
+        "objetivo": "OD05 · Centrales nucleares en el mundo",
+        "tema": "2.1 · Centrales nucleares",
+        "enlace": "unidad_centrales_nucleares.html#od5"
+      },
+      {
+        "front": "¿Qué país concentra la mayor parte de los reactores que se están construyendo hoy en el mundo?<br><br>A) China, con 38 de los 80 reactores en obra<br>B) India, con más de la mitad de los reactores en obra<br>C) Estados Unidos, que amplía su parque de 94 reactores<br>D) Francia, que sustituye poco a poco sus 57 reactores",
+        "back": "Correcta: A) China, con 38 de los 80 reactores en obra<br><br><i>Por qué:</i> Según la World Nuclear Association (septiembre de 2026), China tiene 38 de los 80 reactores en construcción. India le sigue con 8; Estados Unidos y Francia no tienen ninguno en obra en esa fecha.",
+        "tags": [
+          "centrales_nucleares",
+          "OD05",
+          "Bloom::Analizar"
+        ],
+        "objetivo": "OD05 · Centrales nucleares en el mundo",
+        "tema": "2.1 · Centrales nucleares",
+        "enlace": "unidad_centrales_nucleares.html#od5"
+      },
+      {
+        "front": "Al comparar el libro (2013) con los datos de Foro Nuclear, ¿qué explica que el parque español haya pasado de 8 a 7 reactores?<br><br>A) La conversión de Cofrentes de tipo BWR a tipo PWR<br>B) El desmantelamiento de Vandellós II tras su parada en 1989<br>C) El cierre de Santa María de Garoña tras denegarse su licencia<br>D) La fusión de Almaraz I y Almaraz II en una sola unidad",
         "back": "Correcta: C) El cierre de Santa María de Garoña tras denegarse su licencia<br><br><i>Por qué:</i> En 2017 se rechazó renovar la autorización de explotación de Garoña, que ya no operaba en 2013. La que paró en 1989 fue Vandellós I, no Vandellós II, que sigue en operación.",
         "tags": [
           "centrales_nucleares",
           "OD05",
           "Bloom::Analizar"
         ],
-        "objetivo": "OD05 · Centrales nucleares en España",
+        "objetivo": "OD05 · Centrales nucleares en el mundo",
         "tema": "2.1 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od5"
       },
       {
-        "front": "En 2025 la nuclear aportó el 19,06 % de la electricidad con solo el 5,28 % de la potencia instalada. ¿Qué dato del mismo informe ayuda a explicarlo?<br><br>A) Sus reactores superan los 1.000 MWe de potencia<br>B) Cubrió más de una cuarta parte de la electricidad limpia<br>C) Su combustible se fabrica en la planta de Juzbado<br>D) Funcionó a plena potencia unas 7.283 horas del año",
+        "front": "En 2025 la nuclear aportó el 19,06 % de la electricidad española con solo el 5,28 % de la potencia instalada. ¿Qué dato del mismo informe ayuda a explicarlo?<br><br>A) Sus reactores superan los 1.000 MWe de potencia<br>B) Cubrió más de una cuarta parte de la electricidad limpia<br>C) Su combustible se fabrica en la planta de Juzbado<br>D) Funcionó a plena potencia unas 7.283 horas del año",
         "back": "Correcta: D) Funcionó a plena potencia unas 7.283 horas del año<br><br><i>Por qué:</i> Producir mucha energía con poca potencia instalada exige funcionar muchas horas: el parque estuvo a plena potencia el 83,14 % de las horas del año. Los demás datos son ciertos, pero no explican esa diferencia.",
         "tags": [
           "centrales_nucleares",
           "OD05",
           "Bloom::Analizar"
         ],
-        "objetivo": "OD05 · Centrales nucleares en España",
-        "tema": "2.1 · Centrales nucleares",
-        "enlace": "unidad_centrales_nucleares.html#od5"
-      },
-      {
-        "front": "¿Qué papel cumple la instalación de Juzbado (Salamanca) en España?<br><br>A) Almacena residuos radiactivos de baja y media actividad<br>B) Fabrica el combustible nuclear que usan las centrales<br>C) Genera electricidad con un reactor de agua en ebullición<br>D) Enriquece el uranio antes de enviarlo a las centrales",
-        "back": "Correcta: B) Fabrica el combustible nuclear que usan las centrales<br><br><i>Por qué:</i> Juzbado es la fábrica de combustible nuclear. Los residuos de baja y media actividad van a El Cabril, y el único BWR en operación es Cofrentes.",
-        "tags": [
-          "centrales_nucleares",
-          "OD05",
-          "Bloom::Analizar"
-        ],
-        "objetivo": "OD05 · Centrales nucleares en España",
-        "tema": "2.1 · Centrales nucleares",
-        "enlace": "unidad_centrales_nucleares.html#od5"
-      },
-      {
-        "front": "Un compañero afirma que la mayoría de los reactores españoles son BWR. ¿Qué dato lo desmiente?<br><br>A) Seis de los siete reactores en operación son de tipo PWR<br>B) Cofrentes es la central con más potencia instalada de España<br>C) Garoña, el otro BWR citado, ya no produce electricidad<br>D) Almaraz y Ascó cuentan con dos reactores cada una",
-        "back": "Correcta: A) Seis de los siete reactores en operación son de tipo PWR<br><br><i>Por qué:</i> De los siete reactores en operación, solo Cofrentes es BWR. El cierre de Garoña reduce los BWR, pero por sí solo no dice cuántos PWR hay.",
-        "tags": [
-          "centrales_nucleares",
-          "OD05",
-          "Bloom::Analizar"
-        ],
-        "objetivo": "OD05 · Centrales nucleares en España",
+        "objetivo": "OD05 · Centrales nucleares en el mundo",
         "tema": "2.1 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od5"
       },
