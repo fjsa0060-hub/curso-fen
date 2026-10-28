@@ -4,8 +4,8 @@
 window.MEMORAI_DECKS = [
   {
     "id": "centrales_nucleares",
-    "name": "2.1 · Centrales nucleares",
-    "curso": "Fundamentos de Energía Nuclear (FEN)",
+    "name": "0.2 · Centrales nucleares",
+    "curso": "Curso 00 · Fundamentos de la energía nuclear",
     "slug": "centrales_nucleares",
     "cards": [
       {
@@ -17,7 +17,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD01 · Cómo se produce la electricidad",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od1"
       },
       {
@@ -29,7 +29,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD01 · Cómo se produce la electricidad",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od1"
       },
       {
@@ -41,7 +41,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD01 · Cómo se produce la electricidad",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od1"
       },
       {
@@ -53,7 +53,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD01 · Cómo se produce la electricidad",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od1"
       },
       {
@@ -65,7 +65,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD02 · La fisión como fuente de calor",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od2"
       },
       {
@@ -77,7 +77,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD02 · La fisión como fuente de calor",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od2"
       },
       {
@@ -89,7 +89,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD02 · La fisión como fuente de calor",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od2"
       },
       {
@@ -101,7 +101,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD02 · La fisión como fuente de calor",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od2"
       },
       {
@@ -113,7 +113,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD02 · La fisión como fuente de calor",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od2"
       },
       {
@@ -125,7 +125,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD03 · PWR frente a BWR",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od3"
       },
       {
@@ -137,7 +137,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD03 · PWR frente a BWR",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od3"
       },
       {
@@ -149,7 +149,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD03 · PWR frente a BWR",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od3"
       },
       {
@@ -161,7 +161,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD03 · PWR frente a BWR",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od3"
       },
       {
@@ -173,7 +173,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD04 · Componentes principales",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od4"
       },
       {
@@ -185,7 +185,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD04 · Componentes principales",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od4"
       },
       {
@@ -197,7 +197,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD04 · Componentes principales",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od4"
       },
       {
@@ -209,7 +209,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD04 · Componentes principales",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od4"
       },
       {
@@ -221,7 +221,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD05 · Centrales nucleares en el mundo",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od5"
       },
       {
@@ -233,7 +233,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD05 · Centrales nucleares en el mundo",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od5"
       },
       {
@@ -245,7 +245,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD05 · Centrales nucleares en el mundo",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od5"
       },
       {
@@ -257,7 +257,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD05 · Centrales nucleares en el mundo",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od5"
       },
       {
@@ -269,7 +269,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Aplicar"
         ],
         "objetivo": "OD06 · Del núcleo a la red",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od6"
       },
       {
@@ -281,7 +281,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Aplicar"
         ],
         "objetivo": "OD06 · Del núcleo a la red",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od6"
       },
       {
@@ -293,15 +293,15 @@ window.MEMORAI_DECKS = [
           "Bloom::Aplicar"
         ],
         "objetivo": "OD06 · Del núcleo a la red",
-        "tema": "2.1 · Centrales nucleares",
+        "tema": "0.2 · Centrales nucleares",
         "enlace": "unidad_centrales_nucleares.html#od6"
       }
     ]
   },
   {
     "id": "fisica_nuclear_radiacion",
-    "name": "1.1 · Física nuclear y radiación",
-    "curso": "Fundamentos de Energía Nuclear (FEN)",
+    "name": "0.1 · Física nuclear y radiación",
+    "curso": "Curso 00 · Fundamentos de la energía nuclear",
     "slug": "fisica_nuclear_radiacion",
     "cards": [
       {
@@ -313,7 +313,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD1 · Modelos atómicos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od1"
       },
       {
@@ -325,7 +325,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD1 · Modelos atómicos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od1"
       },
       {
@@ -337,7 +337,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD1 · Modelos atómicos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od1"
       },
       {
@@ -349,7 +349,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD1 · Modelos atómicos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od1"
       },
       {
@@ -361,7 +361,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD2 · Átomo, núcleo e isótopos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od2"
       },
       {
@@ -373,7 +373,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD2 · Átomo, núcleo e isótopos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od2"
       },
       {
@@ -385,7 +385,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD2 · Átomo, núcleo e isótopos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od2"
       },
       {
@@ -397,7 +397,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD2 · Átomo, núcleo e isótopos",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od2"
       },
       {
@@ -409,7 +409,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD3 · Radiactividad y estabilidad",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
@@ -421,7 +421,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD3 · Radiactividad y estabilidad",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
@@ -433,7 +433,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD3 · Radiactividad y estabilidad",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
@@ -445,7 +445,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD3 · Radiactividad y estabilidad",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
@@ -457,7 +457,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD3 · Radiactividad y estabilidad",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
@@ -469,7 +469,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Analizar"
         ],
         "objetivo": "OD3 · Radiactividad y estabilidad",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od3"
       },
       {
@@ -481,7 +481,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD4 · Fisión y fusión",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
@@ -493,7 +493,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD4 · Fisión y fusión",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
@@ -505,7 +505,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD4 · Fisión y fusión",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
@@ -517,7 +517,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD4 · Fisión y fusión",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
@@ -529,7 +529,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Comprender"
         ],
         "objetivo": "OD4 · Fisión y fusión",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od4"
       },
       {
@@ -541,7 +541,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Aplicar"
         ],
         "objetivo": "OD5 · Reacción en cadena",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od5"
       },
       {
@@ -553,7 +553,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Aplicar"
         ],
         "objetivo": "OD5 · Reacción en cadena",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od5"
       },
       {
@@ -565,7 +565,7 @@ window.MEMORAI_DECKS = [
           "Bloom::Aplicar"
         ],
         "objetivo": "OD5 · Reacción en cadena",
-        "tema": "1.1 · Física nuclear y radiación",
+        "tema": "0.1 · Física nuclear y radiación",
         "enlace": "unidad_fisica_nuclear_radiacion.html#od5"
       }
     ]
