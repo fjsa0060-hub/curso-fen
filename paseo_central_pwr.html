@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paseo virtual por una central PWR · Edificio del reactor · KnoCor.AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+
+  :root { --bg:#0a0d14; --panel:#141a21f2; --line:#2a323b; --ink:#e9e7e2; --dim:#a6acb4; --faint:#6f7680;
+          --teal:#3fb5a3; --amber:#e0a43c; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); overflow:hidden;
+    font:14px/1.5 Inter, system-ui, "Segoe UI", sans-serif; }
+  canvas#view { position:fixed; inset:0; display:block; touch-action:none; cursor:grab; }
+  canvas#view.hot { cursor:pointer; }
+  .mono { font-family:"Space Mono", ui-monospace, Consolas, monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+  h1, h2 { font-family:"Space Grotesk", Inter, sans-serif; font-weight:600; margin:0; }
+
+  #top { position:fixed; left:14px; top:12px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:10px 14px; max-width:330px; }
+  #top a { color:var(--teal); text-decoration:none; font-size:12.5px; }
+  #top a:hover { text-decoration:underline; }
+  #top h1 { font-size:16px; margin-top:4px; }
+  #top .where { color:var(--dim); font-size:12.5px; margin-top:2px; }
+
+  #side { position:fixed; right:14px; top:12px; width:200px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:10px 12px; }
+  #side .mono { color:var(--faint); }
+  #count { font-family:"Space Grotesk", sans-serif; font-size:20px; margin:2px 0 6px; }
+  #count small { font-size:12.5px; color:var(--dim); font-family:Inter, sans-serif; }
+  #map { display:block; width:100%; border-radius:6px; background:#0c1118; }
+  #list { list-style:none; margin:8px 0 0; padding:0; max-height:38vh; overflow-y:auto; }
+  #list li { display:flex; gap:7px; align-items:baseline; font-size:12.5px; padding:2px 0; color:var(--dim); cursor:pointer; }
+  #list li:hover { color:var(--ink); }
+  #list li::before { content:""; flex:0 0 8px; height:8px; border-radius:50%; background:var(--amber); }
+  #list li.seen::before { background:var(--teal); }
+
+  #hint { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); background:#0a0d14cc; border:1px solid var(--line);
+    color:var(--dim); font-size:12.5px; padding:6px 14px; border-radius:20px; white-space:nowrap; pointer-events:none; }
+  #hint b { color:var(--ink); font-weight:500; }
+  #tip { position:fixed; display:none; pointer-events:none; background:var(--panel); border:1px solid var(--teal);
+    border-radius:6px; padding:4px 9px; font-size:12.5px; transform:translate(14px, -50%); z-index:3; }
+
+  .veil { position:fixed; inset:0; background:#05080dcc; display:none; place-items:center; padding:20px; z-index:5; }
+  .veil.on { display:grid; }
+  .card { background:#141a21; border:1px solid var(--line); border-radius:14px; width:min(620px, 100%);
+    max-height:calc(100% - 20px); overflow-y:auto; padding:22px 24px; position:relative; }
+  .card.wide { width:min(1180px, 100%); height:calc(100% - 20px); padding:0; overflow:hidden; display:flex; flex-direction:column; }
+  .card .tag { color:var(--teal); }
+  .card h2 { font-size:22px; margin:4px 30px 10px 0; }
+  .card p { margin:0 0 10px; color:#d5d8dc; }
+  .card dl { display:grid; grid-template-columns:auto 1fr; gap:5px 14px; margin:14px 0; padding:12px 0;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .card dt { color:var(--faint); }
+  .card dd { margin:0; }
+  .card .simp { border-left:3px solid var(--amber); background:#2a2416; padding:8px 12px; border-radius:0 6px 6px 0; font-size:13px; }
+  .card .simp b { display:block; color:var(--amber); }
+  .card figure { margin:12px 0 0; }
+  .card figure img, .card figure video { width:100%; border-radius:8px; display:block; }
+  .card figcaption { color:var(--faint); font-size:12px; margin-top:4px; }
+  button { font:inherit; color:var(--ink); background:#212a33; border:1px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; }
+  button:hover { border-color:var(--dim); }
+  button.go { background:var(--teal); border-color:var(--teal); color:#06120f; font-weight:600; }
+  button:focus-visible { outline:2px solid var(--amber); outline-offset:2px; }
+  .x { position:absolute; top:12px; right:12px; padding:2px 10px; z-index:2; }
+  .acts { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .bar { display:flex; align-items:center; gap:12px; padding:10px 16px; border-bottom:1px solid var(--line); }
+  .bar h2 { font-size:16px; margin:0; flex:1; }
+  .card.wide iframe { flex:1; width:100%; border:0; background:#0e1318; }
+  #intro ul { margin:8px 0 0; padding-left:18px; color:#d5d8dc; }
+  #intro li { margin:3px 0; }
+  kbd { font-family:"Space Mono", monospace; font-size:11.5px; background:#232c36; border:1px solid var(--line);
+    border-radius:4px; padding:1px 5px; }
+  #modo { margin-top:8px; padding:5px 11px; font-size:12.5px; border-color:var(--teal); }
+  .card .foto { margin:-22px -24px 14px; position:relative; }
+  .card .foto img { width:100%; height:250px; object-fit:cover; border-radius:14px 14px 0 0; display:block; cursor:zoom-in; }
+  .card .foto span { position:absolute; left:10px; bottom:8px; font-size:11px; color:#e9e7e2; background:#0a0d14b0; padding:2px 8px; border-radius:10px; }
+  .quien { display:flex; align-items:center; gap:10px; }
+  .quien img { width:44px; height:44px; border-radius:50%; object-fit:cover; object-position:50% 12%; border:2px solid var(--teal); flex:none; }
+  #intro .card { display:grid; grid-template-columns:150px 1fr; gap:6px 22px; width:min(760px,100%); }
+  #intro .nico { grid-row:1 / span 6; align-self:end; width:150px; border-radius:10px; }
+  #intro .card > :not(.nico) { grid-column:2; }
+  #zoom { z-index:8; cursor:zoom-out; } #zoom img { max-width:100%; max-height:100%; border-radius:10px; }
+  @media (max-width:640px) { #intro .card { display:block; } #intro .nico { display:none; } }
+  @media (max-width:760px) { #side { width:150px; } #list { display:none; } #hint { display:none; } #top { max-width:calc(100% - 190px); } }
+
+  body { background:#05070b; }
+  #stage { position:fixed; overflow:hidden; background:#000; transition:opacity .25s; cursor:pointer; user-select:none; touch-action:none; }
+  #stage.fuera { opacity:0; }
+  #fondo { position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; }
+  #nico { position:absolute; pointer-events:none; filter:drop-shadow(0 3px 5px #0007); transform-origin:50% 100%; will-change:left, top, height, transform; }
+  #sombra { position:absolute; pointer-events:none; border-radius:50%; background:radial-gradient(closest-side, #000a, #0000); }
+  #dbg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .pt { position:absolute; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%; border:3px solid #fff; background:var(--amber);
+    color:#0a0d14; font:700 20px/1 Georgia, serif; padding:0; display:grid; place-items:center; box-shadow:0 0 0 0 #e0a43c99; animation:pulso 1.8s infinite; }
+  .pt.seen { background:var(--teal); animation:none; }
+  .pt:hover { transform:scale(1.15); border-color:#fff; }
+  @keyframes pulso { 70% { box-shadow:0 0 0 14px #e0a43c00; } 100% { box-shadow:0 0 0 0 #e0a43c00; } }
+  .sal { position:absolute; transform:translate(-50%, -50%); background:#0a0d14d9; border:1.5px solid var(--teal); color:var(--ink);
+    border-radius:20px; padding:4px 12px 4px 8px; font-size:12.5px; white-space:nowrap; display:flex; align-items:center; gap:6px; }
+  .sal::before { content:"➜"; color:var(--teal); font-size:13px; }
+  .sal.atras::before { content:"↩"; }
+  .sal:hover { background:var(--teal); color:#06120f; border-color:var(--teal); } .sal:hover::before { color:#06120f; }
+  #top .fila { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  #top .fila button { padding:5px 11px; font-size:12.5px; border-color:var(--teal); }
+  #top .fila button.go { color:#06120f; }
+  #ruta { display:flex; flex-wrap:wrap; gap:4px; margin:6px 0 2px; }
+  #ruta button { padding:2px 8px; font-size:11.5px; border-radius:12px; color:var(--dim); }
+  #ruta button.aqui { border-color:var(--teal); color:var(--ink); }
+  #side { width:210px; }
+  #side.plegado { width:auto; padding:6px 12px; cursor:pointer; }
+  #side.plegado > :not(#count) { display:none; }
+  #side.plegado #count { margin:0; font-size:15px; }
+  #side.plegado #count::after { content:" ▾"; color:var(--teal); }
+  #count { cursor:pointer; }
+  #top .fila[hidden] { display:none; }
+  #top { max-width:300px; padding:8px 12px; } #top h1 { font-size:14.5px; }
+  #hint { transition:opacity .6s; } #hint.fuera { opacity:0; }
+</style>
+</head>
+<body>
+<div id="stage" class="fuera"><img id="fondo" alt=""><div id="sombra"></div><img id="nico" alt=""><svg id="dbg"></svg><div id="capa"></div></div>
+
+<div id="top">
+  <a href="index.html">← Curso 00 · Fundamentos</a>
+  <h1>Paseo virtual por una central PWR</h1>
+  <div class="where" id="where"></div>
+  <div class="fila" id="hubBtns" hidden>
+    <button id="modo">Ver en recarga</button>
+    <button id="tresd" class="go">Explorar en 3D</button>
+  </div>
+</div>
+
+<aside id="side" class="plegado">
+  <div class="mono">Puntos de información</div>
+  <div id="count">0 <small>de 0 vistos</small></div>
+  <div class="mono" style="margin-top:6px">Ir a</div>
+  <div id="ruta"></div>
+  <ul id="list"></ul>
+</aside>
+
+<div id="hint"><b>Clic en el suelo</b> o <b>flechas / W A S D</b> para mover a Nico · <b>clic en ⓘ</b> para abrir un punto · <b>clic en ➜</b> para cambiar de sitio</div>
+
+<div class="veil on" id="intro">
+  <div class="card">
+    <img class="nico" src="paseo_img/nico_retrato.jpg" alt="Nico, el técnico que hace la visita">
+    <div class="mono tag">Etapa 1 de la visita · Edificio del reactor</div>
+    <h2>Paseo virtual por una central nuclear PWR</h2>
+    <p>Acompañas a Nico, el técnico de Nucleatom, por el edificio del reactor de una central de agua a presión de cuatro lazos. La visita empieza fuera, sigue por el control de acceso y la esclusa de personal, y llega a la plataforma de recarga, desde la que se ve la tapa de la vasija.</p>
+    <ul>
+      <li>Haz clic en el suelo para que Nico camine hasta allí, o muévelo con las flechas o con <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd>.</li>
+      <li>Los círculos con una <b>i</b> abren una ficha con la explicación. Las etiquetas con flecha llevan a otro punto de la planta.</li>
+      <li>En la plataforma de recarga puedes ver la cavidad en operación o en recarga, y entrar en la maqueta con «Explorar en 3D».</li>
+    </ul>
+    <p style="margin-top:12px;color:var(--faint);font-size:12.5px">Ilustraciones orientativas generadas con IA sobre un diseño genérico, hechas solo con información pública. No representan ninguna central concreta.</p>
+    <div class="acts"><button class="go" id="start">Empezar la visita</button></div>
+  </div>
+</div>
+
+<div class="veil" id="zoom"><img alt=""></div>
+<div class="veil" id="info"><div class="card" id="infoCard"></div></div>
+<div class="veil" id="model">
+  <div class="card wide">
+    <div class="bar"><h2 id="modelTitle"></h2><button id="modelClose">Volver al paseo</button></div>
+    <iframe id="modelFrame" title="Modelo 3D" allow="fullscreen"></iframe>
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   1. CONTENIDO DE LOS PUNTOS DE INFORMACIÓN  (editar aquí)
+   fotos: ilustraciones de la ficha; se usa la primera que no sea el fondo de la escena actual
+   modelo: { titulo, src } → botón que abre un modelo 3D
+   ============================================================================ */
+const PUNTOS = [
+  { id:'acceso', foto:'paseo_img/acceso.jpg', pos:[1.9, 1.7, 31.2], sis:'Protección radiológica', titulo:'Control de acceso a zona controlada',
+    txt:['Aquí acaba la zona de libre acceso. Para pasar hace falta un permiso de trabajo con radiaciones, que fija qué se va a hacer, dónde, durante cuánto tiempo y con qué protección.',
+         'Cada persona lleva dos dosímetros: uno oficial, que se lee cada mes, y otro electrónico de lectura directa, que marca la dosis al momento y avisa si se supera el valor previsto. A la salida, el pórtico comprueba que nadie se lleva contaminación en la ropa o en la piel.'],
+    datos:[['Equipo habitual','Casco, gafas, guantes, calzado de seguridad, protección auditiva y ropa de zona'],['Criterio','ALARA: la dosis, tan baja como sea razonablemente posible'],['Dosímetros','Uno oficial (pasivo) y uno electrónico de lectura directa']],
+    simp:'El vestuario y el control dosimétrico reales ocupan varias salas; aquí se han reducido a un pasillo.' },
+
+  { id:'esclusa', foto:'paseo_img/acceso.jpg', pos:[1.9, 1.7, 25.5], sis:'Contención', titulo:'Esclusa de personal',
+    txt:['La contención es un recinto estanco, y la esclusa permite entrar sin que deje de serlo. Es una cámara de acero con una puerta en cada extremo, enclavadas entre sí: una no abre hasta que la otra está cerrada.',
+         'Al cruzarla verás que la puerta exterior se cierra a tu espalda antes de que abra la interior.'],
+    datos:[['Puertas','Dos, estancas y con enclavamiento mecánico'],['Otras entradas','Esclusa de emergencia y compuerta de equipos'],['En operación','La estanqueidad se comprueba con pruebas periódicas de fugas']],
+    simp:'En la maqueta las puertas son correderas; las reales son abatibles, con volante y juntas dobles.' },
+
+  { id:'contencion', foto:'paseo_img/contencion.jpg', pos:[3.4, 2.3, 16.4], sis:'Contención', titulo:'Edificio de contención',
+    txt:['Es la última de las barreras entre los productos radiactivos y el exterior, después de la vaina del combustible y del circuito primario. Su misión es soportar la presión y la temperatura de un accidente con rotura del primario y retener lo que se libere.',
+         'En este tipo de central es un cilindro de hormigón pretensado rematado por una cúpula, forrado por dentro con una chapa de acero soldada que asegura la estanqueidad.'],
+    datos:[['Diámetro interior','Entre 32 y 47 m según el tamaño de la central'],['Altura','Del orden de 60 m'],['Pared','De 1 a 1,3 m de hormigón pretensado, con chapa de acero de 6 a 10 mm'],['Presión de diseño','Entre 3 y 4,5 bar sobre la atmosférica']],
+    simp:'La cúpula de la maqueta es más baja que la real, y bajo la plataforma faltan los cubículos de los lazos, que aquí no se visitan.' },
+
+  { id:'tapa', foto:'paseo_img/tapa.jpg', pos:[0, -0.5, 0], sis:'Reactor', titulo:'Tapa de la vasija del reactor',
+    txt:['Al fondo de la cavidad se ve la tapa de la vasija, con el haz de mecanismos de accionamiento de las barras de control encima. Debajo están los internos y el núcleo, con sus 193 elementos combustibles.',
+         'La tapa va unida a la vasija con una corona de pernos. En cada recarga se destensan los pernos, se inunda la cavidad y la grúa polar se lleva la tapa a su soporte para dejar el núcleo accesible desde arriba.'],
+    datos:[['Vasija','Entre 13 y 14 m de alto con la tapa y 4,4 m de diámetro interior'],['Pared','Más de 20 cm de acero al carbono, revestido por dentro de inoxidable'],['Condiciones','155 bar; el agua entra a unos 290 °C y sale a unos 325 °C'],['Barras de control','53 haces en un núcleo de 193 elementos']],
+    simp:'La tapa y los mecanismos son esquemáticos. El modelo 3D muestra la vasija entera con sus internos.',
+    modelo:{ titulo:'Vasija del reactor y sus internos', src:'visor_reactor_pwr.html?vista=corte' } },
+
+  { id:'cavidad', foto:'paseo_img/cavidad.jpg', pos:[4.9, 1.5, 3.2], sis:'Recarga', titulo:'Cavidad de recarga',
+    txt:['Con la central en marcha la cavidad está seca. En la recarga se llena de agua borada hasta casi el nivel de la plataforma: el agua hace de blindaje y refrigera el combustible, y el boro mantiene el núcleo subcrítico.',
+         'Todo el movimiento de combustible se hace bajo varios metros de agua, que además es transparente y deja ver la maniobra. Las paredes y el fondo van forrados de acero inoxidable. El botón «Ver en recarga», arriba a la izquierda, cambia entre los dos estados.'],
+    datos:[['Estado en operación','Seca'],['Estado en recarga','Inundada con agua borada'],['Zonas','Pozo del reactor, almacenamiento de internos y canal de transferencia']],
+    simp:'Forma y profundidad aproximadas. No se ha representado el anillo de sellado entre la vasija y el fondo de la cavidad.' },
+
+  { id:'manipuladora', foto:'paseo_img/manipuladora.jpg', pos:[0, 4.3, -7], sis:'Recarga', titulo:'Máquina de recarga',
+    txt:['Es un puente que rueda sobre carriles a los dos lados de la cavidad. Lleva un carro con un mástil telescópico terminado en una garra, que toma los elementos combustibles de uno en uno por el cabezal superior.',
+         'El elemento sube dentro del mástil sin salir nunca del agua, viaja hasta el canal de transferencia y de ahí pasa al edificio de combustible. En cada recarga se renueva entre un cuarto y un tercio del núcleo y el resto cambia de posición.'],
+    datos:[['Ciclo','Recarga cada 12, 18 o 24 meses, según la central'],['Combustible renovado','Entre un cuarto y un tercio del núcleo'],['Elemento combustible','Unos 4 m de largo y del orden de 600 kg']],
+    simp:'Puente, carro y mástil reducidos a sus volúmenes principales.' },
+
+  { id:'gv', foto:'paseo_img/generador_vapor.jpg', pos:[7.3, 2.2, 6.5], sis:'Circuito primario', titulo:'Generador de vapor',
+    txt:['Aquí se separan los dos circuitos. El agua del primario, caliente y radiactiva, circula por dentro de miles de tubos en forma de U invertida; el agua del secundario los baña por fuera, hierve y sale como vapor hacia la turbina.',
+         'Los tubos forman parte de la barrera del primario, por eso se inspeccionan en las recargas. Lo que asoma sobre la plataforma es la parte alta, donde están los separadores de humedad y los secadores de vapor. Hay un generador por lazo, cuatro en esta central.'],
+    datos:[['Altura','Unos 21 m'],['Diámetro','Entre 4,5 y 5,1 m en la parte superior'],['Tubos','Entre 3.400 y 5.800 por generador, según el modelo'],['Vapor','Unos 70 bar y 285 °C']],
+    simp:'En una central real cada generador está dentro de un cubículo de hormigón y apenas se ve desde la plataforma.' },
+
+  { id:'presionador', foto:'paseo_img/presionador.jpg', pos:[-12.2, 2.2, -10.4], sis:'Circuito primario', titulo:'Presionador',
+    txt:['Mantiene la presión del primario en 155 bar para que el agua no hierva en el núcleo a más de 300 °C. Es un depósito medio lleno de agua y medio de vapor, unido a la rama caliente de uno de los lazos.',
+         'Para subir la presión se conectan unas resistencias eléctricas en el fondo, que generan vapor. Para bajarla se rocía agua más fría por arriba, que condensa parte del vapor. Si aun así la presión sube, abren las válvulas de alivio y de seguridad.'],
+    datos:[['Altura','Unos 16 m'],['Diámetro','Unos 2,3 m'],['Volumen','Unos 51 m³, con un 60 % de agua a plena potencia'],['Solo hay uno','Sirve a todo el circuito primario']],
+    simp:'Se ve solo la parte que sobresale de la plataforma, sin su cubículo ni las líneas de alivio.' },
+
+  { id:'bomba', foto:'paseo_img/bomba.jpg', pos:[14, 1.7, 3], sis:'Circuito primario', titulo:'Bomba principal del reactor',
+    txt:['Por la abertura se ve el motor de una de las cuatro bombas principales, una por lazo. Cada una devuelve a la vasija el agua que sale del generador de vapor.',
+         'Es una bomba centrífuga vertical, con el motor arriba y el rodete abajo. Lleva un volante de inercia para que, si falla la alimentación eléctrica, siga girando un rato y el caudal baje poco a poco. El eje atraviesa la barrera de presión mediante un sistema de sellos al que se inyecta agua continuamente.'],
+    datos:[['Caudal','Unos 20.000 m³/h por bomba'],['Motor','Entre 4,5 y 6,5 MW según el modelo'],['Velocidad','Unas 1.200 rpm'],['Ubicación','Rama fría, entre el generador de vapor y la vasija']],
+    simp:'Las bombas están en los cubículos de los lazos, bajo la plataforma. La abertura con barandilla es un recurso para poder verlas.' },
+
+  { id:'grua', foto:'paseo_img/grua_polar.jpg', pos:[0, 17.6, 3.4], sis:'Manutención', titulo:'Grúa polar',
+    txt:['Mira hacia arriba. La grúa polar es un puente que gira sobre una viga carril circular fijada a la pared de la contención, de modo que su gancho alcanza cualquier punto de la plataforma.',
+         'Hace los izados pesados de la recarga: la tapa de la vasija, que con sus mecanismos pesa del orden de cien toneladas o más, y los internos superiores, de entre 15 y 50 toneladas. También sirvió en el montaje para colocar la vasija y los generadores de vapor.'],
+    datos:[['Tipo','Puente grúa giratorio sobre carril circular'],['Izados típicos','Tapa de la vasija, internos, losas y blindajes'],['Capacidad','Entre 125 y 320 t en el gancho principal, según la central'],['Durante la operación','Aparcada y bloqueada']],
+    simp:'Vigas, carro y gancho esquemáticos.' },
+
+  { id:'transferencia', foto:'paseo_img/piscina_combustible.jpg', pos:[2.6, 1.6, -17.4], sis:'Recarga', titulo:'Canal y tubo de transferencia',
+    txt:['Al fondo del canal hay un tubo horizontal que atraviesa la pared de la contención y llega al edificio de combustible. Es el camino habitual del combustible entre estos dos edificios.',
+         'El elemento se tumba sobre un carro, cruza el tubo bajo el agua y al otro lado se vuelve a poner vertical para guardarlo en la piscina de combustible gastado. Con la central en operación el tubo está cerrado con una brida ciega del lado de la contención y una válvula del lado de combustible.'],
+    datos:[['Conecta con','Edificio de combustible'],['En operación','Cerrado: forma parte del límite de la contención'],['Siguiente etapa de la visita','Piscina de combustible gastado (en preparación)']],
+    simp:'No se han representado el carro ni los volteadores.' },
+
+  { id:'compuerta', pos:[18.5, 2.3, 0], sis:'Contención', titulo:'Compuerta de equipos',
+    txt:['Es la abertura más grande de la contención, de varios metros de diámetro. Por ella entran y salen los componentes y las herramientas que no caben por la esclusa de personal.',
+         'En operación permanece cerrada con una tapa atornillada y con juntas, porque forma parte de la barrera estanca. Solo se abre con el reactor parado.'],
+    datos:[['Uso','Paradas de recarga y grandes sustituciones'],['Cierre','Tapa embridada con doble junta'],['En operación','Cerrada y probada a fugas']],
+    simp:'Dibujada como un simple disco sobre la pared.' },
+];
+
+const FOTOS = {   // id del punto → [fichero, pie]
+  contencion: [['escena_exterior.jpg', 'El edificio de contención, visto desde fuera']],
+  acceso: [['escena_acceso.jpg', 'Pórtico de control y esclusa de personal']],
+  esclusa: [['escena_acceso.jpg', 'Esclusa de personal, con la puerta exterior abierta']],
+  tapa: [['escena_grua.jpg', 'En la recarga, la grúa polar se lleva la tapa a su soporte'], ['escena_plataforma.jpg', 'La tapa, en el fondo de la cavidad seca']],
+  cavidad: [['escena_recarga.jpg', 'La cavidad inundada durante la recarga'], ['escena_plataforma.jpg', 'La cavidad seca, con la central en operación']],
+  manipuladora: [['detalle_manipuladora.jpg', 'El mástil saca un elemento combustible del núcleo']],
+  transferencia: [['piscina_combustible.jpg', 'Al otro lado del tubo: la piscina de combustible gastado']],
+};
+
+/* ============================================================================
+   2. ESCENAS  (coordenadas sobre una imagen de 1394 × 784)
+   suelo    polígono por el que puede andar Nico
+   escala   [[y, altura de Nico], [y, altura]]: tamaño según la profundidad
+   puntos   [id, x, y]        salidas  { a: escena, x, y, txt, pie: [x, y] donde se coloca Nico }
+   ============================================================================ */
+const HUB = { suelo: [[90, 786], [1310, 786], [1310, 774], [90, 774]], escala: [[774, 410], [786, 410]], inicio: [230, 784] };
+const ESCENAS = {
+  exterior: { img: 'escena_exterior.jpg', nombre: 'Exterior · edificio de contención',
+    suelo: [[110, 786], [1290, 786], [1290, 774], [110, 774]], escala: [[774, 380], [786, 380]], inicio: [250, 784],
+    puntos: [['contencion', 600, 150]],
+    salidas: [{ a: 'acceso', x: 500, y: 560, txt: 'Entrar por el edificio auxiliar', pie: [520, 784] }] },
+  acceso: { img: 'escena_acceso.jpg', nombre: 'Edificio auxiliar · control de acceso',
+    suelo: [[640, 786], [1392, 786], [1392, 700], [1190, 590], [1150, 505], [1010, 480], [955, 505], [930, 575], [820, 585], [700, 645]],
+    escala: [[480, 150], [786, 540]], inicio: [900, 760],
+    puntos: [['acceso', 530, 330], ['esclusa', 1300, 330]],
+    salidas: [{ a: 'hub', x: 1075, y: 420, txt: 'Cruzar la esclusa', pie: [1060, 505] },
+              { a: 'exterior', x: 1300, y: 745, txt: 'Salir al exterior', atras: 1, pie: [1250, 765] }] },
+  plataforma: { img: 'escena_plataforma.jpg', nombre: 'Edificio del reactor · plataforma de recarga (en operación)', ...HUB,
+    puntos: [['tapa', 790, 590], ['cavidad', 1100, 560]],
+    salidas: [{ a: 'gv', x: 475, y: 190, txt: 'Generador de vapor', pie: [480, 784] }, { a: 'presionador', x: 165, y: 285, txt: 'Presionador', pie: [170, 784] },
+              { a: 'bomba', x: 1300, y: 300, txt: 'Bomba principal', pie: [1290, 784] }, { a: 'grua', x: 1150, y: 70, txt: 'Grúa polar', pie: [1100, 784] },
+              { a: 'compuerta', x: 1245, y: 215, txt: 'Compuerta de equipos', pie: [1220, 784] },
+              { a: 'acceso', x: 120, y: 735, txt: 'Volver a la esclusa', atras: 1, pie: [110, 784] }] },
+  recarga: { img: 'escena_recarga.jpg', nombre: 'Edificio del reactor · plataforma de recarga (en recarga)', ...HUB,
+    puntos: [['cavidad', 610, 700], ['manipuladora', 830, 330], ['transferencia', 1060, 545]],
+    salidas: [{ a: 'gv', x: 480, y: 215, txt: 'Generador de vapor', pie: [480, 784] }, { a: 'presionador', x: 165, y: 300, txt: 'Presionador', pie: [170, 784] },
+              { a: 'bomba', x: 1305, y: 380, txt: 'Bomba principal', pie: [1290, 784] }, { a: 'grua', x: 1040, y: 60, txt: 'Grúa polar', pie: [1100, 784] },
+              { a: 'compuerta', x: 1270, y: 240, txt: 'Compuerta de equipos', pie: [1220, 784] },
+              { a: 'acceso', x: 120, y: 735, txt: 'Volver a la esclusa', atras: 1, pie: [110, 784] }] },
+  gv: { img: 'escena_gv.jpg', nombre: 'Edificio del reactor · generador de vapor',
+    suelo: [[75, 650], [75, 560], [300, 480], [440, 455], [455, 500], [330, 585]], escala: [[455, 190], [650, 330]], inicio: [200, 600],
+    puntos: [['gv', 770, 420]],
+    salidas: [{ a: 'hub', x: 150, y: 735, txt: 'Volver a la plataforma', atras: 1, pie: [120, 620] }] },
+  presionador: { img: 'escena_presionador.jpg', nombre: 'Edificio del reactor · presionador',
+    suelo: [[60, 786], [60, 650], [400, 585], [470, 610], [330, 786]], escala: [[585, 170], [786, 430]], inicio: [200, 750],
+    puntos: [['presionador', 730, 330]],
+    salidas: [{ a: 'hub', x: 150, y: 590, txt: 'Volver a la plataforma', atras: 1, pie: [120, 720] }] },
+  bomba: { img: 'escena_bomba.jpg', nombre: 'Edificio del reactor · bomba principal',
+    suelo: [[330, 786], [1380, 786], [1380, 760], [330, 768]], escala: [[760, 430], [786, 440]], inicio: [1180, 784],
+    puntos: [['bomba', 790, 150]],
+    salidas: [{ a: 'hub', x: 1290, y: 700, txt: 'Volver a la plataforma', atras: 1, pie: [1290, 784] }] },
+  grua: { img: 'escena_grua.jpg', nombre: 'Edificio del reactor · grúa polar',
+    suelo: [[150, 786], [1250, 786], [1250, 774], [150, 774]], escala: [[774, 390], [786, 390]], inicio: [300, 784],
+    puntos: [['grua', 640, 180]],
+    salidas: [{ a: 'hub', x: 140, y: 735, txt: 'Bajar la vista', atras: 1, pie: [200, 784] }] },
+  compuerta: { img: 'escena_compuerta.jpg', nombre: 'Edificio del reactor · compuerta de equipos',
+    suelo: [[15, 786], [1335, 786], [1375, 625], [895, 605], [870, 665], [410, 665], [400, 595], [165, 605], [15, 645]],
+    escala: [[595, 175], [786, 430]], inicio: [220, 745],
+    puntos: [['compuerta', 775, 250]],
+    salidas: [{ a: 'hub', x: 110, y: 735, txt: 'Volver a la plataforma', atras: 1, pie: [120, 720] }] },
+};
+const ORDEN = [['exterior', 'Exterior'], ['acceso', 'Acceso'], ['hub', 'Plataforma'], ['gv', 'Generador'], ['presionador', 'Presionador'], ['bomba', 'Bomba'], ['grua', 'Grúa'], ['compuerta', 'Compuerta']];
+const ANCLA = { frente: .6, espalda: .5, paso1: .5, paso2: .5 };   // dónde caen los pies dentro de cada recorte
+const POSES = { frente: 'nico_frente.png', espalda: 'nico_espalda.png', paso1: 'nico_paso1.png', paso2: 'nico_paso2.png' };
+const BW = 1394, BH = 784, DIR = 'paseo_img/';
+
+/* ============================================================================
+   3. MOTOR
+   ============================================================================ */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const stage = $('stage'), nico = $('nico'), sombra = $('sombra'), capa = $('capa');
+const q = new URLSearchParams(location.search);
+const est = { escena: null, x: 0, y: 0, destino: null, alLlegar: null, mira: 'frente', izq: false, t: 0, activo: false, recarga: false, k: 1, anda: false };
+const teclas = new Set();
+let vistos = new Set();
+try { vistos = new Set(JSON.parse(localStorage.getItem('paseo_pwr_vistos') || '[]')); } catch (e) {}
+const poses = {};
+for (const [k, f] of Object.entries(POSES)) { poses[k] = new Image(); poses[k].src = DIR + f; }
+Object.values(ESCENAS).forEach((e) => { new Image().src = DIR + e.img; });   // precarga
+const real = (id) => id === 'hub' ? (est.recarga ? 'recarga' : 'plataforma') : id;
+const esHub = (id) => id === 'plataforma' || id === 'recarga';
+const E = () => ESCENAS[est.escena];
+
+function dentro(P, x, y) {
+  let c = false;
+  for (let i = 0, j = P.length - 1; i < P.length; j = i++) {
+    const [xi, yi] = P[i], [xj, yj] = P[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c;
+  }
+  return c;
+}
+function masCercano(P, x, y) {   // punto del polígono más próximo a (x, y), un poco hacia dentro
+  if (dentro(P, x, y)) return [x, y];
+  let m = null, md = 1e9;
+  for (let i = 0, j = P.length - 1; i < P.length; j = i++) {
+    const [ax, ay] = P[j], [bx, by] = P[i], dx = bx - ax, dy = by - ay;
+    const t = Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy)));
+    const px = ax + t * dx, py = ay + t * dy, d = (px - x) ** 2 + (py - y) ** 2;
+    if (d < md) { md = d; m = [px, py]; }
+  }
+  const cx = P.reduce((s, p) => s + p[0], 0) / P.length, cy = P.reduce((s, p) => s + p[1], 0) / P.length;
+  for (const f of [.02, .06, .12, .25]) { const p = [m[0] + (cx - m[0]) * f, m[1] + (cy - m[1]) * f]; if (dentro(P, p[0], p[1])) return p; }
+  return m;
+}
+function altura(y) { const [[y0, h0], [y1, h1]] = E().escala; return h0 + (h1 - h0) * Math.max(0, Math.min(1, (y - y0) / (y1 - y0))); }
+
+function ajustar() {
+  const w = Math.min(innerWidth, innerHeight * BW / BH), h = w * BH / BW;
+  Object.assign(stage.style, { width: w + 'px', height: h + 'px', left: (innerWidth - w) / 2 + 'px', top: (innerHeight - h) / 2 + 'px' });
+  est.k = w / BW;
+}
+addEventListener('resize', ajustar); ajustar();
+
+function irA(id, desde) {
+  id = real(id);
+  const e = ESCENAS[id]; if (!e) return;
+  stage.classList.add('fuera');
+  setTimeout(() => {
+    est.escena = id; est.destino = null; est.alLlegar = null;
+    $('fondo').src = DIR + e.img;
+    const vuelta = desde && e.salidas.find((s) => real(s.a) === desde || (s.a === 'hub' && esHub(desde)));
+    [est.x, est.y] = masCercano(e.suelo, ...(vuelta ? vuelta.pie : e.inicio));
+    est.mira = 'frente';
+    capa.innerHTML = '';
+    e.salidas.forEach((s) => {
+      const b = document.createElement('button'); b.className = 'sal' + (s.atras ? ' atras' : ''); b.textContent = s.txt;
+      b.style.left = s.x / BW * 100 + '%'; b.style.top = s.y / BH * 100 + '%';
+      b.onclick = (ev) => { ev.stopPropagation(); if (!est.activo) return; caminar(...s.pie, () => irA(s.a, est.escena)); };
+      capa.appendChild(b);
+    });
+    e.puntos.forEach(([pid, x, y]) => {
+      const p = PUNTOS.find((p) => p.id === pid), b = document.createElement('button');
+      b.className = 'pt' + (vistos.has(pid) ? ' seen' : ''); b.textContent = 'i'; b.title = p.titulo; b.dataset.id = pid;
+      b.style.left = x / BW * 100 + '%'; b.style.top = y / BH * 100 + '%';
+      b.onclick = (ev) => { ev.stopPropagation(); if (est.activo) abrir(p); };
+      capa.appendChild(b);
+    });
+    $('where').textContent = e.nombre;
+    $('hubBtns').hidden = !esHub(id);
+    $('modo').textContent = est.recarga ? 'Ver en operación' : 'Ver en recarga';
+    pintarRuta(); dibujarDebug();
+    const listo = () => stage.classList.remove('fuera');
+    if ($('fondo').complete) listo(); else $('fondo').onload = listo;
+  }, est.escena ? 240 : 0);
+}
+function caminar(x, y, alLlegar) {
+  const p = masCercano(E().suelo, x, y);
+  est.destino = { x: p[0], y: p[1] }; est.alLlegar = alLlegar || null; est.tDest = 0;
+}
+stage.addEventListener('pointerdown', (ev) => {
+  if (!est.activo || ev.target.closest('button')) return;
+  const r = stage.getBoundingClientRect();
+  caminar((ev.clientX - r.left) / est.k, (ev.clientY - r.top) / est.k);
+});
+addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { if ($('zoom').classList.contains('on')) $('zoom').classList.remove('on'); else if (!est.activo) cerrar(); return; }
+  if (!est.activo) return;
+  const k = e.key.toLowerCase();
+  if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
+  teclas.add(k);
+});
+addEventListener('keyup', (e) => teclas.delete(e.key.toLowerCase()));
+addEventListener('blur', () => teclas.clear());
+
+let antes = performance.now();
+function bucle(ahora) {
+  const dt = Math.min(.05, (ahora - antes) / 1000); antes = ahora;
+  if (est.escena) {
+    const P = E().suelo, v = altura(est.y) * 1.05 * dt;
+    let dx = 0, dy = 0;
+    if (est.activo) {
+      const t = (...ks) => ks.some((k) => teclas.has(k));
+      dx = (t('d', 'arrowright') ? 1 : 0) - (t('a', 'arrowleft') ? 1 : 0);
+      dy = (t('s', 'arrowdown') ? 1 : 0) - (t('w', 'arrowup') ? 1 : 0);
+      if (dx || dy) { est.destino = null; est.alLlegar = null; }
+      else if (est.destino) {
+        const ex = est.destino.x - est.x, ey = est.destino.y - est.y, d = Math.hypot(ex, ey); est.tDest += dt;
+        if (d <= v || est.tDest > 6) {
+          if (d <= v * 1.5) { est.x = est.destino.x; est.y = est.destino.y; }
+          const f = est.alLlegar; est.destino = null; est.alLlegar = null; est.mira = 'frente'; if (f) f();
+        } else { dx = ex / d; dy = ey / d; }
+      }
+    }
+    est.anda = false;
+    if (dx || dy) {
+      const n = Math.hypot(dx, dy), sx = dx / n * v, sy = dy / n * v * .7;
+      if (dentro(P, est.x + sx, est.y + sy)) { est.x += sx; est.y += sy; est.anda = true; }
+      else if (sx && dentro(P, est.x + sx, est.y)) { est.x += sx; est.anda = true; }
+      else if (sy && dentro(P, est.x, est.y + sy)) { est.y += sy; est.anda = true; }
+      else if (est.destino) { const f = est.alLlegar; est.destino = null; est.alLlegar = null; if (f) f(); }
+      if (Math.abs(dx) > Math.abs(dy) * .6) { est.mira = 'lado'; est.izq = dx < 0; } else est.mira = dy < 0 ? 'espalda' : 'frente';
+    }
+    est.t = est.anda ? est.t + dt : 0;
+    // dibujar a Nico
+    const paso = Math.floor(est.t / .17) % 2, pose = est.mira === 'lado' ? (est.anda ? (paso ? 'paso2' : 'paso1') : 'paso1') : est.mira;
+    const img = poses[pose === 'lado' ? 'paso1' : pose];
+    if (img.complete && img.naturalWidth) {
+      if (nico.dataset.pose !== pose) { nico.src = img.src; nico.dataset.pose = pose; }
+      const h = altura(est.y) * est.k, w = h * img.naturalWidth / img.naturalHeight;
+      const bote = est.anda ? Math.abs(Math.sin(est.t * 18)) * h * .012 : 0, giro = est.anda && est.mira !== 'lado' ? Math.sin(est.t * 9) * 2.2 : 0;
+      nico.style.height = h + 'px'; nico.style.left = est.x * est.k - w * (est.izq && est.mira === 'lado' ? 1 - ANCLA[pose] : ANCLA[pose]) + 'px'; nico.style.top = est.y * est.k - h * .985 - bote + 'px';
+      nico.style.transform = `scaleX(${est.izq && est.mira === 'lado' ? -1 : 1}) rotate(${giro}deg)`;
+      Object.assign(sombra.style, { width: h * .42 + 'px', height: h * .07 + 'px', left: est.x * est.k - h * .21 + 'px', top: est.y * est.k - h * .045 + 'px' });
+    }
+  }
+  requestAnimationFrame(bucle);
+}
+requestAnimationFrame(bucle);
+
+/* ============================================================================
+   4. FICHAS, MODELOS 3D, LISTA
+   ============================================================================ */
+function abrir(p) {
+  est.activo = false; teclas.clear(); est.destino = null;
+  vistos.add(p.id);
+  try { localStorage.setItem('paseo_pwr_vistos', JSON.stringify([...vistos])); } catch (e) {}
+  capa.querySelectorAll(`.pt[data-id="${p.id}"]`).forEach((b) => b.classList.add('seen'));
+  pintarLista();
+  const ft = (FOTOS[p.id] || []).find(([f]) => f !== E().img);
+  $('infoCard').innerHTML = `<button class="x" data-cerrar aria-label="Cerrar">✕</button>
+    ${ft ? `<div class="foto"><img src="${DIR + ft[0]}" alt="" title="Ampliar"><span>${esc(ft[1])} · ilustración generada con IA</span></div>` : ''}
+    <div class="quien"><img src="${DIR}nico_retrato.jpg" alt=""><div><div class="mono tag">${esc(p.sis)}</div><h2>${esc(p.titulo)}</h2></div></div>
+    ${p.txt.map((t) => `<p>${esc(t)}</p>`).join('')}
+    <dl>${p.datos.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    <div class="acts">${p.modelo ? '<button class="go" data-modelo>Abrir el modelo 3D</button>' : ''}<button data-cerrar>Seguir el paseo</button></div>`;
+  $('infoCard').querySelectorAll('[data-cerrar]').forEach((b) => b.onclick = cerrar);
+  const im = $('infoCard').querySelector('.foto img');
+  if (im) { im.onerror = () => im.parentNode.remove(); im.onclick = () => { $('zoom').querySelector('img').src = im.src; $('zoom').classList.add('on'); }; }
+  const bm = $('infoCard').querySelector('[data-modelo]');
+  if (bm) bm.onclick = () => abrirModelo(p.modelo.titulo, p.modelo.src);
+  $('info').classList.add('on');
+  (bm || $('infoCard').querySelector('.acts button')).focus();
+}
+function abrirModelo(titulo, src) {
+  est.activo = false; teclas.clear();
+  $('info').classList.remove('on'); $('modelTitle').textContent = titulo; $('modelFrame').src = src; $('model').classList.add('on');
+}
+function cerrar() {
+  ['intro', 'info', 'model', 'zoom'].forEach((id) => $(id).classList.remove('on'));
+  $('modelFrame').src = 'about:blank'; est.activo = true;
+}
+$('start').onclick = cerrar; $('modelClose').onclick = cerrar;
+$('zoom').onclick = () => $('zoom').classList.remove('on');
+$('info').addEventListener('pointerdown', (e) => { if (e.target === $('info')) cerrar(); });
+document.querySelector('#intro .nico').onerror = (e) => e.target.remove();
+$('modo').onclick = () => { est.recarga = !est.recarga; irA('hub', est.escena); };
+$('tresd').onclick = () => abrirModelo('Plataforma de recarga · maqueta 3D', 'paseo_3d_recarga.html?embed=1&modo=' + (est.recarga ? 'recarga' : 'operacion'));
+
+function escenaDe(pid) {
+  const pref = est.recarga ? ['recarga', 'plataforma'] : ['plataforma', 'recarga'];
+  return [...pref, ...Object.keys(ESCENAS)].find((id) => ESCENAS[id].puntos.some(([q]) => q === pid));
+}
+function pintarLista() {
+  const con = PUNTOS.filter((p) => escenaDe(p.id));
+  $('count').innerHTML = `${con.filter((p) => vistos.has(p.id)).length} <small>de ${con.length} vistos</small>`;
+  $('list').innerHTML = con.map((p) => `<li data-id="${p.id}" class="${vistos.has(p.id) ? 'seen' : ''}">${esc(p.titulo)}</li>`).join('');
+  $('list').querySelectorAll('li').forEach((li) => li.onclick = () => {
+    if (!est.activo) return;
+    const p = PUNTOS.find((p) => p.id === li.dataset.id), id = escenaDe(p.id);
+    if (esHub(id)) est.recarga = id === 'recarga';
+    if (id !== est.escena) irA(id, est.escena);
+    setTimeout(() => abrir(p), id !== est.escena ? 600 : 0);
+  });
+}
+function pintarRuta() {
+  $('ruta').innerHTML = ORDEN.map(([id, t]) => `<button data-id="${id}" class="${real(id) === est.escena ? 'aqui' : ''}">${t}</button>`).join('');
+  $('ruta').querySelectorAll('button').forEach((b) => b.onclick = () => { if (est.activo && real(b.dataset.id) !== est.escena) irA(b.dataset.id, est.escena); });
+}
+function dibujarDebug() {
+  if (!q.has('debug')) return;
+  $('dbg').setAttribute('viewBox', `0 0 ${BW} ${BH}`);
+  $('dbg').innerHTML = `<polygon points="${E().suelo.map((p) => p.join(',')).join(' ')}" fill="#00ff0044" stroke="#0f0" stroke-width="2"/>`;
+}
+$('side').addEventListener('click', (e) => { if ($('side').classList.contains('plegado') || e.target.closest('#count')) $('side').classList.toggle('plegado'); });
+setTimeout(() => $('hint').classList.add('fuera'), 20000);
+pintarLista();
+if (q.get('modo') === 'recarga') est.recarga = true;
+irA(q.get('escena') || 'exterior');
+window.__paseo = { est, ESCENAS, PUNTOS, irA, abrir, cerrar, caminar };
+</script>
+</body>
+</html>

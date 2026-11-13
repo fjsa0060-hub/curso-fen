@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plataforma de recarga · maqueta 3D · KnoCor.AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0a0d14; --panel:#141a21f2; --line:#2a323b; --ink:#e9e7e2; --dim:#a6acb4; --faint:#6f7680;
+          --teal:#3fb5a3; --amber:#e0a43c; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); overflow:hidden;
+    font:14px/1.5 Inter, system-ui, "Segoe UI", sans-serif; }
+  canvas#view { position:fixed; inset:0; display:block; touch-action:none; cursor:grab; }
+  canvas#view.hot { cursor:pointer; }
+  .mono { font-family:"Space Mono", ui-monospace, Consolas, monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+  h1, h2 { font-family:"Space Grotesk", Inter, sans-serif; font-weight:600; margin:0; }
+
+  #top { position:fixed; left:14px; top:12px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:10px 14px; max-width:330px; }
+  #top a { color:var(--teal); text-decoration:none; font-size:12.5px; }
+  #top a:hover { text-decoration:underline; }
+  #top h1 { font-size:16px; margin-top:4px; }
+  #top .where { color:var(--dim); font-size:12.5px; margin-top:2px; }
+
+  #side { position:fixed; right:14px; top:12px; width:200px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:10px 12px; }
+  #side .mono { color:var(--faint); }
+  #count { font-family:"Space Grotesk", sans-serif; font-size:20px; margin:2px 0 6px; }
+  #count small { font-size:12.5px; color:var(--dim); font-family:Inter, sans-serif; }
+  #map { display:block; width:100%; border-radius:6px; background:#0c1118; }
+  #list { list-style:none; margin:8px 0 0; padding:0; max-height:38vh; overflow-y:auto; }
+  #list li { display:flex; gap:7px; align-items:baseline; font-size:12.5px; padding:2px 0; color:var(--dim); cursor:pointer; }
+  #list li:hover { color:var(--ink); }
+  #list li::before { content:""; flex:0 0 8px; height:8px; border-radius:50%; background:var(--amber); }
+  #list li.seen::before { background:var(--teal); }
+
+  #hint { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); background:#0a0d14cc; border:1px solid var(--line);
+    color:var(--dim); font-size:12.5px; padding:6px 14px; border-radius:20px; white-space:nowrap; pointer-events:none; }
+  #hint b { color:var(--ink); font-weight:500; }
+  #tip { position:fixed; display:none; pointer-events:none; background:var(--panel); border:1px solid var(--teal);
+    border-radius:6px; padding:4px 9px; font-size:12.5px; transform:translate(14px, -50%); z-index:3; }
+
+  .veil { position:fixed; inset:0; background:#05080dcc; display:none; place-items:center; padding:20px; z-index:5; }
+  .veil.on { display:grid; }
+  .card { background:#141a21; border:1px solid var(--line); border-radius:14px; width:min(620px, 100%);
+    max-height:calc(100% - 20px); overflow-y:auto; padding:22px 24px; position:relative; }
+  .card.wide { width:min(1180px, 100%); height:calc(100% - 20px); padding:0; overflow:hidden; display:flex; flex-direction:column; }
+  .card .tag { color:var(--teal); }
+  .card h2 { font-size:22px; margin:4px 30px 10px 0; }
+  .card p { margin:0 0 10px; color:#d5d8dc; }
+  .card dl { display:grid; grid-template-columns:auto 1fr; gap:5px 14px; margin:14px 0; padding:12px 0;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .card dt { color:var(--faint); }
+  .card dd { margin:0; }
+  .card .simp { border-left:3px solid var(--amber); background:#2a2416; padding:8px 12px; border-radius:0 6px 6px 0; font-size:13px; }
+  .card .simp b { display:block; color:var(--amber); }
+  .card figure { margin:12px 0 0; }
+  .card figure img, .card figure video { width:100%; border-radius:8px; display:block; }
+  .card figcaption { color:var(--faint); font-size:12px; margin-top:4px; }
+  button { font:inherit; color:var(--ink); background:#212a33; border:1px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; }
+  button:hover { border-color:var(--dim); }
+  button.go { background:var(--teal); border-color:var(--teal); color:#06120f; font-weight:600; }
+  button:focus-visible { outline:2px solid var(--amber); outline-offset:2px; }
+  .x { position:absolute; top:12px; right:12px; padding:2px 10px; z-index:2; }
+  .acts { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .bar { display:flex; align-items:center; gap:12px; padding:10px 16px; border-bottom:1px solid var(--line); }
+  .bar h2 { font-size:16px; margin:0; flex:1; }
+  .card.wide iframe { flex:1; width:100%; border:0; background:#0e1318; }
+  #intro ul { margin:8px 0 0; padding-left:18px; color:#d5d8dc; }
+  #intro li { margin:3px 0; }
+  kbd { font-family:"Space Mono", monospace; font-size:11.5px; background:#232c36; border:1px solid var(--line);
+    border-radius:4px; padding:1px 5px; }
+  #modo { margin-top:8px; padding:5px 11px; font-size:12.5px; border-color:var(--teal); }
+  .card .foto { margin:-22px -24px 14px; position:relative; }
+  .card .foto img { width:100%; height:250px; object-fit:cover; border-radius:14px 14px 0 0; display:block; cursor:zoom-in; }
+  .card .foto span { position:absolute; left:10px; bottom:8px; font-size:11px; color:#e9e7e2; background:#0a0d14b0; padding:2px 8px; border-radius:10px; }
+  .quien { display:flex; align-items:center; gap:10px; }
+  .quien img { width:44px; height:44px; border-radius:50%; object-fit:cover; object-position:50% 12%; border:2px solid var(--teal); flex:none; }
+  #intro .card { display:grid; grid-template-columns:150px 1fr; gap:6px 22px; width:min(760px,100%); }
+  #intro .nico { grid-row:1 / span 6; align-self:end; width:150px; border-radius:10px; }
+  #intro .card > :not(.nico) { grid-column:2; }
+  #zoom { z-index:8; cursor:zoom-out; } #zoom img { max-width:100%; max-height:100%; border-radius:10px; }
+  @media (max-width:640px) { #intro .card { display:block; } #intro .nico { display:none; } }
+  @media (max-width:760px) { #side { width:150px; } #list { display:none; } #hint { display:none; } #top { max-width:calc(100% - 190px); } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="view"></canvas>
+
+<div id="top">
+  <a id="volver" href="paseo_central_pwr.html">← Paseo por escenas</a>
+  <h1>Plataforma de recarga · maqueta 3D</h1>
+  <div class="where" id="where">Edificio auxiliar · acceso a zona controlada</div>
+  <button id="modo">Ver en recarga</button>
+</div>
+
+<aside id="side">
+  <div class="mono">Puntos de información</div>
+  <div id="count">0 <small>de 0 vistos</small></div>
+  <canvas id="map" width="400" height="550"></canvas>
+  <ul id="list"></ul>
+</aside>
+
+<div id="hint"><b>W A S D</b> o flechas para andar · <b>clic en el suelo</b> para ir hasta allí · <b>arrastrar</b> para mirar · <b>rueda</b> para acercar · <b>clic en ⓘ</b> o tecla <b>E</b> para abrir un punto</div>
+<div id="tip"></div>
+
+<div class="veil on" id="intro">
+  <div class="card">
+    <img class="nico" src="paseo_img/nico_retrato.jpg" alt="Nico, el técnico que hace la visita">
+    <div class="mono tag">Etapa 1 de la visita · Edificio del reactor</div>
+    <h2>Paseo virtual por una central nuclear PWR</h2>
+    <p>Acompañas a Nico, el técnico de Nucleatom, que entra en la contención de un reactor de agua a presión de cuatro lazos. Empieza en el pasillo del edificio auxiliar, pasa el control de acceso y la esclusa de personal, y sale a la plataforma de recarga, desde donde se ve la tapa de la vasija en el fondo de la cavidad. Con el botón «Ver en recarga» la cavidad se inunda y la tapa pasa a su soporte.</p>
+    <ul>
+      <li><kbd>W</kbd> <kbd>S</kbd> o <kbd>↑</kbd> <kbd>↓</kbd> para avanzar y retroceder; <kbd>A</kbd> <kbd>D</kbd> o <kbd>←</kbd> <kbd>→</kbd> para girar. <kbd>Mayús</kbd> para ir más deprisa.</li>
+      <li>Con el ratón: clic en el suelo para caminar hasta ese punto, arrastrar para mirar alrededor y rueda para acercar o alejar la cámara.</li>
+      <li>Los círculos con una <b>i</b> son puntos de información. Se abren con un clic, o con la tecla <kbd>E</kbd> cuando estás cerca.</li>
+    </ul>
+    <p style="margin-top:12px;color:var(--faint);font-size:12.5px">Maqueta didáctica de un diseño genérico, hecha solo con información pública. Las proporciones y la disposición están simplificadas; no representa ninguna central concreta.</p>
+    <div class="acts"><button class="go" id="start">Empezar la visita</button></div>
+  </div>
+</div>
+
+<div class="veil" id="zoom"><img alt=""></div>
+<div class="veil" id="info"><div class="card" id="infoCard"></div></div>
+
+<div class="veil" id="model">
+  <div class="card wide">
+    <div class="bar"><h2 id="modelTitle"></h2><button id="modelClose">Volver al paseo</button></div>
+    <iframe id="modelFrame" title="Modelo 3D"></iframe>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ============================================================================
+   1. CONTENIDO DE LOS PUNTOS DE INFORMACIÓN  (editar aquí)
+   ----------------------------------------------------------------------------
+   pos    posición del círculo ⓘ en metros: [x, altura, z]
+   datos  pares [etiqueta, valor]; son órdenes de magnitud de un PWR de 4 lazos
+   simp   qué se ha simplificado en la maqueta
+   foto   ilustración de cabecera de la ficha (se amplía con un clic)
+   media  lista opcional de { tipo:'img'|'video', src:'fichero', pie:'texto' }
+   modelo opcional { titulo, src } → botón que abre un modelo 3D dentro del paseo
+   ============================================================================ */
+const PUNTOS = [
+  { id:'acceso', foto:'paseo_img/escena_acceso.jpg', pos:[1.9, 1.7, 31.2], sis:'Protección radiológica', titulo:'Control de acceso a zona controlada',
+    txt:['Aquí acaba la zona de libre acceso. Para pasar hace falta un permiso de trabajo con radiaciones, que fija qué se va a hacer, dónde, durante cuánto tiempo y con qué protección.',
+         'Cada persona lleva dos dosímetros: uno oficial, que se lee cada mes, y otro electrónico de lectura directa, que marca la dosis al momento y avisa si se supera el valor previsto. A la salida, el pórtico comprueba que nadie se lleva contaminación en la ropa o en la piel.'],
+    datos:[['Equipo habitual','Casco, gafas, guantes, calzado de seguridad, protección auditiva y ropa de zona'],['Criterio','ALARA: la dosis, tan baja como sea razonablemente posible'],['Dosímetros','Uno oficial (pasivo) y uno electrónico de lectura directa']],
+    simp:'El vestuario y el control dosimétrico reales ocupan varias salas; aquí se han reducido a un pasillo.' },
+
+  { id:'esclusa', foto:'paseo_img/escena_acceso.jpg', pos:[1.9, 1.7, 25.5], sis:'Contención', titulo:'Esclusa de personal',
+    txt:['La contención es un recinto estanco, y la esclusa permite entrar sin que deje de serlo. Es una cámara de acero con una puerta en cada extremo, enclavadas entre sí: una no abre hasta que la otra está cerrada.',
+         'Al cruzarla verás que la puerta exterior se cierra a tu espalda antes de que abra la interior.'],
+    datos:[['Puertas','Dos, estancas y con enclavamiento mecánico'],['Otras entradas','Esclusa de emergencia y compuerta de equipos'],['En operación','La estanqueidad se comprueba con pruebas periódicas de fugas']],
+    simp:'En la maqueta las puertas son correderas; las reales son abatibles, con volante y juntas dobles.' },
+
+  { id:'contencion', foto:'paseo_img/escena_exterior.jpg', pos:[3.4, 2.3, 16.4], sis:'Contención', titulo:'Edificio de contención',
+    txt:['Es la última de las barreras entre los productos radiactivos y el exterior, después de la vaina del combustible y del circuito primario. Su misión es soportar la presión y la temperatura de un accidente con rotura del primario y retener lo que se libere.',
+         'En este tipo de central es un cilindro de hormigón pretensado rematado por una cúpula, forrado por dentro con una chapa de acero soldada que asegura la estanqueidad.'],
+    datos:[['Diámetro interior','Entre 32 y 47 m según el tamaño de la central'],['Altura','Del orden de 60 m'],['Pared','De 1 a 1,3 m de hormigón pretensado, con chapa de acero de 6 a 10 mm'],['Presión de diseño','Entre 3 y 4,5 bar sobre la atmosférica']],
+    simp:'La cúpula de la maqueta es más baja que la real, y bajo la plataforma faltan los cubículos de los lazos, que aquí no se visitan.' },
+
+  { id:'tapa', foto:'paseo_img/escena_plataforma.jpg', pos:[0, -0.5, 0], sis:'Reactor', titulo:'Tapa de la vasija del reactor',
+    txt:['Al fondo de la cavidad se ve la tapa de la vasija, con el haz de mecanismos de accionamiento de las barras de control encima. Debajo están los internos y el núcleo, con sus 193 elementos combustibles.',
+         'La tapa va unida a la vasija con una corona de pernos. En cada recarga se destensan los pernos, se inunda la cavidad y la grúa polar se lleva la tapa a su soporte para dejar el núcleo accesible desde arriba.'],
+    datos:[['Vasija','Entre 13 y 14 m de alto con la tapa y 4,4 m de diámetro interior'],['Pared','Más de 20 cm de acero al carbono, revestido por dentro de inoxidable'],['Condiciones','155 bar; el agua entra a unos 290 °C y sale a unos 325 °C'],['Barras de control','53 haces en un núcleo de 193 elementos']],
+    simp:'La tapa y los mecanismos son esquemáticos. El modelo 3D muestra la vasija entera con sus internos.',
+    modelo:{ titulo:'Vasija del reactor y sus internos', src:'visor_reactor_pwr.html?vista=corte' } },
+
+  { id:'cavidad', foto:'paseo_img/escena_recarga.jpg', pos:[4.9, 1.5, 3.2], sis:'Recarga', titulo:'Cavidad de recarga',
+    txt:['Con la central en marcha la cavidad está seca. En la recarga se llena de agua borada hasta casi el nivel de la plataforma: el agua hace de blindaje y refrigera el combustible, y el boro mantiene el núcleo subcrítico.',
+         'Todo el movimiento de combustible se hace bajo varios metros de agua, que además es transparente y deja ver la maniobra. Las paredes y el fondo van forrados de acero inoxidable. El botón «Ver en recarga», arriba a la izquierda, cambia entre los dos estados.'],
+    datos:[['Estado en operación','Seca'],['Estado en recarga','Inundada con agua borada'],['Zonas','Pozo del reactor, almacenamiento de internos y canal de transferencia']],
+    simp:'Forma y profundidad aproximadas. No se ha representado el anillo de sellado entre la vasija y el fondo de la cavidad.' },
+
+  { id:'manipuladora', foto:'paseo_img/detalle_manipuladora.jpg', pos:[0, 4.3, -7], sis:'Recarga', titulo:'Máquina de recarga',
+    txt:['Es un puente que rueda sobre carriles a los dos lados de la cavidad. Lleva un carro con un mástil telescópico terminado en una garra, que toma los elementos combustibles de uno en uno por el cabezal superior.',
+         'El elemento sube dentro del mástil sin salir nunca del agua, viaja hasta el canal de transferencia y de ahí pasa al edificio de combustible. En cada recarga se renueva entre un cuarto y un tercio del núcleo y el resto cambia de posición.'],
+    datos:[['Ciclo','Recarga cada 12, 18 o 24 meses, según la central'],['Combustible renovado','Entre un cuarto y un tercio del núcleo'],['Elemento combustible','Unos 4 m de largo y del orden de 600 kg']],
+    simp:'Puente, carro y mástil reducidos a sus volúmenes principales.' },
+
+  { id:'gv', foto:'paseo_img/escena_gv.jpg', pos:[7.3, 2.2, 6.5], sis:'Circuito primario', titulo:'Generador de vapor',
+    txt:['Aquí se separan los dos circuitos. El agua del primario, caliente y radiactiva, circula por dentro de miles de tubos en forma de U invertida; el agua del secundario los baña por fuera, hierve y sale como vapor hacia la turbina.',
+         'Los tubos forman parte de la barrera del primario, por eso se inspeccionan en las recargas. Lo que asoma sobre la plataforma es la parte alta, donde están los separadores de humedad y los secadores de vapor. Hay un generador por lazo, cuatro en esta central.'],
+    datos:[['Altura','Unos 21 m'],['Diámetro','Entre 4,5 y 5,1 m en la parte superior'],['Tubos','Entre 3.400 y 5.800 por generador, según el modelo'],['Vapor','Unos 70 bar y 285 °C']],
+    simp:'En una central real cada generador está dentro de un cubículo de hormigón y apenas se ve desde la plataforma.' },
+
+  { id:'presionador', foto:'paseo_img/escena_presionador.jpg', pos:[-12.2, 2.2, -10.4], sis:'Circuito primario', titulo:'Presionador',
+    txt:['Mantiene la presión del primario en 155 bar para que el agua no hierva en el núcleo a más de 300 °C. Es un depósito medio lleno de agua y medio de vapor, unido a la rama caliente de uno de los lazos.',
+         'Para subir la presión se conectan unas resistencias eléctricas en el fondo, que generan vapor. Para bajarla se rocía agua más fría por arriba, que condensa parte del vapor. Si aun así la presión sube, abren las válvulas de alivio y de seguridad.'],
+    datos:[['Altura','Unos 16 m'],['Diámetro','Unos 2,3 m'],['Volumen','Unos 51 m³, con un 60 % de agua a plena potencia'],['Solo hay uno','Sirve a todo el circuito primario']],
+    simp:'Se ve solo la parte que sobresale de la plataforma, sin su cubículo ni las líneas de alivio.' },
+
+  { id:'bomba', foto:'paseo_img/escena_bomba.jpg', pos:[14, 1.7, 3], sis:'Circuito primario', titulo:'Bomba principal del reactor',
+    txt:['Por la abertura se ve el motor de una de las cuatro bombas principales, una por lazo. Cada una devuelve a la vasija el agua que sale del generador de vapor.',
+         'Es una bomba centrífuga vertical, con el motor arriba y el rodete abajo. Lleva un volante de inercia para que, si falla la alimentación eléctrica, siga girando un rato y el caudal baje poco a poco. El eje atraviesa la barrera de presión mediante un sistema de sellos al que se inyecta agua continuamente.'],
+    datos:[['Caudal','Unos 20.000 m³/h por bomba'],['Motor','Entre 4,5 y 6,5 MW según el modelo'],['Velocidad','Unas 1.200 rpm'],['Ubicación','Rama fría, entre el generador de vapor y la vasija']],
+    simp:'Las bombas están en los cubículos de los lazos, bajo la plataforma. La abertura con barandilla es un recurso para poder verlas.' },
+
+  { id:'grua', foto:'paseo_img/escena_grua.jpg', pos:[0, 17.6, 3.4], sis:'Manutención', titulo:'Grúa polar',
+    txt:['Mira hacia arriba. La grúa polar es un puente que gira sobre una viga carril circular fijada a la pared de la contención, de modo que su gancho alcanza cualquier punto de la plataforma.',
+         'Hace los izados pesados de la recarga: la tapa de la vasija, que con sus mecanismos pesa del orden de cien toneladas o más, y los internos superiores, de entre 15 y 50 toneladas. También sirvió en el montaje para colocar la vasija y los generadores de vapor.'],
+    datos:[['Tipo','Puente grúa giratorio sobre carril circular'],['Izados típicos','Tapa de la vasija, internos, losas y blindajes'],['Capacidad','Entre 125 y 320 t en el gancho principal, según la central'],['Durante la operación','Aparcada y bloqueada']],
+    simp:'Vigas, carro y gancho esquemáticos.' },
+
+  { id:'transferencia', foto:'paseo_img/piscina_combustible.jpg', pos:[2.6, 1.6, -17.4], sis:'Recarga', titulo:'Canal y tubo de transferencia',
+    txt:['Al fondo del canal hay un tubo horizontal que atraviesa la pared de la contención y llega al edificio de combustible. Es el camino habitual del combustible entre estos dos edificios.',
+         'El elemento se tumba sobre un carro, cruza el tubo bajo el agua y al otro lado se vuelve a poner vertical para guardarlo en la piscina de combustible gastado. Con la central en operación el tubo está cerrado con una brida ciega del lado de la contención y una válvula del lado de combustible.'],
+    datos:[['Conecta con','Edificio de combustible'],['En operación','Cerrado: forma parte del límite de la contención'],['Siguiente etapa de la visita','Piscina de combustible gastado (en preparación)']],
+    simp:'No se han representado el carro ni los volteadores.' },
+
+  { id:'compuerta', foto:'paseo_img/escena_compuerta.jpg', pos:[18.5, 2.3, 0], sis:'Contención', titulo:'Compuerta de equipos',
+    txt:['Es la abertura más grande de la contención, de varios metros de diámetro. Por ella entran y salen los componentes y las herramientas que no caben por la esclusa de personal.',
+         'En operación permanece cerrada con una tapa atornillada y con juntas, porque forma parte de la barrera estanca. Solo se abre con el reactor parado.'],
+    datos:[['Uso','Paradas de recarga y grandes sustituciones'],['Cierre','Tapa embridada con doble junta'],['En operación','Cerrada y probada a fugas']],
+    simp:'Dibujada como un simple disco sobre la pared.' },
+];
+
+/* ============================================================================
+   2. GEOMETRÍA DE LA PLANTA (metros; la plataforma de recarga está en y = 0)
+   ============================================================================ */
+const G = {
+  R: 20, hPared: 24,                            // contención: radio interior y altura del cilindro sobre la plataforma
+  pasillo: { x: 2.5, z0: 25, z1: 40, h: 3.2 },  // pasillo del edificio auxiliar
+  esclusa: { x: 1.3, z0: 19.6, z1: 25, h: 2.6 },
+  foso: [[-4.5, 4.5], [4.5, 4.5], [4.5, -11], [1.2, -11], [1.2, -19.2], [-1.2, -19.2], [-1.2, -11], [-4.5, -11]],
+  fondo: -8,
+  gv: [[9, 8], [-9, 8], [9, -8], [-9, -8]],
+  bombas: [[14, 3], [-14, 3], [14, -3], [-14, -3]],
+  presionador: [-13.5, -11.5],
+};
+
+const canvas = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = .92;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0d14);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture; // reflejos en metales y suelos
+scene.environmentIntensity = .45;
+const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 200);
+
+// ---------- texturas hechas con canvas ----------
+function tex(w, h, draw, repeat) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  if (repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat[0], repeat[1]); }
+  return t;
+}
+function ruido(g, w, h, base, n, amp) {
+  g.fillStyle = base; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < n; i++) {
+    const v = Math.random() < .5 ? 255 : 0;
+    g.fillStyle = `rgba(${v},${v},${v},${Math.random() * amp})`;
+    g.fillRect(Math.random() * w, Math.random() * h, 1 + Math.random() * 3, 1 + Math.random() * 3);
+  }
+}
+const tHormigon = tex(512, 512, (g, w, h) => {
+  ruido(g, w, h, '#d9c9a8', 3000, .035);
+  g.strokeStyle = 'rgba(90,70,40,.22)'; g.lineWidth = 2;
+  for (let i = 0; i <= 4; i++) { g.beginPath(); g.moveTo(0, i * h / 4); g.lineTo(w, i * h / 4); g.stroke(); }
+  for (let i = 0; i <= 2; i++) { g.beginPath(); g.moveTo(i * w / 2, 0); g.lineTo(i * w / 2, h); g.stroke(); }
+}, [14, 3]);
+const tSuelo = tex(512, 512, (g, w, h) => {
+  ruido(g, w, h, '#a8a08f', 2500, .03);
+  g.strokeStyle = 'rgba(70,55,35,.28)'; g.lineWidth = 3; g.strokeRect(0, 0, w, h);
+}, [.25, .25]);
+const tInox = tex(256, 256, (g, w, h) => {
+  ruido(g, w, h, '#d3dde4', 800, .03);
+  g.strokeStyle = 'rgba(0,0,0,.14)'; g.strokeRect(0, 0, w, h);
+}, [1, 1]);
+const tFranjas = tex(128, 128, (g, w, h) => {
+  g.fillStyle = '#e3b62a'; g.fillRect(0, 0, w, h); g.fillStyle = '#16181a';
+  for (let i = -2; i < 4; i++) { g.beginPath(); g.moveTo(i * 64, h); g.lineTo(i * 64 + 32, h); g.lineTo(i * 64 + 32 + h, 0); g.lineTo(i * 64 + h, 0); g.fill(); }
+}, [1, 1]);
+
+const M = {
+  hormigon: new THREE.MeshStandardMaterial({ map: tHormigon, roughness: .8, side: THREE.DoubleSide }),
+  suelo: new THREE.MeshStandardMaterial({ map: tSuelo, roughness: .16, metalness: .05, envMapIntensity: 1.3 }),   // resina pulida
+  inox: new THREE.MeshStandardMaterial({ map: tInox, roughness: .16, metalness: .9, side: THREE.DoubleSide }),
+  acero: new THREE.MeshStandardMaterial({ color: 0xb4bec7, roughness: .22, metalness: .92 }),
+  aceroOsc: new THREE.MeshStandardMaterial({ color: 0x4b5661, roughness: .35, metalness: .8 }),
+  aislante: new THREE.MeshStandardMaterial({ color: 0xe3e9ee, roughness: .2, metalness: .88 }),
+  amarillo: new THREE.MeshStandardMaterial({ color: 0xf7b916, roughness: .32, metalness: .15 }),
+  azul: new THREE.MeshStandardMaterial({ color: 0x2567d8, roughness: .28, metalness: .35 }),
+  verde: new THREE.MeshStandardMaterial({ color: 0x8ccf2e, roughness: .3, metalness: .3 }),
+  naranja: new THREE.MeshStandardMaterial({ color: 0xf47a17, roughness: .3, metalness: .25 }),
+  rojo: new THREE.MeshStandardMaterial({ color: 0xd9412b, roughness: .3, metalness: .3 }),
+  negro: new THREE.MeshStandardMaterial({ color: 0x0b0d10, roughness: 1 }),
+  pared: new THREE.MeshStandardMaterial({ color: 0xd9ceb6, roughness: .7, side: THREE.BackSide }),
+  franjas: new THREE.MeshStandardMaterial({ map: tFranjas, roughness: .45 }),
+  hoja: [0x2f9e44, 0x3fb950, 0x1f7a34].map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: .7 })),
+  maceta: new THREE.MeshStandardMaterial({ color: 0xd6d0c4, roughness: .6 }),
+  luz: new THREE.MeshBasicMaterial({ color: 0xffe9bd }),
+};
+const add = (geo, mat, x = 0, y = 0, z = 0, parent = scene) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; parent.add(m); return m; };
+const sinSombra = (m) => { m.castShadow = false; return m; };
+const uvk = (g, a, b) => { const u = g.attributes.uv; for (let i = 0; i < u.count; i++) u.setXY(i, u.getX(i) * a, u.getY(i) * b); return g; };
+// Texturas ilustradas (paseo_img/tex_*.jpg). Si alguna no carga, se queda la textura de respaldo hecha por programa.
+const cargador = new THREE.TextureLoader();
+function textura(f, mat, rx, ry, extra) {
+  cargador.load('paseo_img/' + f, (t) => {
+    t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.MirroredRepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = 8;
+    mat.map = t; mat.color.set(0xffffff); Object.assign(mat, extra || {}); mat.needsUpdate = true;
+  }, undefined, () => {});
+}
+M.crdm = new THREE.MeshStandardMaterial({ color: 0xcfd6dc, roughness: .2, metalness: .92 });
+M.rejilla = new THREE.MeshStandardMaterial({ color: 0x8d969d, roughness: .5, metalness: .7 });
+textura('tex_inox.jpg', M.inox, 1, 1, { roughness: .2, metalness: .85 });
+textura('tex_hormigon.jpg', M.hormigon, 14, 3, { roughness: .85 });
+textura('tex_aislante.jpg', M.aislante, 3, 2, { roughness: .22, metalness: .85 });
+textura('tex_rejilla.jpg', M.rejilla, 1, 1, { roughness: .45, metalness: .6 });
+// los metales reflejan la ilustración de la contención en lugar de un entorno neutro
+cargador.load('paseo_img/escena_recarga.jpg', (t) => {
+  t.mapping = THREE.EquirectangularReflectionMapping; t.colorSpace = THREE.SRGBColorSpace;
+  scene.environment = new THREE.PMREMGenerator(renderer).fromEquirectangular(t).texture; scene.environmentIntensity = .5; M.suelo.envMapIntensity = .7;
+}, undefined, () => {});
+const plano = (m) => { m.castShadow = m.receiveShadow = false; return m; };
+const cil = (r1, r2, h, seg = 32, open = false) => new THREE.CylinderGeometry(r1, r2, h, seg, 1, open);
+
+// ---------- luces ----------
+scene.add(new THREE.HemisphereLight(0xfff1dc, 0x8f7c63, .5));
+const sol = new THREE.DirectionalLight(0xffd3a1, 1.7); sol.position.set(13, 36, 11); sol.castShadow = true;   // luz cálida, como en Nucleatom
+sol.shadow.mapSize.set(2048, 2048); sol.shadow.bias = -.0005; sol.shadow.normalBias = .04;
+Object.assign(sol.shadow.camera, { left: -23, right: 23, top: 23, bottom: -23, near: 2, far: 70 }); scene.add(sol);
+[[3.6, -1.5, 3.6, 90], [-3.6, -1.5, -3.6, 90], [0, -2, -14, 40], [0, 2.6, 31, 12], [0, 2.6, 37, 9], [0, 2.2, 22.3, 6]].forEach(([x, y, z, i]) => {
+  const l = new THREE.PointLight(0xfff0d8, i, 0, 2); l.position.set(x, y, z); scene.add(l);
+});
+const luzNucleo = new THREE.PointLight(0x66d9ff, 0, 0, 2); luzNucleo.position.set(0, G.fondo - 1.2, 0); scene.add(luzNucleo);
+
+// ---------- contención ----------
+{
+  const a = Math.asin(G.esclusa.x / G.R);
+  sinSombra(add(new THREE.CylinderGeometry(G.R, G.R, G.hPared, 96, 1, true, a, Math.PI * 2 - 2 * a), M.hormigon, 0, G.hPared / 2, 0));
+  sinSombra(add(new THREE.CylinderGeometry(G.R, G.R, G.hPared - G.esclusa.h, 6, 1, true, -a, 2 * a), M.hormigon, 0, (G.hPared + G.esclusa.h) / 2, 0));
+  const cupula = add(new THREE.SphereGeometry(G.R, 64, 24, 0, Math.PI * 2, 0, Math.PI / 2),
+    new THREE.MeshStandardMaterial({ color: 0xd6c6a4, roughness: .85, side: THREE.BackSide }), 0, G.hPared, 0);
+  cupula.scale.y = .8; plano(cupula);
+  // anillos de rociado de la contención
+  [[13, 9], [8, 12.5]].forEach(([r, y]) => { const t = add(new THREE.TorusGeometry(r, .09, 8, 80), M.naranja, 0, G.hPared + y, 0); t.rotation.x = Math.PI / 2; });
+  // franja de color a media altura, como referencia visual
+  plano(add(new THREE.CylinderGeometry(G.R - .02, G.R - .02, .5, 96, 1, true, a, Math.PI * 2 - 2 * a),
+    new THREE.MeshStandardMaterial({ color: 0x3fb5a3, roughness: .5, side: THREE.BackSide }), 0, 1.25, 0));
+  // colectores que rodean la pared, por encima de la compuerta de equipos, y montante del rociado
+  [[8.6, .26, M.naranja], [9.4, .2, M.azul], [10.05, .13, M.rojo]].forEach(([y, r, m]) => {
+    const t = add(new THREE.TorusGeometry(G.R - .55 - r, r, 12, 120), m, 0, y, 0); t.rotation.x = Math.PI / 2;
+  });
+  for (let k = 0; k < 24; k++) { const b = k * Math.PI / 12 + .13; add(new THREE.BoxGeometry(.12, 2.2, .5), M.aceroOsc, (G.R - .3) * Math.sin(b), 9.2, (G.R - .3) * Math.cos(b)).rotation.y = b; }
+  add(cil(.11, .11, G.hPared, 12), M.naranja, -(G.R - .5), 8.6 + G.hPared / 2, 0);
+  // luminarias en la pared y bajo la cúpula
+  for (let k = 0; k < 20; k++) { const b = k * Math.PI / 10 + .16; plano(add(new THREE.BoxGeometry(1.6, .28, .1), M.luz, (G.R - .12) * Math.sin(b), 13.5, (G.R - .12) * Math.cos(b))).rotation.y = b; }
+  for (let k = 0; k < 8; k++) { const b = k * Math.PI / 4; plano(add(cil(.7, .7, .1, 20), M.luz, 9 * Math.sin(b), G.hPared + 13.2, 9 * Math.cos(b))); }
+}
+
+// ---------- plataforma de recarga con el foso ----------
+{
+  const s = new THREE.Shape(); s.absarc(0, 0, G.R, 0, Math.PI * 2, false);
+  const h = new THREE.Path(); G.foso.forEach(([x, z], i) => i ? h.lineTo(x, -z) : h.moveTo(x, -z)); h.closePath(); s.holes.push(h);
+  G.bombas.forEach(([x, z]) => { const p = new THREE.Path(); p.absarc(x, -z, 1.7, 0, Math.PI * 2, true); s.holes.push(p); });
+  const geo = new THREE.ShapeGeometry(s, 64); geo.rotateX(-Math.PI / 2);
+  sinSombra(add(geo, M.suelo));
+  // senda peatonal pintada desde la esclusa y línea perimetral
+  const pintura = (c) => new THREE.MeshStandardMaterial({ color: c, roughness: .3, metalness: .05 });
+  const senda = plano(add(new THREE.PlaneGeometry(1.7, 13.6), pintura(0x2fa56d), 0, .012, 12.2)); senda.rotation.x = -Math.PI / 2; senda.receiveShadow = true;
+  [-.92, .92].forEach((x) => { const l = plano(add(new THREE.PlaneGeometry(.1, 13.6), pintura(0xf7b916), x, .014, 12.2)); l.rotation.x = -Math.PI / 2; });
+  const per = plano(add(new THREE.RingGeometry(G.R - 1.5, G.R - 1.35, 96), pintura(0xf7b916), 0, .012, 0)); per.rotation.x = -Math.PI / 2;
+  // fondo y paredes del foso, forrados de inoxidable
+  const f = new THREE.Shape(); G.foso.forEach(([x, z], i) => i ? f.lineTo(x, -z) : f.moveTo(x, -z));
+  const hv = new THREE.Path(); hv.absarc(0, 0, 2.2, 0, Math.PI * 2, true); f.holes.push(hv);   // boca de la vasija
+  const gf = new THREE.ShapeGeometry(f); uvk(gf, .25, .25); gf.rotateX(-Math.PI / 2); add(gf, M.inox, 0, G.fondo, 0);
+  const giro = Math.sign(G.foso.reduce((a, [x, z], i) => { const [x2, z2] = G.foso[(i + 1) % G.foso.length]; return a + x * z2 - x2 * z; }, 0));
+  G.foso.forEach(([x1, z1], i) => {
+    const [x2, z2] = G.foso[(i + 1) % G.foso.length];
+    const L = Math.hypot(x2 - x1, z2 - z1);
+    const w = sinSombra(add(new THREE.PlaneGeometry(L, -G.fondo), M.inox, (x1 + x2) / 2, G.fondo / 2, (z1 + z2) / 2));
+    w.rotation.y = -Math.atan2(z2 - z1, x2 - x1); uvk(w.geometry, L / 4, 2);
+    // pasillo de rejilla alrededor de la cavidad
+    const nx = giro * (z2 - z1) / L, nz = -giro * (x2 - x1) / L;
+    const rj = plano(add(uvk(new THREE.PlaneGeometry(L + 1.1, 1.1), (L + 1.1) / 1.6, 1.1 / 1.6), M.rejilla, (x1 + x2) / 2 + nx * .7, .013, (z1 + z2) / 2 + nz * .7));
+    rj.rotation.order = 'YXZ'; rj.rotation.y = w.rotation.y; rj.rotation.x = -Math.PI / 2; rj.receiveShadow = true;
+    // bordillo de franjas y barandilla
+    const b = add(new THREE.BoxGeometry(L + .3, .06, .3), M.franjas, (x1 + x2) / 2, .03, (z1 + z2) / 2); b.rotation.y = w.rotation.y;
+    [.55, 1.05].forEach((y) => { const r = add(new THREE.BoxGeometry(L, .08, .08), M.amarillo, (x1 + x2) / 2, y, (z1 + z2) / 2); r.rotation.y = w.rotation.y; });
+    const n = Math.max(1, Math.round(L / 1.6));
+    for (let k = 0; k <= n; k++) add(cil(.045, .045, 1.09, 10), M.amarillo, x1 + (x2 - x1) * k / n, .54, z1 + (z2 - z1) * k / n);
+  });
+  // boca del tubo de transferencia, al fondo del canal
+  const boca = add(cil(.55, .55, .3, 24), M.aceroOsc, 0, G.fondo + 1.2, -19.1); boca.rotation.x = Math.PI / 2;
+  add(new THREE.CircleGeometry(.45, 24), M.negro, 0, G.fondo + 1.2, -18.94);
+  // soporte de los internos superiores en la zona de almacenamiento
+  const sop = add(new THREE.TorusGeometry(1.9, .14, 8, 40), M.acero, 0, G.fondo + .8, -7.8); sop.rotation.x = Math.PI / 2;
+  for (let k = 0; k < 6; k++) add(cil(.09, .09, .8, 8), M.acero, 1.9 * Math.cos(k * Math.PI / 3), G.fondo + .4, -7.8 + 1.9 * Math.sin(k * Math.PI / 3));
+}
+
+// ---------- tapa de la vasija (grupo que se traslada a su soporte en recarga), vasija y núcleo ----------
+const tapa = new THREE.Group(); scene.add(tapa);
+const SOP = [-7.5, 14.5];   // soporte de almacenamiento de la tapa, sobre la plataforma
+{
+  const y0 = G.fondo, o = new THREE.Object3D();
+  add(cil(2.75, 2.75, .25, 48, true), M.aceroOsc, 0, y0 + .12, 0);         // brida de la vasija
+  add(new THREE.RingGeometry(2.2, 2.75, 48), M.aceroOsc, 0, y0 + .25, 0).rotation.x = -Math.PI / 2;
+  sinSombra(add(cil(2.2, 2.2, 4.4, 48, true), new THREE.MeshStandardMaterial({ color: 0xa9c0cf, roughness: .25, metalness: .8, side: THREE.BackSide }), 0, y0 - 1.95, 0));
+  add(new THREE.CircleGeometry(2.2, 48), new THREE.MeshStandardMaterial({ color: 0x0f2c3d, roughness: .6 }), 0, y0 - 4.1, 0).rotation.x = -Math.PI / 2;
+  // núcleo: 193 elementos combustibles vistos desde arriba
+  const filas = [7, 11, 13, 13, 15, 15, 15, 15, 15, 15, 15, 13, 13, 11, 7], p = .215;
+  const ec = new THREE.InstancedMesh(new THREE.BoxGeometry(p * .88, .5, p * .88),
+    new THREE.MeshStandardMaterial({ color: 0xc4d2dc, roughness: .25, metalness: .85, emissive: 0x0d4a66 }), 193);
+  let n = 0; filas.forEach((c, j) => { for (let i = 0; i < c; i++) { o.position.set((i - (c - 1) / 2) * p, y0 - 3.7, (j - 7) * p); o.updateMatrix(); ec.setMatrixAt(n++, o.matrix); } });
+  scene.add(ec);
+  // --- tapa: acero pintado de verde brillante, como en la ilustración ---
+  const mVerde = new THREE.MeshPhysicalMaterial({ color: 0x2fae2a, roughness: .3, metalness: .12, clearcoat: 1, clearcoatRoughness: .07 });
+  add(cil(2.6, 2.6, .8, 72), mVerde, 0, y0 + .65, 0, tapa);               // brida de la tapa
+  add(cil(2.68, 2.68, .14, 72), mVerde, 0, y0 + .34, 0, tapa);
+  const casquete = add(new THREE.SphereGeometry(2.3, 72, 24, 0, Math.PI * 2, 0, Math.PI / 2), mVerde, 0, y0 + 1.05, 0, tapa);
+  casquete.scale.y = .62;
+  const inst = (geo, mat, n, f) => {
+    const m = new THREE.InstancedMesh(geo, mat, n);
+    for (let i = 0; i < n; i++) { o.position.set(0, 0, 0); o.rotation.set(0, 0, 0); o.scale.set(1, 1, 1); f(i); o.updateMatrix(); m.setMatrixAt(i, o.matrix); }
+    m.castShadow = m.receiveShadow = true; tapa.add(m); return m;
+  };
+  // 54 pernos de cierre: arandela, tuerca hexagonal y espárrago
+  const corona = (y) => (i) => { const a = i / 54 * Math.PI * 2; o.position.set(2.43 * Math.cos(a), y, 2.43 * Math.sin(a)); o.rotation.y = -a; };
+  inst(cil(.16, .16, .04, 18), M.acero, 54, corona(y0 + 1.07));
+  inst(cil(.13, .13, .18, 6), M.acero, 54, corona(y0 + 1.18));
+  inst(cil(.065, .065, .42, 10), M.aceroOsc, 54, corona(y0 + 1.42));
+  for (let k = 0; k < 3; k++) {                                           // orejetas de izado
+    const a = k * 2 * Math.PI / 3 + .5, l = add(new THREE.BoxGeometry(.5, .5, .1), mVerde, 1.75 * Math.cos(a), y0 + 2.1, 1.75 * Math.sin(a), tapa);
+    l.rotation.y = -a;
+  }
+  // mecanismos de accionamiento de las barras de control (esquemáticos): tobera, carcasa de presión y bobinas
+  const pts = [];
+  for (let i = -4; i <= 4; i++) for (let j = -4; j <= 4; j++) if ((i + j) % 2 === 0 && Math.hypot(i, j) < 4.6) pts.push([i * .4, j * .4]);
+  const base = ([x, z]) => y0 + 1.05 + .62 * Math.sqrt(5.29 - x * x - z * z), techo = y0 + 6.15;
+  inst(cil(.11, .135, .5, 12), M.acero, pts.length, (i) => o.position.set(pts[i][0], base(pts[i]) + .18, pts[i][1]));
+  inst(cil(.07, .07, 1, 10), M.crdm, pts.length, (i) => { const b = base(pts[i]); o.position.set(pts[i][0], (b + techo) / 2, pts[i][1]); o.scale.y = techo - b; });
+  inst(cil(.112, .112, .3, 12), new THREE.MeshStandardMaterial({ color: 0x8f99a1, roughness: .3, metalness: .85 }), pts.length * 3, (i) => { const p = pts[i % pts.length]; o.position.set(p[0], y0 + 3.2 + Math.floor(i / pts.length) * .42, p[1]); });
+  inst(cil(.085, .085, .05, 12), M.acero, pts.length * 2, (i) => { const p = pts[i % pts.length]; o.position.set(p[0], y0 + 2.75 + Math.floor(i / pts.length) * 1.75, p[1]); });
+  // carcasa de ventilación con lamas, por encima de las bobinas
+  const tLamas = tex(512, 256, (g, w, h) => {
+    const gr = g.createLinearGradient(0, 0, w, 0); ['#aab4bc', '#f1f4f6', '#b7c1c8', '#e8ecef', '#aab4bc'].forEach((c, i) => gr.addColorStop(i / 4, c));
+    g.fillStyle = gr; g.fillRect(0, 0, w, h); g.fillStyle = '#262c31';
+    for (let p = 0; p < 8; p++) for (let l = 0; l < 5; l++) g.fillRect(p * 64 + 12, 74 + l * 22, 40, 9);
+    g.strokeStyle = 'rgba(0,0,0,.4)'; g.lineWidth = 3; g.strokeRect(0, 1.5, w, h - 3);
+    for (let p = 0; p < 8; p++) { g.beginPath(); g.moveTo(p * 64, 0); g.lineTo(p * 64, h); g.stroke(); }
+  }, [3, 1]);
+  add(cil(2.0, 2.0, 1.3, 64, true), new THREE.MeshStandardMaterial({ map: tLamas, roughness: .22, metalness: .88, side: THREE.DoubleSide }), 0, y0 + 5.5, 0, tapa);
+  [4.85, 6.15].forEach((y) => add(new THREE.TorusGeometry(2.0, .05, 8, 64), M.aceroOsc, 0, y0 + y, 0, tapa).rotation.x = Math.PI / 2);
+  for (let k = 0; k < 3; k++) {                                           // útil de izado de la tapa
+    const a = k * 2 * Math.PI / 3 + .5;
+    add(cil(.08, .08, 5.0, 10), M.amarillo, 2.12 * Math.cos(a), y0 + 4.3, 2.12 * Math.sin(a), tapa);
+    const t = add(cil(.07, .07, 2.4, 10), M.amarillo, 1.06 * Math.cos(a), y0 + 7.05, 1.06 * Math.sin(a), tapa);
+    t.rotation.z = Math.cos(a) * 1.1; t.rotation.x = -Math.sin(a) * 1.1;
+  }
+  add(new THREE.TorusGeometry(.3, .08, 10, 24), M.amarillo, 0, y0 + 7.5, 0, tapa);
+  // soporte de la tapa en la plataforma
+  add(new THREE.TorusGeometry(2.5, .16, 8, 48), M.azul, SOP[0], .46, SOP[1]).rotation.x = Math.PI / 2;
+  for (let k = 0; k < 8; k++) add(cil(.1, .1, .46, 8), M.azul, SOP[0] + 2.5 * Math.cos(k * Math.PI / 4), .23, SOP[1] + 2.5 * Math.sin(k * Math.PI / 4));
+  add(cil(3.0, 3.0, .03, 48), M.franjas, SOP[0], .015, SOP[1]);
+}
+// agua de la cavidad (solo en recarga)
+const agua = (() => {
+  const sh = new THREE.Shape(); G.foso.forEach(([x, z], i) => i ? sh.lineTo(x, -z) : sh.moveTo(x, -z));
+  const g = new THREE.ShapeGeometry(sh); g.rotateX(-Math.PI / 2);
+  const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: 0x0f9be8, transparent: true, opacity: .62, roughness: .03, metalness: .25, envMapIntensity: 1.6, depthWrite: false, emissive: 0x06324a }));
+  m.visible = false; m.position.y = G.fondo; scene.add(m); return m;
+})();
+
+// ---------- generadores de vapor ----------
+G.gv.forEach(([x, z]) => {
+  const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+  add(cil(1.75, 1.75, 3.2), M.aislante, 0, 1.6, 0, g);
+  add(cil(2.25, 1.75, 1.5), M.aislante, 0, 3.95, 0, g);
+  add(cil(2.25, 2.25, 6.3), M.aislante, 0, 7.85, 0, g);
+  const c = add(new THREE.SphereGeometry(2.25, 32, 12, 0, Math.PI * 2, 0, Math.PI / 2), M.aislante, 0, 11, 0, g); c.scale.y = .55;
+  [3.2, 4.7, 8, 11].forEach((y) => add(cil(y < 4 ? 1.79 : 2.29, y < 4 ? 1.79 : 2.29, .14), M.azul, 0, y, 0, g));
+  add(new THREE.TorusGeometry(2.75, .035, 6, 48), M.amarillo, 0, 5.6, 0, g).rotation.x = Math.PI / 2;   // pasarela de inspección
+  add(new THREE.TorusGeometry(2.75, .035, 6, 48), M.amarillo, 0, 6.1, 0, g).rotation.x = Math.PI / 2;
+  add(new THREE.RingGeometry(2.25, 2.8, 48), new THREE.MeshStandardMaterial({ color: 0x7d8790, roughness: .5, metalness: .6, side: THREE.DoubleSide }), 0, 5.05, 0, g).rotation.x = -Math.PI / 2;
+  // línea de vapor principal: sale por arriba y va hacia la pared
+  add(cil(.42, .42, 2.2, 16), M.naranja, 0, 13.2, 0, g);
+  const d = Math.hypot(x, z), L = G.R - d;
+  const t = add(cil(.42, .42, L, 16), M.naranja, x / d * L / 2, 14.3, z / d * L / 2, g);
+  t.rotation.z = Math.PI / 2; t.rotation.y = -Math.atan2(z, x);
+  add(new THREE.SphereGeometry(.42, 16, 12), M.naranja, 0, 14.3, 0, g);
+  add(cil(2.6, 2.6, .08, 40), M.franjas, 0, .04, 0, g);
+});
+
+// ---------- presionador ----------
+{
+  const [x, z] = G.presionador, g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+  add(cil(1.15, 1.15, 8), M.aislante, 0, 4, 0, g);
+  add(new THREE.SphereGeometry(1.15, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), M.aislante, 0, 8, 0, g);
+  [2.7, 5.4, 8].forEach((y) => add(cil(1.19, 1.19, .12), M.rojo, 0, y, 0, g));
+  add(cil(.12, .12, 1.6, 10), M.naranja, 0, 9.6, 0, g);                 // línea de rociado
+  [-.5, .5].forEach((dx) => add(cil(.1, .1, 1.1, 10), M.acero, dx, 9.2, .35, g)); // alivio y seguridad
+  add(cil(1.5, 1.5, .08, 32), M.franjas, 0, .04, 0, g);
+}
+
+// ---------- bombas principales, vistas por una abertura de la plataforma ----------
+G.bombas.forEach(([x, z]) => {
+  const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+  plano(add(cil(1.7, 1.7, 7, 32, true), new THREE.MeshBasicMaterial({ color: 0x9a927f, side: THREE.BackSide }), 0, -3.5, 0, g));
+  add(new THREE.CircleGeometry(1.7, 32), M.negro, 0, -7, 0, g).rotation.x = -Math.PI / 2;
+  add(cil(1.0, 1.0, 3.6, 28), new THREE.MeshStandardMaterial({ color: 0x2567d8, roughness: .28, metalness: .35, emissive: 0x0a1f4a }), 0, -2.6, 0, g); // motor
+  add(cil(1.12, 1.12, .5, 28), M.aceroOsc, 0, -.9, 0, g);                // volante de inercia
+  add(cil(.5, .5, .35, 20), M.azul, 0, -.5, 0, g);
+  add(cil(.75, .75, 2.2, 20), M.acero, 0, -5.5, 0, g);                   // soporte del motor
+  [.55, 1.05].forEach((y) => { const r = add(new THREE.TorusGeometry(1.85, .045, 8, 48), M.amarillo, 0, y, 0, g); r.rotation.x = Math.PI / 2; });
+  for (let k = 0; k < 10; k++) add(cil(.03, .03, 1.05, 8), M.amarillo, 1.85 * Math.cos(k * Math.PI / 5), .52, 1.85 * Math.sin(k * Math.PI / 5), g);
+});
+
+// ---------- máquina de recarga ----------
+const maquina = new THREE.Group(); maquina.position.set(0, 0, -7); scene.add(maquina);
+{
+  const g = maquina;
+  [-5.3, 5.3].forEach((x) => {
+    add(new THREE.BoxGeometry(.16, .12, 16.5), M.aceroOsc, x, .06, -3.4);       // carriles
+    add(new THREE.BoxGeometry(.6, 1.5, 2.6), M.amarillo, x, .85, 0, g);         // testeros
+  });
+  [-.9, .9].forEach((z) => add(new THREE.BoxGeometry(11.2, .5, .35), M.amarillo, 0, 1.75, z, g));
+  add(new THREE.BoxGeometry(2, .3, 2.1), M.aceroOsc, 0, 2.05, 0, g);            // carro
+  add(new THREE.BoxGeometry(.9, 3.6, .9), M.amarillo, 0, 4, 0, g);              // torre del mástil
+  add(cil(.28, .28, 6.6, 16), M.acero, 0, -1.4, 0, g);                          // mástil telescópico
+  add(new THREE.BoxGeometry(1.3, 1.9, 1.1), M.azul, 1.9, 3.1, 0, g);            // cabina de mando
+  [.55, 1.05].forEach((y) => [-1.1, 1.1].forEach((z) => add(new THREE.BoxGeometry(11.2, .05, .05), M.amarillo, 0, 2 + y, z, g)));
+}
+
+// ---------- grúa polar ----------
+{
+  const y = 20;
+  const carril = add(new THREE.TorusGeometry(G.R - .5, .3, 8, 96), M.aceroOsc, 0, y - .5, 0); carril.rotation.x = Math.PI / 2;
+  const g = new THREE.Group(); g.position.y = y; g.rotation.y = .5; scene.add(g);
+  [-1.6, 1.6].forEach((z) => add(new THREE.BoxGeometry(2 * Math.sqrt((G.R - .5) ** 2 - z * z), 1.5, .7), M.naranja, 0, .5, z, g));
+  [-1, 1].forEach((s) => add(new THREE.BoxGeometry(.9, 1, 4.2), M.aceroOsc, s * (G.R - 1.2), .1, 0, g));
+  add(new THREE.BoxGeometry(3.2, .9, 3.6), M.aceroOsc, 3, 1.5, 0, g);           // carro
+  add(cil(.03, .03, 3.4, 6), M.negro, 3, -.5, 0, g);                            // cables
+  add(new THREE.BoxGeometry(.6, .5, .4), M.naranja, 3, -2.3, 0, g);            // pasteca
+  const gancho = add(new THREE.TorusGeometry(.22, .07, 8, 16, Math.PI * 1.5), M.aceroOsc, 3, -2.8, 0, g); gancho.rotation.z = Math.PI;
+}
+
+// ---------- rótulos ----------
+function rotulo(lineas, w, h, x, y, z, ry, opt = {}) {
+  const t = tex(512, Math.round(512 * h / w), (g, W, H) => {
+    g.fillStyle = opt.fondo || '#f2f0ea'; g.fillRect(0, 0, W, H);
+    g.strokeStyle = opt.borde || '#16181a'; g.lineWidth = 10; g.strokeRect(5, 5, W - 10, H - 10);
+    g.fillStyle = opt.tinta || '#16181a'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    lineas.forEach((l, i) => {
+      let px = Math.min(i ? 34 : 52, H / (lineas.length + .6) * (i ? .62 : .9));
+      g.font = `${i ? 500 : 700} ${px}px Inter, Arial, sans-serif`;
+      const an = g.measureText(l).width; if (an > W - 50) { px *= (W - 50) / an; g.font = `${i ? 500 : 700} ${px}px Inter, Arial, sans-serif`; }
+      g.fillText(l, W / 2, H * (i + 1) / (lineas.length + 1));
+    });
+  });
+  const m = add(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: t }), x, y, z); m.rotation.y = ry; return m;
+}
+function trebol(x, y, z, ry, s = .9) { // señal normalizada de riesgo radiológico
+  const t = tex(256, 256, (g, W) => {
+    g.fillStyle = '#f4d21f'; g.beginPath(); g.moveTo(W / 2, 8); g.lineTo(W - 6, W - 14); g.lineTo(6, W - 14); g.closePath(); g.fill();
+    g.strokeStyle = '#111'; g.lineWidth = 10; g.lineJoin = 'round'; g.stroke();
+    const cx = W / 2, cy = W * .63; g.fillStyle = '#111';
+    g.beginPath(); g.arc(cx, cy, 11, 0, 7); g.fill();
+    for (let k = 0; k < 3; k++) { const a = -Math.PI / 2 + k * 2 * Math.PI / 3; g.beginPath(); g.arc(cx, cy, 52, a - .52, a + .52); g.arc(cx, cy, 18, a + .52, a - .52, true); g.closePath(); g.fill(); }
+  });
+  const m = add(new THREE.PlaneGeometry(s, s), new THREE.MeshBasicMaterial({ map: t, transparent: true }), x, y, z); m.rotation.y = ry;
+}
+
+// ---------- pasillo del edificio auxiliar y control de acceso ----------
+{
+  const P = G.pasillo, L = P.z1 - P.z0;
+  const nada = new THREE.MeshBasicMaterial({ visible: false });
+  plano(add(new THREE.BoxGeometry(2 * P.x, P.h, L), [M.pared, M.pared, M.pared, M.pared, M.pared, nada], 0, P.h / 2, (P.z0 + P.z1) / 2));
+  // pared del fondo, con el hueco de la esclusa
+  const frente = new THREE.MeshStandardMaterial({ color: 0xd9ceb6, roughness: .7 });
+  [-1, 1].forEach((s) => add(new THREE.PlaneGeometry(P.x - G.esclusa.x, P.h), frente, s * (P.x + G.esclusa.x) / 2, P.h / 2, P.z0));
+  add(new THREE.PlaneGeometry(2 * G.esclusa.x, P.h - G.esclusa.h), frente, 0, (P.h + G.esclusa.h) / 2, P.z0);
+  add(new THREE.PlaneGeometry(2 * P.x, L), new THREE.MeshStandardMaterial({ color: 0x3f86a8, roughness: .14, metalness: .05, envMapIntensity: 1.3 }), 0, .005, (P.z0 + P.z1) / 2).rotation.x = -Math.PI / 2;
+  add(new THREE.PlaneGeometry(2 * P.x, .5), M.franjas, 0, .01, 29.6).rotation.x = -Math.PI / 2;
+  for (let z = 27; z < P.z1; z += 3) add(new THREE.BoxGeometry(1.2, .05, .25), new THREE.MeshBasicMaterial({ color: 0xfff6dd }), 0, P.h - .03, z);
+  // pórtico de control de contaminación
+  [-.95, .95].forEach((x) => add(new THREE.BoxGeometry(.35, 2.1, .7), M.aislante, x, 1.05, 30.4));
+  add(new THREE.BoxGeometry(2.25, .25, .7), M.aislante, 0, 2.2, 30.4);
+  add(new THREE.BoxGeometry(.5, .12, .05), new THREE.MeshBasicMaterial({ color: 0x35d07f }), 0, 2.2, 30.76);
+  // estante de cascos y lector de dosímetros
+  add(new THREE.BoxGeometry(.35, .05, 2), M.acero, -2.3, 1.5, 33.5);
+  [0xe3b62a, 0xf2f0ea, 0xe3b62a, 0x2f6fb0].forEach((c, i) => {
+    const k = add(new THREE.SphereGeometry(.15, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: c, roughness: .5 }), -2.3, 1.53, 32.75 + i * .5);
+  });
+  add(new THREE.BoxGeometry(.12, .6, .45), M.aceroOsc, 2.42, 1.35, 31.2);
+  add(new THREE.BoxGeometry(.02, .22, .3), new THREE.MeshBasicMaterial({ color: 0x3fb5a3 }), 2.35, 1.45, 31.2);
+  rotulo(['ZONA CONTROLADA', 'Acceso solo con permiso de trabajo', 'y dosímetro'], 2.2, 1.0, -2.48, 1.9, 29.6, Math.PI / 2);
+  trebol(-2.48, 1.9, 27.9, Math.PI / 2);
+  rotulo(['EDIFICIO AUXILIAR', 'Control de acceso'], 2.2, .8, 2.48, 2.1, 34.2, -Math.PI / 2, { fondo: '#16303a', tinta: '#e9e7e2', borde: '#3fb5a3' });
+  rotulo(['ESCLUSA DE PERSONAL', 'Edificio de contención'], 2.4, .5, 0, 2.9, 25.02, 0, { fondo: '#e3b62a' });
+  trebol(-1.9, 1.7, 25.02, 0, .8);
+  const E = G.esclusa;
+  const chapa = new THREE.MeshStandardMaterial({ color: 0xc3ccd3, roughness: .22, metalness: .85, side: THREE.BackSide });
+  plano(add(new THREE.BoxGeometry(2 * E.x, E.h, E.z1 - E.z0 + .1), [chapa, chapa, chapa, chapa, nada, nada], 0, E.h / 2, (E.z0 + E.z1) / 2));
+  add(new THREE.PlaneGeometry(2 * E.x, E.z1 - E.z0), new THREE.MeshStandardMaterial({ color: 0x59636b, roughness: .6, metalness: .4 }), 0, .012, (E.z0 + E.z1) / 2).rotation.x = -Math.PI / 2;
+  rotulo(['PLATAFORMA DE RECARGA'], 2.4, .4, 0, 3.0, 19.55, Math.PI, { fondo: '#16303a', tinta: '#e9e7e2', borde: '#3fb5a3' });
+}
+// jardineras, como en los escenarios de Nucleatom
+const MACETAS = [[-1.95, 38.6], [1.95, 38.6], [-1.95, 26.2], [3.2, 17.6], [-3.2, 17.6]];
+MACETAS.forEach(([x, z], k) => {
+  const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+  add(new THREE.BoxGeometry(.8, .5, .8), M.maceta, 0, .25, 0, g);
+  add(new THREE.BoxGeometry(.7, .04, .7), new THREE.MeshStandardMaterial({ color: 0x4a3524, roughness: 1 }), 0, .5, 0, g);
+  for (let i = 0; i < 7; i++) {
+    const a = i * 2.4 + k, r = i ? .2 : 0, h = add(new THREE.IcosahedronGeometry(.2 + (i % 3) * .05, 1), M.hoja[i % 3], r * Math.cos(a), .72 + (i % 4) * .13, r * Math.sin(a), g);
+    h.scale.y = 1.25;
+  }
+});
+// puertas de la esclusa (dos hojas correderas cada una)
+const puertas = [25, 19.75].map((z) => {
+  const hojas = [-1, 1].map((s) => {
+    const h = add(new THREE.BoxGeometry(G.esclusa.x, G.esclusa.h, .12), M.amarillo, s * G.esclusa.x / 2, G.esclusa.h / 2, z);
+    add(cil(.16, .16, .14, 16), M.aceroOsc, -s * .25, 0, 0, h).rotation.x = Math.PI / 2;
+    h.userData.s = s; return h;
+  });
+  return { z, hojas, ap: 0 };
+});
+
+// ---------- compuerta de equipos ----------
+{
+  const c = add(new THREE.CircleGeometry(3.2, 48), M.aislante, 19.62, 4.2, 0); c.rotation.y = -Math.PI / 2;
+  const a = add(new THREE.TorusGeometry(3.2, .22, 10, 48), M.aceroOsc, 19.62, 4.2, 0); a.rotation.y = Math.PI / 2;
+  for (let k = 0; k < 24; k++) add(new THREE.BoxGeometry(.2, .2, .2), M.acero, 19.5, 4.2 + 3.2 * Math.sin(k * Math.PI / 12), 3.2 * Math.cos(k * Math.PI / 12));
+  rotulo(['COMPUERTA DE EQUIPOS'], 3, .5, 19.4, .9, 0, -Math.PI / 2, { fondo: '#e3b62a' }).position.x = 19.9;
+  rotulo(['EDIFICIO DE COMBUSTIBLE', 'Tubo de transferencia'], 3.4, .9, 0, 2.4, -19.9, 0, { fondo: '#16303a', tinta: '#e9e7e2', borde: '#3fb5a3' });
+  trebol(2.6, 2.4, -19.8, 0);
+}
+
+/* ============================================================================
+   3. AVATAR: técnico con casco, gafas, guantes, calzado de seguridad y dosímetro
+   ============================================================================ */
+const jugador = new THREE.Group(); scene.add(jugador);
+const av = {};
+{
+  const mt = (c, r = .6, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: r, ...o });
+  const piel = mt(0xc98a5e, .5), camisa = mt(0xeef1f4, .65), pantalon = mt(0xb58d5c, .7), zapato = mt(0x4a3424, .45),
+        chaleco = mt(0xf47a17, .5), reflec = mt(0xf4ec4a, .3, { emissive: 0x555000 }), gris = mt(0x6d747c, .55),
+        casco = mt(0xf9c81c, .25), oscuro = mt(0x1b1e22, .35), pelo = mt(0x3a2414, .8), blanco = mt(0xffffff, .3);
+  const cap = (r, l) => new THREE.CapsuleGeometry(r, l, 6, 16), esf = (r) => new THREE.SphereGeometry(r, 20, 14), J = jugador;
+  const pierna = (x) => { const g = new THREE.Group(); g.position.set(x, .86, 0); J.add(g);
+    add(cap(.095, .54), pantalon, 0, -.36, 0, g);
+    add(esf(.12), zapato, 0, -.79, .05, g).scale.set(.95, .62, 1.55); return g; };
+  av.pi = pierna(-.11); av.pd = pierna(.11);
+  const brazo = (s) => { const g = new THREE.Group(); g.position.set(s * .3, 1.42, 0); J.add(g);
+    add(cap(.072, .2), camisa, 0, -.14, 0, g);            // manga remangada
+    add(cap(.056, .2), piel, 0, -.4, 0, g);               // antebrazo
+    add(esf(.072), piel, 0, -.58, 0, g); return g; };
+  av.bi = brazo(-1); av.bd = brazo(1);
+  // tableta en la mano izquierda
+  const tb = add(new THREE.BoxGeometry(.3, .21, .022), oscuro, -.02, -.62, .12, av.bi); tb.rotation.set(-.9, .25, 0);
+  plano(add(new THREE.PlaneGeometry(.26, .17), new THREE.MeshBasicMaterial({ color: 0x3aa0ff }), 0, 0, .012, tb));
+  // tronco: camisa, chaleco de alta visibilidad con bandas y bolsillos
+  add(cap(.2, .12), pantalon, 0, .95, 0, J).scale.set(1.08, 1, .76);
+  add(cap(.2, .34), camisa, 0, 1.2, 0, J).scale.set(1.1, 1, .76);
+  add(cap(.212, .26), chaleco, 0, 1.19, 0, J).scale.set(1.12, 1, .82);
+  [1.07, 1.27].forEach((y) => add(cil(.24, .24, .05, 24), reflec, 0, y, 0, J).scale.set(1.01, 1, .75));
+  [-1, 1].forEach((s) => { add(new THREE.BoxGeometry(.05, .46, .02), reflec, s * .12, 1.21, .172, J); add(new THREE.BoxGeometry(.12, .1, .04), gris, s * .12, 1.0, .178, J); });
+  add(new THREE.BoxGeometry(.07, .1, .03), oscuro, -.12, 1.34, .185, J);    // dosímetro electrónico
+  plano(add(new THREE.BoxGeometry(.04, .03, .01), new THREE.MeshBasicMaterial({ color: 0x35d07f }), -.12, 1.355, .202, J));
+  add(esf(.09), camisa, 0, 1.47, 0, J).scale.set(1.2, .5, 1);               // cuello de la camisa
+  add(cil(.058, .066, .1, 14), piel, 0, 1.52, 0, J);
+  // cabeza
+  add(esf(.168), piel, 0, 1.68, 0, J).scale.set(1, 1.05, .98);
+  add(esf(.172), pelo, 0, 1.71, -.03, J).scale.set(1, .85, .95);
+  [-1, 1].forEach((s) => {
+    add(esf(.036), piel, s * .165, 1.67, 0, J);                             // orejas
+    add(esf(.034), blanco, s * .062, 1.705, .143, J);                       // ojos
+    add(esf(.02), oscuro, s * .062, 1.705, .168, J);
+    add(new THREE.BoxGeometry(.06, .014, .012), pelo, s * .062, 1.755, .155, J).rotation.z = -s * .15;
+    add(cil(.055, .055, .05, 16), oscuro, s * .185, 1.68, 0, J).rotation.z = Math.PI / 2;   // auriculares
+  });
+  add(esf(.024), piel, 0, 1.665, .168, J);                                  // nariz
+  const boca = add(new THREE.TorusGeometry(.05, .009, 6, 16, Math.PI), mt(0x7a2e22, .5), 0, 1.63, .148, J); boca.rotation.set(-.15, 0, Math.PI);
+  add(cil(.007, .007, .15, 6), oscuro, .17, 1.63, .075, J).rotation.x = Math.PI / 2 - .25;  // micrófono
+  add(esf(.018), oscuro, .15, 1.61, .15, J);
+  // casco amarillo con el átomo verde
+  add(new THREE.SphereGeometry(.2, 24, 14, 0, Math.PI * 2, 0, Math.PI / 2), casco, 0, 1.755, 0, J).scale.set(1, .88, 1.1);
+  add(cil(.238, .238, .02, 24), casco, 0, 1.762, .035, J).scale.set(1, 1, 1.12);
+  add(new THREE.BoxGeometry(.05, .03, .36), casco, 0, 1.925, 0, J);
+  const tAtomo = tex(128, 128, (g) => {
+    g.clearRect(0, 0, 128, 128); g.strokeStyle = '#2e9e3a'; g.lineWidth = 7;
+    for (let k = 0; k < 3; k++) { g.save(); g.translate(64, 64); g.rotate(k * Math.PI / 3); g.beginPath(); g.ellipse(0, 0, 52, 20, 0, 0, 7); g.stroke(); g.restore(); }
+    g.fillStyle = '#2e9e3a'; g.beginPath(); g.arc(64, 64, 11, 0, 7); g.fill();
+  });
+  const logo = plano(add(new THREE.PlaneGeometry(.12, .12), new THREE.MeshBasicMaterial({ map: tAtomo, transparent: true, polygonOffset: true, polygonOffsetFactor: -4 }), 0, 1.845, .198, J));
+  logo.rotation.x = -.5;
+  const sombra = plano(add(new THREE.CircleGeometry(.36, 20), new THREE.MeshBasicMaterial({ color: 0, transparent: true, opacity: .22, depthWrite: false }), 0, .02, 0, J));
+  sombra.rotation.x = -Math.PI / 2;
+}
+
+/* ============================================================================
+   4. PUNTOS DE INFORMACIÓN (sprites)
+   ============================================================================ */
+const icono = (c) => tex(128, 128, (g) => {
+  g.clearRect(0, 0, 128, 128);
+  g.fillStyle = c; g.beginPath(); g.arc(64, 64, 50, 0, 7); g.fill();
+  g.strokeStyle = '#fff'; g.lineWidth = 7; g.stroke();
+  g.fillStyle = '#0a0d14'; g.font = 'bold 72px Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('i', 64, 68);
+});
+const tNuevo = icono('#e0a43c'), tVisto = icono('#3fb5a3');
+let vistos = new Set();
+try { vistos = new Set(JSON.parse(localStorage.getItem('paseo_pwr_vistos') || '[]')); } catch (e) {}
+PUNTOS.forEach((p) => {
+  p.sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: vistos.has(p.id) ? tVisto : tNuevo, sizeAttenuation: false, depthTest: true }));
+  p.sprite.position.set(...p.pos); p.sprite.userData.p = p; scene.add(p.sprite);
+});
+
+/* ============================================================================
+   5. MOVIMIENTO, COLISIONES Y CÁMARA
+   ============================================================================ */
+const RJ = .4; // radio del avatar
+const circulos = [
+  ...G.gv.map(([x, z]) => [x, z, 2.45]), ...G.bombas.map(([x, z]) => [x, z, 1.9]), [...G.presionador, 1.35],
+  [...SOP, 2.75], ...MACETAS.map(([x, z]) => [x, z, .5]),
+];
+const cajas = [ // [xmin, xmax, zmin, zmax]
+  [-4.75, 4.75, -11.25, 4.75], [-1.45, 1.45, -19.6, -11],              // foso y canal
+  [-1.2, -.7, 30, 30.8], [.7, 1.2, 30, 30.8],                          // pórtico
+];
+function pisable(x, z) {
+  const P = G.pasillo, E = G.esclusa;
+  const dentro = (Math.abs(x) < P.x - RJ && z > P.z0 - .2 && z < P.z1 - RJ) ||
+                 (Math.abs(x) < E.x - RJ && z > E.z0 - 1.2 && z <= P.z0) ||
+                 (x * x + z * z < (G.R - RJ - .1) ** 2);
+  if (!dentro) return false;
+  for (const [cx, cz, r] of circulos) if ((x - cx) ** 2 + (z - cz) ** 2 < (r + RJ) ** 2) return false;
+  for (const [a, b, c, d] of cajas) if (x > a - RJ && x < b + RJ && z > c - RJ && z < d + RJ) return false;
+  if (Math.abs(Math.abs(x) - 5.3) < .4 + RJ && Math.abs(z - maquina.position.z) < 1.4 + RJ) return false;   // testeros de la máquina de recarga
+  return true;
+}
+function camaraLibre(x, y, z) {
+  const P = G.pasillo, E = G.esclusa;
+  if (y < .3) return false;
+  const pz = est.z; // la cámara se queda del mismo lado que el avatar de cada puerta cerrada
+  const zmin = pz > 25.1 ? 25.1 : pz > 22.4 ? 19.9 : -99, zmax = pz > 22.4 ? 99 : pz > 18.2 ? 24.9 : 19.9;
+  if (z < zmin || z > zmax) return false;
+  if (x * x + z * z < (G.R - .4) ** 2) return y < G.hPared + 10;
+  if (Math.abs(x) < E.x - .2 && z <= P.z0 + .1 && z > 0) return y < E.h - .15;
+  if (Math.abs(x) < P.x - .2 && z > P.z0 && z < P.z1 - .2) return y < P.h - .15;
+  return false;
+}
+
+const est = { recarga: false, x: 0, z: 35.5, rumbo: Math.PI, giro: 0, elev: .3, dist: 5.2, paso: 0, destino: null, atasco: 0, activo: false };
+const teclas = new Set();
+const anillo = add(new THREE.RingGeometry(.25, .36, 28), new THREE.MeshBasicMaterial({ color: 0x3fb5a3, transparent: true, opacity: .9, depthWrite: false }), 0, .03, 0);
+anillo.rotation.x = -Math.PI / 2; anillo.visible = false;
+
+addEventListener('keydown', (e) => {
+  if (!est.activo) { if (e.key === 'Escape') cerrar(); return; }
+  const k = e.key.toLowerCase();
+  if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
+  if (k === 'e') { const p = cercano(); if (p) abrir(p); return; }
+  teclas.add(k);
+});
+addEventListener('keyup', (e) => teclas.delete(e.key.toLowerCase()));
+addEventListener('blur', () => teclas.clear());
+
+function mover(dt) {
+  const t = (...ks) => ks.some((k) => teclas.has(k));
+  let av_ = (t('w', 'arrowup') ? 1 : 0) - (t('s', 'arrowdown') ? 1 : 0);
+  const gi = (t('a', 'arrowleft') ? 1 : 0) - (t('d', 'arrowright') ? 1 : 0);
+  if (av_ || gi) { est.destino = null; anillo.visible = false; }
+  est.rumbo += gi * 2.2 * dt;
+  if (est.destino) {
+    const dx = est.destino.x - est.x, dz = est.destino.z - est.z, d = Math.hypot(dx, dz);
+    if (d < .25) { est.destino = null; anillo.visible = false; }
+    else {
+      let dif = Math.atan2(dx, dz) - est.rumbo; dif = Math.atan2(Math.sin(dif), Math.cos(dif));
+      est.rumbo += Math.sign(dif) * Math.min(Math.abs(dif), 5 * dt);
+      av_ = Math.abs(dif) < .9 ? 1 : 0;
+    }
+  }
+  let movido = false;
+  if (av_) {
+    const v = (av_ > 0 ? 3.4 : -1.8) * (teclas.has('shift') || est.destino ? 1.6 : 1) * dt;
+    const nx = est.x + Math.sin(est.rumbo) * v, nz = est.z + Math.cos(est.rumbo) * v;
+    if (pisable(nx, nz)) { est.x = nx; est.z = nz; movido = true; }
+    else if (pisable(nx, est.z)) { est.x = nx; movido = true; }
+    else if (pisable(est.x, nz)) { est.z = nz; movido = true; }
+    if (est.destino) { est.atasco = movido ? 0 : est.atasco + dt; if (est.atasco > .4) { est.destino = null; anillo.visible = false; est.atasco = 0; } }
+  }
+  if (movido && (av_ || gi) && !arrastre.on) est.giro *= Math.exp(-2.5 * dt); // la cámara vuelve detrás del avatar
+  // animación de andar
+  est.paso = movido ? est.paso + dt * 9 : est.paso * .8;
+  const s = movido ? Math.sin(est.paso) * .65 : 0;
+  av.pi.rotation.x = s; av.pd.rotation.x = -s; av.bi.rotation.x = -s * .8; av.bd.rotation.x = s * .8;
+  jugador.position.set(est.x, movido ? Math.abs(Math.cos(est.paso)) * .03 : 0, est.z);
+  jugador.rotation.y = est.rumbo;
+}
+
+function colocarCamara() {
+  const tx = est.x, ty = 1.55, tz = est.z;
+  const yaw = est.rumbo + Math.PI + est.giro, ce = Math.cos(est.elev);
+  const dx = Math.sin(yaw) * ce, dy = Math.sin(est.elev), dz = Math.cos(yaw) * ce;
+  let d = est.dist;
+  while (d > .6 && !camaraLibre(tx + dx * d, ty + dy * d, tz + dz * d)) d -= .2;
+  camera.position.set(tx + dx * d, Math.max(.35, ty + dy * d), tz + dz * d);
+  camera.lookAt(tx, ty + (est.elev < 0 ? -est.elev * 6 : 0), tz);
+  jugador.visible = d > 1.1;
+}
+
+function puertasEsclusa(dt) {
+  const enEsclusa = est.z < 26.6 && est.z > 18.2 && Math.abs(est.x) < 2.6;
+  const obj = [enEsclusa && est.z > 22.4 ? 1 : 0, enEsclusa && est.z <= 22.4 ? 1 : 0];
+  puertas.forEach((p, i) => {
+    p.ap += (obj[i] - p.ap) * Math.min(1, dt * 4);
+    p.hojas.forEach((h) => { h.position.x = h.userData.s * (G.esclusa.x / 2 + p.ap * (G.esclusa.x - .08)); });
+  });
+}
+
+// ---------- ratón ----------
+const arrastre = { on: false, x: 0, y: 0, mov: 0 };
+const rayo = new THREE.Raycaster(), raton = new THREE.Vector2();
+const planoSuelo = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+const tip = document.getElementById('tip');
+function puntoBajo(e) {
+  raton.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+  rayo.setFromCamera(raton, camera);
+  const h = rayo.intersectObjects(PUNTOS.map((p) => p.sprite))[0];
+  return h ? h.object.userData.p : null;
+}
+canvas.addEventListener('pointerdown', (e) => { arrastre.on = true; arrastre.x = e.clientX; arrastre.y = e.clientY; arrastre.mov = 0; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove', (e) => {
+  if (arrastre.on) {
+    const dx = e.clientX - arrastre.x, dy = e.clientY - arrastre.y;
+    arrastre.mov += Math.abs(dx) + Math.abs(dy); arrastre.x = e.clientX; arrastre.y = e.clientY;
+    est.giro -= dx * .006; est.elev = Math.min(1.35, Math.max(-.45, est.elev + dy * .005));
+    tip.style.display = 'none'; return;
+  }
+  const p = est.activo && puntoBajo(e);
+  canvas.classList.toggle('hot', !!p);
+  if (p) { tip.textContent = p.titulo; tip.style.left = e.clientX + 'px'; tip.style.top = e.clientY + 'px'; tip.style.display = 'block'; }
+  else tip.style.display = 'none';
+});
+canvas.addEventListener('pointerup', (e) => {
+  arrastre.on = false;
+  if (arrastre.mov > 6 || !est.activo) return;
+  const p = puntoBajo(e);
+  if (p) return abrir(p);
+  const s = new THREE.Vector3();
+  if (rayo.ray.intersectPlane(planoSuelo, s) && pisable(s.x, s.z)) { est.destino = { x: s.x, z: s.z }; est.atasco = 0; anillo.position.set(s.x, .03, s.z); anillo.visible = true; }
+});
+canvas.addEventListener('wheel', (e) => { e.preventDefault(); est.dist = Math.min(13, Math.max(2.2, est.dist * (e.deltaY > 0 ? 1.1 : .9))); }, { passive: false });
+
+function cercano() {
+  let m = null, md = 7;
+  for (const p of PUNTOS) { const d = Math.hypot(p.sprite.position.x - est.x, p.sprite.position.z - est.z); if (d < md) { md = d; m = p; } }
+  return m;
+}
+
+/* ============================================================================
+   6. FICHAS, MODELO 3D, LISTA Y PLANO
+   ============================================================================ */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function abrir(p) {
+  est.activo = false; teclas.clear(); tip.style.display = 'none'; est.destino = null; anillo.visible = false;
+  vistos.add(p.id); p.sprite.material.map = tVisto;
+  try { localStorage.setItem('paseo_pwr_vistos', JSON.stringify([...vistos])); } catch (e) {}
+  pintarLista();
+  $('infoCard').innerHTML = `<button class="x" data-cerrar aria-label="Cerrar">✕</button>
+    ${p.foto ? `<div class="foto"><img src="${esc(p.foto)}" alt="" title="Ampliar"><span>Ilustración orientativa generada con IA</span></div>` : ''}
+    <div class="quien"><img src="paseo_img/nico_retrato.jpg" alt=""><div><div class="mono tag">${esc(p.sis)}</div><h2>${esc(p.titulo)}</h2></div></div>
+    ${p.txt.map((t) => `<p>${esc(t)}</p>`).join('')}
+    <dl>${p.datos.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    <div class="simp"><b>Simplificación didáctica</b>${esc(p.simp)}</div>
+    ${(p.media || []).map((m) => `<figure>${m.tipo === 'video' ? `<video controls preload="metadata" src="${esc(m.src)}"></video>` : `<img alt="" src="${esc(m.src)}">`}<figcaption>${esc(m.pie || '')}</figcaption></figure>`).join('')}
+    <div class="acts">${p.modelo ? '<button class="go" data-modelo>Abrir el modelo 3D</button>' : ''}<button data-cerrar>Seguir el paseo</button></div>`;
+  $('infoCard').querySelectorAll('[data-cerrar]').forEach((b) => b.onclick = cerrar);
+  const ft = $('infoCard').querySelector('.foto img');
+  if (ft) { ft.onerror = () => ft.parentNode.remove(); ft.onclick = () => { $('zoom').querySelector('img').src = ft.src; $('zoom').classList.add('on'); }; }
+  const bm = $('infoCard').querySelector('[data-modelo]');
+  if (bm) bm.onclick = () => { $('info').classList.remove('on'); $('modelTitle').textContent = p.modelo.titulo; $('modelFrame').src = p.modelo.src; $('model').classList.add('on'); };
+  $('info').classList.add('on');
+  (bm || $('infoCard').querySelector('.acts button')).focus();
+}
+function cerrar() {
+  ['intro', 'info', 'model'].forEach((id) => $(id).classList.remove('on'));
+  $('modelFrame').src = 'about:blank'; est.activo = true; canvas.focus();
+}
+$('start').onclick = cerrar; $('modelClose').onclick = cerrar;
+$('zoom').onclick = () => $('zoom').classList.remove('on');
+document.querySelector('#intro .nico').onerror = (e) => e.target.remove();
+
+// operación (cavidad seca, tapa puesta) o recarga (cavidad inundada, tapa en su soporte, núcleo a la vista)
+function modo(rec) {
+  est.recarga = rec;
+  tapa.position.set(rec ? SOP[0] : 0, rec ? -G.fondo + .37 : 0, rec ? SOP[1] : 0);
+  maquina.position.z = rec ? 0 : -7;
+  luzNucleo.intensity = rec ? 120 : 0;
+  agua.visible = rec; if (rec) agua.position.y = G.fondo + .5;
+  const pt = (id) => PUNTOS.find((p) => p.id === id).sprite.position;
+  pt('tapa').set(...(rec ? [SOP[0] + 1.9, 2.4, SOP[1] - 2.3] : PUNTOS.find((p) => p.id === 'tapa').pos));
+  pt('manipuladora').z = maquina.position.z;
+  $('modo').textContent = rec ? 'Ver en operación' : 'Ver en recarga';
+  if (est.destino) { est.destino = null; anillo.visible = false; }
+}
+$('modo').onclick = () => { modo(!est.recarga); canvas.focus(); };
+$('info').addEventListener('pointerdown', (e) => { if (e.target === $('info')) cerrar(); });
+
+function pintarLista() {
+  $('count').innerHTML = `${PUNTOS.filter((p) => vistos.has(p.id)).length} <small>de ${PUNTOS.length} vistos</small>`;
+  $('list').innerHTML = PUNTOS.map((p, i) => `<li data-i="${i}" class="${vistos.has(p.id) ? 'seen' : ''}">${esc(p.titulo)}</li>`).join('');
+  $('list').querySelectorAll('li').forEach((li) => li.onclick = () => abrir(PUNTOS[+li.dataset.i]));
+}
+pintarLista();
+
+const mapa = $('map'), mg = mapa.getContext('2d');
+function pintarMapa() {
+  const W = mapa.width, H = mapa.height, k = 8.6, ox = W / 2, oz = 22.5;
+  const X = (x) => ox + x * k, Z = (z) => (z + oz) * k;
+  mg.clearRect(0, 0, W, H);
+  mg.fillStyle = '#26323a'; mg.strokeStyle = '#55636e'; mg.lineWidth = 3;
+  mg.beginPath(); mg.arc(X(0), Z(0), G.R * k, 0, 7); mg.fill(); mg.stroke();
+  mg.fillRect(X(-G.pasillo.x), Z(G.pasillo.z0), 2 * G.pasillo.x * k, (G.pasillo.z1 - G.pasillo.z0) * k);
+  mg.strokeRect(X(-G.pasillo.x), Z(G.pasillo.z0), 2 * G.pasillo.x * k, (G.pasillo.z1 - G.pasillo.z0) * k);
+  mg.fillRect(X(-G.esclusa.x), Z(G.esclusa.z0 - .5), 2 * G.esclusa.x * k, (G.esclusa.z1 - G.esclusa.z0 + 1) * k);
+  mg.fillStyle = '#0c1118'; mg.beginPath(); G.foso.forEach(([x, z], i) => i ? mg.lineTo(X(x), Z(z)) : mg.moveTo(X(x), Z(z))); mg.closePath(); mg.fill();
+  if (est.recarga) { mg.fillStyle = '#1787c2'; mg.beginPath(); G.foso.forEach(([x, z], i) => i ? mg.lineTo(X(x), Z(z)) : mg.moveTo(X(x), Z(z))); mg.closePath(); mg.fill(); }
+  mg.fillStyle = '#8ccf2e'; mg.beginPath(); mg.arc(X(tapa.position.x), Z(tapa.position.z), 2.6 * k, 0, 7); mg.fill();
+  mg.fillStyle = '#8f9aa3'; G.gv.forEach(([x, z]) => { mg.beginPath(); mg.arc(X(x), Z(z), 2.25 * k, 0, 7); mg.fill(); });
+  mg.beginPath(); mg.arc(X(G.presionador[0]), Z(G.presionador[1]), 1.2 * k, 0, 7); mg.fill();
+  mg.fillStyle = '#2f6fb0'; G.bombas.forEach(([x, z]) => { mg.beginPath(); mg.arc(X(x), Z(z), 1.3 * k, 0, 7); mg.fill(); });
+  PUNTOS.forEach((p) => { mg.fillStyle = vistos.has(p.id) ? '#3fb5a3' : '#e0a43c'; mg.beginPath(); mg.arc(X(p.sprite.position.x), Z(p.sprite.position.z), 6, 0, 7); mg.fill(); });
+  mg.save(); mg.translate(X(est.x), Z(est.z)); mg.rotate(-est.rumbo);
+  mg.fillStyle = '#fff'; mg.beginPath(); mg.moveTo(0, 15); mg.lineTo(-9, -9); mg.lineTo(0, -4); mg.lineTo(9, -9); mg.closePath(); mg.fill(); mg.restore();
+}
+function lugar() {
+  if (est.z > 25) return 'Edificio auxiliar · acceso a zona controlada';
+  if (est.z > 19.3 && Math.abs(est.x) < 1.4) return 'Esclusa de personal';
+  return 'Edificio del reactor · plataforma de recarga';
+}
+
+/* ============================================================================
+   7. BUCLE
+   ============================================================================ */
+function ajustar() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', ajustar); ajustar();
+const reloj = new THREE.Clock();
+let fotograma = 0;
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(reloj.getDelta(), .05), t = reloj.elapsedTime;
+  if ($('model').classList.contains('on')) return; // con el modelo 3D abierto, el paseo no gasta gráfica
+  if (est.activo) mover(dt);
+  puertasEsclusa(dt); colocarCamara();
+  if (agua.visible && agua.position.y < -.7) agua.position.y = Math.min(-.7, agua.position.y + dt * 3.5);   // la cavidad se llena
+  const pulso = .052 + Math.sin(t * 3) * .004;
+  PUNTOS.forEach((p) => p.sprite.scale.setScalar(vistos.has(p.id) ? .042 : pulso));
+  renderer.render(scene, camera);
+  if (fotograma++ % 6 === 0) { pintarMapa(); $('where').textContent = lugar(); }
+});
+const Q = new URLSearchParams(location.search);
+if (Q.get('modo') === 'recarga') modo(true);
+if (Q.has('embed')) { $('volver').style.display = 'none'; Object.assign(est, { x: 0, z: 16.5 }); cerrar(); }
+window.__paseo = { est, PUNTOS, pisable, abrir, cerrar, modo, agua }; // para pruebas
+</script>
+</body>
+</html>
